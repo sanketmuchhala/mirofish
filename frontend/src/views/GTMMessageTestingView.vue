@@ -81,8 +81,10 @@
             }"
             @click="selectedAngle = msg.angle"
           >
+            <div v-if="winner && winner.winner_message_id === msg.id" class="mt-card-winner-strip">
+              ★ WINNER
+            </div>
             <div class="mt-card-header">
-              <span v-if="winner && winner.winner_message_id === msg.id" class="mt-card-star">★</span>
               <span class="mt-card-angle">{{ angleLabel(msg.angle) }}</span>
               <span class="mt-card-avg" v-if="summaryFor(msg.id)">
                 {{ summaryFor(msg.id).average_interest_score }} avg
@@ -92,9 +94,9 @@
             <div class="mt-card-body">{{ msg.body }}</div>
             <div class="mt-card-reasoning">{{ msg.target_persona_reasoning }}</div>
             <div class="mt-card-counts" v-if="summaryFor(msg.id)">
-              <span class="mt-pos">✓ {{ summaryFor(msg.id).positive_count }}</span>
+              <span class="mt-pos">✓ {{ summaryFor(msg.id).positive_count }} interested</span>
               <span class="mt-neu">→ {{ summaryFor(msg.id).neutral_count }}</span>
-              <span class="mt-neg">✗ {{ summaryFor(msg.id).negative_count }}</span>
+              <span class="mt-neg">{{ summaryFor(msg.id).negative_count }} objections</span>
             </div>
             <div v-if="summaryFor(msg.id)" class="mt-card-rec">
               {{ summaryFor(msg.id).recommendation }}
@@ -144,7 +146,11 @@
                   </td>
                   <td class="mt-td-score">
                     <div class="mt-score-bar-wrap">
-                      <div class="mt-score-bar" :style="{ width: rxn.interest_score * 10 + '%' }"></div>
+                      <div
+                        class="mt-score-bar"
+                        :class="rxn.interest_score >= 7 ? 'mt-score-bar--high' : rxn.interest_score >= 5 ? 'mt-score-bar--mid' : 'mt-score-bar--low'"
+                        :style="{ width: rxn.interest_score * 10 + '%' }"
+                      ></div>
                     </div>
                     <span class="mt-score-val">{{ rxn.interest_score.toFixed(1) }}</span>
                   </td>
@@ -168,13 +174,13 @@
           <!-- Objections + triggers for selected angle -->
           <div class="mt-insights" v-if="summaryFor(selectedMessageId)">
             <div class="mt-insight-block">
-              <div class="mt-insight-label">Top Objections</div>
+              <div class="mt-insight-label">Objections Raised</div>
               <ul class="mt-insight-list">
                 <li v-for="obj in summaryFor(selectedMessageId).top_objections" :key="obj">{{ obj }}</li>
               </ul>
             </div>
             <div class="mt-insight-block">
-              <div class="mt-insight-label">Best-Fit Personas</div>
+              <div class="mt-insight-label">Best Match</div>
               <div class="mt-insight-chips">
                 <span v-for="pid in summaryFor(selectedMessageId).best_fit_personas" :key="pid" class="mt-chip mt-chip--green">
                   {{ personaName(pid) || pid }}
@@ -182,7 +188,7 @@
               </div>
             </div>
             <div class="mt-insight-block">
-              <div class="mt-insight-label">Worst-Fit Personas</div>
+              <div class="mt-insight-label">Weakest Match</div>
               <div class="mt-insight-chips">
                 <span v-for="pid in summaryFor(selectedMessageId).worst_fit_personas" :key="pid" class="mt-chip mt-chip--red">
                   {{ personaName(pid) || pid }}
@@ -612,8 +618,20 @@ loadAll()
 }
 
 .mt-card--winner {
-  border-color: rgba(99, 102, 241, 0.5);
+  border: 2px solid #6366f1;
   background: rgba(99, 102, 241, 0.06);
+}
+
+.mt-card-winner-strip {
+  background: #6366f1;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-align: center;
+  padding: 4px;
+  margin: -20px -20px 12px -20px;
+  border-radius: 8px 8px 0 0;
 }
 
 .mt-card--selected {
@@ -799,6 +817,10 @@ loadAll()
   border-radius: 2px;
   transition: width 0.4s;
 }
+
+.mt-score-bar--high { background: #4ade80; }
+.mt-score-bar--mid  { background: #f59e0b; }
+.mt-score-bar--low  { background: #f87171; }
 
 .mt-score-val {
   font-size: 13px;

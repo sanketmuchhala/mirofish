@@ -21,9 +21,15 @@
       </div>
       <div class="pcf-badges">
         <span class="reaction-badge" :class="persona.reaction">{{ reactionLabel }}</span>
-        <span class="skep-badge" :title="`Skepticism: ${persona.skepticism_level}/5`">
-          {{ '●'.repeat(persona.skepticism_level) }}{{ '○'.repeat(5 - persona.skepticism_level) }}
-        </span>
+        <div class="skep-bar" :title="`Skepticism: ${persona.skepticism_level}/5`">
+          <div
+            v-for="i in 5"
+            :key="i"
+            class="skep-seg"
+            :class="{ filled: i <= (persona.skepticism_level || 0) }"
+          ></div>
+        </div>
+        <span class="skep-label">Skepticism {{ persona.skepticism_level }}/5</span>
       </div>
     </div>
 
@@ -41,8 +47,8 @@
 
     <!-- Top Objection -->
     <div class="pcf-row" v-if="persona.objections?.length">
-      <span class="pcf-row-label">OBJECTS</span>
-      <span class="pcf-row-value objection-text">"{{ persona.objections[0] }}"</span>
+      <span class="pcf-row-label">OBJECTION</span>
+      <span class="pcf-objection-chip">⚠ {{ persona.objections[0] }}</span>
     </div>
 
     <!-- Buying Triggers -->
@@ -217,11 +223,28 @@ const angleLabel = computed(() => {
 .reaction-badge.neutral    { background: #FFF3E0; color: #E65100; }
 .reaction-badge.objection  { background: #FFEBEE; color: #C62828; }
 
-.skep-badge {
-  font-size: 9px;
-  color: #BBB;
-  letter-spacing: 1px;
+.skep-bar {
+  display: flex;
+  gap: 2px;
   cursor: help;
+}
+
+.skep-seg {
+  width: 8px;
+  height: 4px;
+  border-radius: 1px;
+  background: #E0E0E0;
+}
+
+.skep-seg.filled {
+  background: #E65100;
+}
+
+.skep-label {
+  font-size: 9px;
+  color: #AAA;
+  font-family: 'JetBrains Mono', monospace;
+  margin-top: 1px;
 }
 
 /* Info rows */
@@ -246,6 +269,17 @@ const angleLabel = computed(() => {
 .pcf-row-value { color: #333; }
 
 .objection-text { font-style: italic; color: #555; }
+
+.pcf-objection-chip {
+  display: inline-block;
+  font-size: 11px;
+  color: #C62828;
+  background: #FFEBEE;
+  border: 1px solid #FFCDD2;
+  border-radius: 3px;
+  padding: 2px 7px;
+  line-height: 1.4;
+}
 
 /* Divider */
 .pcf-divider {
