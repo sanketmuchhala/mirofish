@@ -47,6 +47,12 @@ const routes = [
     name: 'GTMPersonas',
     component: () => import('../views/GTMPersonasView.vue'),
     props: true
+  },
+  {
+    path: '/gtm/messages/:briefId',
+    name: 'GTMMessages',
+    component: () => import('../views/GTMMessageTestingView.vue'),
+    props: true
   }
 ]
 

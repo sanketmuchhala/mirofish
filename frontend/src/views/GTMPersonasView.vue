@@ -247,8 +247,7 @@ function goHome() {
 }
 
 function continueToMessageTesting() {
-  // Phase 4 placeholder — navigates back to existing process flow for now
-  router.push({ name: 'Process', params: { projectId: 'new' } })
+  router.push({ name: 'GTMMessages', params: { briefId: briefId.value } })
 }
 
 onMounted(async () => {
