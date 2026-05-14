@@ -85,28 +85,16 @@
           </div>
         </div>
 
-        <!-- Agent dot grid -->
+        <!-- Live agent network -->
         <div class="sim-agent-section">
           <div class="sim-agent-header">
-            <span class="sim-agent-label">Agent pool</span>
-            <span class="sim-agent-count">
-              <span class="sim-agent-g">{{ interestedCount }} interested</span>
-              <span class="sim-agent-sep">·</span>
-              <span class="sim-agent-a">{{ neutralCount }} neutral</span>
-              <span class="sim-agent-sep">·</span>
-              <span class="sim-agent-r">{{ objectionCount }} objection</span>
+            <span class="sim-agent-label">Agent network</span>
+            <span class="sim-agent-hint">
+              {{ numPersonas > 120 ? 'showing 120 of ' + numPersonas : numPersonas + ' agents' }}
             </span>
           </div>
-          <div class="sim-agent-grid" :style="{ '--dot': dotSize + 'px', '--gap': dotGap + 'px' }">
-            <TransitionGroup name="dot" tag="div" class="sim-agent-dots">
-              <div
-                v-for="dot in agentDots"
-                :key="dot.id"
-                class="sim-dot"
-                :class="`sim-dot--${dot.verdict}`"
-                :title="dot.verdict"
-              ></div>
-            </TransitionGroup>
+          <div class="sim-viz-wrap">
+            <HeroViz :count="numPersonas" />
           </div>
         </div>
 
@@ -144,6 +132,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import GTMBriefForm from '../components/GTMBriefForm.vue'
+import HeroViz from '../components/HeroViz.vue'
 import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
 import { setGTMBrief, setSimulationPreview } from '../store/gtmSimulation.js'
 import { MOCK_GTM_PREVIEW } from '../mock/gtm_preview.js'
@@ -159,7 +148,6 @@ const numMessages = ref(3)
 
 const angleNames = { 2: 'Pain · ROI', 3: '+Curiosity', 4: '+Feature', 5: '+Social' }
 
-// Time + cost
 const timeEstimate = computed(() => {
   const n = numPersonas.value
   if (n <= 12)  return '~1 min'
@@ -172,40 +160,6 @@ const timeEstimate = computed(() => {
 const costEstimate = computed(() =>
   (numPersonas.value * 0.008 * numMessages.value).toFixed(2)
 )
-
-// Dot grid
-// Deterministic verdict distribution: 50% interested, 30% neutral, 20% objection
-function verdictFor(i) {
-  const h = ((i * 2654435761) >>> 0) % 100
-  if (h < 50) return 'interested'
-  if (h < 80) return 'neutral'
-  return 'objection'
-}
-
-const agentDots = computed(() =>
-  Array.from({ length: numPersonas.value }, (_, i) => ({ id: i, verdict: verdictFor(i) }))
-)
-
-const interestedCount = computed(() => agentDots.value.filter(d => d.verdict === 'interested').length)
-const neutralCount    = computed(() => agentDots.value.filter(d => d.verdict === 'neutral').length)
-const objectionCount  = computed(() => agentDots.value.filter(d => d.verdict === 'objection').length)
-
-const dotSize = computed(() => {
-  const n = numPersonas.value
-  if (n <= 20)  return 14
-  if (n <= 50)  return 11
-  if (n <= 100) return 9
-  if (n <= 200) return 7
-  if (n <= 350) return 5
-  return 4
-})
-
-const dotGap = computed(() => {
-  const n = numPersonas.value
-  if (n <= 50)  return 4
-  if (n <= 150) return 3
-  return 2
-})
 
 function loadDemo() {
   demoData.value = { ...DEMO_BRIEF }
@@ -533,7 +487,7 @@ async function handleSubmit(payload) {
 .sim-pill.active .sim-pill-num  { color: var(--accent); }
 .sim-pill.active .sim-pill-label { color: rgba(59,130,246,0.7); }
 
-/* Agent dot section */
+/* Agent viz section */
 .sim-agent-section {
   flex: 1;
   display: flex;
@@ -557,54 +511,20 @@ async function handleSubmit(payload) {
   text-transform: uppercase;
 }
 
-.sim-agent-count {
+.sim-agent-hint {
   font-size: 9px;
-  display: flex;
-  gap: 5px;
-  align-items: center;
+  color: var(--text-tertiary);
   font-family: var(--font-mono);
 }
 
-.sim-agent-g   { color: var(--green); }
-.sim-agent-a   { color: var(--amber); }
-.sim-agent-r   { color: var(--red); }
-.sim-agent-sep { color: var(--border-muted); }
-
-.sim-agent-grid {
+.sim-viz-wrap {
+  flex: 1;
+  min-height: 180px;
+  border-radius: 10px;
+  overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  padding: 12px;
-  flex: 1;
-  min-height: 120px;
-  overflow: hidden;
 }
-
-.sim-agent-dots {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap, 4px);
-  align-content: flex-start;
-}
-
-/* Dot */
-.sim-dot {
-  width: var(--dot, 10px);
-  height: var(--dot, 10px);
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.sim-dot--interested { background: var(--green);  opacity: 0.75; }
-.sim-dot--neutral    { background: var(--amber); opacity: 0.65; }
-.sim-dot--objection  { background: var(--red);   opacity: 0.65; }
-
-/* TransitionGroup animations */
-.dot-enter-active { transition: transform 0.2s ease, opacity 0.2s ease; }
-.dot-leave-active { transition: transform 0.1s ease, opacity 0.1s ease; position: absolute; }
-.dot-enter-from  { transform: scale(0); opacity: 0; }
-.dot-leave-to    { transform: scale(0); opacity: 0; }
-.dot-move        { transition: transform 0.15s ease; }
 
 /* Math strip */
 .sim-math-strip {

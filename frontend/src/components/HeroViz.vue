@@ -5,194 +5,281 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import * as d3 from 'd3'
 
-const container = ref(null)
-const svgRef   = ref(null)
+const props = defineProps({
+  count: { type: Number, default: 20 },
+})
 
-let simulation = null
-let pulseTimer  = null
+const container = ref(null)
+const svgRef    = ref(null)
+
+let simulation   = null
+let pulseTimer   = null
 let verdictTimer = null
+let svgSel       = null
+let linkGroup    = null
+let nodeGroup    = null
+let linkSel      = null
+let nodeSel      = null
+let W = 0, H = 0
+
+// Cap for performance — D3 force gets heavy beyond this
+const MAX_NODES = 120
 
 const TYPES = [
   'VP Sales', 'Founder', 'CFO', 'SDR Mgr', 'Head of Growth',
   'CRO', 'Account Exec', 'Ops Lead', 'Mktg VP', 'BizDev',
   'Product', 'CEO', 'RevOps', 'CMO', 'Co-Founder',
   'Dir Sales', 'Advisor', 'Sales Ops', 'Growth', 'CTO',
+  'Head of Sales', 'GTM Lead', 'Sales Dev', 'BD Mgr', 'Mktg Mgr',
 ]
 
 const VERDICT = ['interested', 'interested', 'interested', 'neutral', 'neutral', 'objection']
 const COLOR   = { interested: '#4ade80', neutral: '#f59e0b', objection: '#f87171' }
 
-function makeNodes(n) {
-  return Array.from({ length: n }, (_, i) => ({
-    id: i,
-    label: TYPES[i % TYPES.length],
-    verdict: VERDICT[i % VERDICT.length],
-    r: 13 + (i % 3) * 3,
-  }))
+function verdictFor(i) {
+  const h = ((i * 2654435761) >>> 0) % 6
+  return VERDICT[h]
 }
 
-function makeLinks(nodes, density = 1.6) {
+function nodeRadius(total) {
+  if (total <= 20)  return 14
+  if (total <= 40)  return 11
+  if (total <= 70)  return 9
+  if (total <= 100) return 7
+  return 6
+}
+
+function showLabels(total) { return total <= 35 }
+
+function linkDensity(n) {
+  if (n <= 20)  return 1.5
+  if (n <= 50)  return 1.0
+  if (n <= 100) return 0.6
+  return 0.4
+}
+
+function makeLinks(nodes) {
   const n = nodes.length
-  const target = Math.floor(n * density)
+  const target = Math.max(n, Math.floor(n * linkDensity(n)))
   const used = new Set()
   const links = []
   let attempts = 0
-  while (links.length < target && attempts < target * 10) {
+  while (links.length < target && attempts < target * 12) {
     attempts++
     const a = Math.floor(Math.random() * n)
     const b = Math.floor(Math.random() * n)
     const key = `${Math.min(a, b)}-${Math.max(a, b)}`
     if (a !== b && !used.has(key)) {
       used.add(key)
-      links.push({ id: key, source: a, target: b })
+      links.push({ source: a, target: b })
     }
   }
   return links
 }
 
+// Mutable node array — shared across updates
+let nodes = []
+
+function buildNodeData(count) {
+  const n = Math.min(count, MAX_NODES)
+  return Array.from({ length: n }, (_, i) => {
+    const existing = nodes[i]
+    return existing
+      ? { ...existing, verdict: existing.verdict, r: nodeRadius(n) }
+      : {
+          id: i,
+          label: TYPES[i % TYPES.length],
+          verdict: verdictFor(i),
+          r: nodeRadius(n),
+          x: W / 2 + (Math.random() - 0.5) * (W * 0.6),
+          y: H / 2 + (Math.random() - 0.5) * (H * 0.6),
+        }
+  })
+}
+
+function rebuildGraph(count) {
+  if (!svgSel || !simulation) return
+
+  const n = Math.min(count, MAX_NODES)
+  nodes = buildNodeData(n)
+  const links = makeLinks(nodes)
+  const showLbl = showLabels(n)
+  const r = nodeRadius(n)
+
+  // Update simulation
+  simulation.nodes(nodes)
+  simulation.force('link', d3.forceLink(links).id(d => d.id).distance(r * 5).strength(0.3))
+  simulation.force('charge', d3.forceManyBody().strength(n > 60 ? -60 : -140))
+  simulation.force('collision', d3.forceCollide(r + (n > 60 ? 8 : 16)))
+  simulation.alpha(0.5).restart()
+
+  // Links
+  linkSel = linkGroup.selectAll('line')
+    .data(links)
+    .join('line')
+    .style('stroke', '#232340')
+    .style('stroke-width', 1)
+    .style('opacity', 0.6)
+
+  // Nodes
+  const entered = nodeGroup.selectAll('g.node')
+    .data(nodes, d => d.id)
+    .join(
+      enter => {
+        const g = enter.append('g').attr('class', 'node')
+        g.append('circle').attr('class', 'node-ring')
+        g.append('circle').attr('class', 'node-core')
+        g.append('text').attr('class', 'node-label')
+        // Fade in
+        g.style('opacity', 0).transition().duration(300).style('opacity', 1)
+        return g
+      },
+      update => update,
+      exit => exit.transition().duration(200).style('opacity', 0).remove()
+    )
+
+  // Update ring
+  entered.select('.node-ring')
+    .attr('r', d => d.r + (n > 60 ? 3 : 6))
+    .style('fill', 'none')
+    .style('stroke', d => COLOR[d.verdict])
+    .style('stroke-width', 1)
+    .style('opacity', 0.18)
+
+  // Update core
+  entered.select('.node-core')
+    .attr('r', d => d.r)
+    .style('fill', '#0e0e18')
+    .style('stroke', d => COLOR[d.verdict])
+    .style('stroke-width', 1.5)
+
+  // Update label
+  entered.select('.node-label')
+    .text(d => showLbl ? d.label : '')
+    .attr('text-anchor', 'middle')
+    .attr('dy', d => d.r + (n > 60 ? 0 : 13))
+    .style('fill', '#50507a')
+    .style('font-family', "'Inter', sans-serif")
+    .style('font-size', '9px')
+    .style('font-weight', '600')
+    .style('pointer-events', 'none')
+    .style('opacity', showLbl ? 1 : 0)
+
+  nodeSel = nodeGroup.selectAll('g.node')
+}
+
 onMounted(() => {
-  const W = container.value?.offsetWidth  || 480
-  const H = container.value?.offsetHeight || 400
+  W = container.value?.offsetWidth  || 400
+  H = container.value?.offsetHeight || 360
 
-  const nodes = makeNodes(20)
-  const links = makeLinks(nodes, 1.5)
+  svgSel = d3.select(svgRef.value).attr('width', W).attr('height', H)
 
-  const svg = d3.select(svgRef.value).attr('width', W).attr('height', H)
-
-  // Glow filter
-  const defs  = svg.append('defs')
-  const filter = defs.append('filter').attr('id', 'hviz-glow')
+  // Defs
+  const defs = svgSel.append('defs')
+  const filter = defs.append('filter').attr('id', 'hviz-glow2')
   filter.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'coloredBlur')
   const merge = filter.append('feMerge')
   merge.append('feMergeNode').attr('in', 'coloredBlur')
   merge.append('feMergeNode').attr('in', 'SourceGraphic')
 
-  // Subtle radial vignette
-  const rad = defs.append('radialGradient').attr('id', 'hviz-fade')
+  // Vignette
+  const rad = defs.append('radialGradient').attr('id', 'hviz-fade2')
     .attr('cx', '50%').attr('cy', '50%').attr('r', '50%')
-  rad.append('stop').attr('offset', '60%').attr('stop-color', 'transparent')
-  rad.append('stop').attr('offset', '100%').attr('stop-color', '#000')
-  svg.append('rect').attr('width', W).attr('height', H)
-    .attr('fill', 'url(#hviz-fade)').attr('pointer-events', 'none').attr('style', 'z-index:10')
+  rad.append('stop').attr('offset', '55%').attr('stop-color', 'transparent')
+  rad.append('stop').attr('offset', '100%').attr('stop-color', '#000000')
+  svgSel.append('rect').attr('width', W).attr('height', H)
+    .attr('fill', 'url(#hviz-fade2)').attr('pointer-events', 'none')
+    .style('position', 'relative').style('z-index', 10)
 
-  // Force simulation
-  simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(d => d.id).distance(70).strength(0.3))
-    .force('charge', d3.forceManyBody().strength(-160))
+  // Groups
+  linkGroup = svgSel.append('g').attr('class', 'links')
+  nodeGroup = svgSel.append('g').attr('class', 'nodes')
+
+  // Build initial simulation (empty, will be populated by rebuildGraph)
+  simulation = d3.forceSimulation([])
     .force('center', d3.forceCenter(W / 2, H / 2).strength(0.05))
-    .force('collision', d3.forceCollide(d => d.r + 20))
     .alphaDecay(0.003)
     .velocityDecay(0.55)
-
-  // Links
-  const linkSel = svg.append('g').selectAll('line')
-    .data(links).join('line')
-    .style('stroke', '#232340')
-    .style('stroke-width', 1)
-    .style('opacity', 0.7)
-
-  // Node groups
-  const nodeSel = svg.append('g').selectAll('g')
-    .data(nodes).join('g')
-    .style('cursor', 'default')
-
-  // Outer ring (verdict color, dim)
-  nodeSel.append('circle')
-    .attr('r', d => d.r + 6)
-    .style('fill', 'none')
-    .style('stroke', d => COLOR[d.verdict])
-    .style('stroke-width', 1)
-    .style('opacity', 0.18)
-    .attr('class', 'node-ring')
-
-  // Core circle
-  nodeSel.append('circle')
-    .attr('r', d => d.r)
-    .style('fill', '#0e0e18')
-    .style('stroke', d => COLOR[d.verdict])
-    .style('stroke-width', 1.5)
-    .attr('class', 'node-core')
-
-  // Label
-  nodeSel.append('text')
-    .text(d => d.label)
-    .attr('text-anchor', 'middle')
-    .attr('dy', d => d.r + 13)
-    .style('fill', '#50507a')
-    .style('font-family', "'Inter', sans-serif")
-    .style('font-size', '9px')
-    .style('font-weight', '600')
-    .style('letter-spacing', '0.05em')
-    .style('pointer-events', 'none')
-
-  // Tick — clamp + update positions
-  simulation.on('tick', () => {
-    nodes.forEach(d => {
-      d.x = Math.max(d.r + 14, Math.min(W - d.r - 14, d.x))
-      d.y = Math.max(d.r + 14, Math.min(H - d.r - 14, d.y))
+    .on('tick', () => {
+      if (!nodes.length) return
+      const r = nodes[0]?.r || 10
+      nodes.forEach(d => {
+        d.x = Math.max(r + 10, Math.min(W - r - 10, d.x || W / 2))
+        d.y = Math.max(r + 10, Math.min(H - r - 10, d.y || H / 2))
+      })
+      linkSel?.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+               .attr('x2', d => d.target.x).attr('y2', d => d.target.y)
+      nodeSel?.attr('transform', d => `translate(${d.x},${d.y})`)
     })
-    linkSel
-      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
-      .attr('x2', d => d.target.x).attr('y2', d => d.target.y)
-    nodeSel.attr('transform', d => `translate(${d.x},${d.y})`)
-  })
 
-  // Pulse: fire a small ball along a random link
+  // Initial build
+  rebuildGraph(props.count)
+
+  // Pulse animation
   function firePulse() {
-    const link = links[Math.floor(Math.random() * links.length)]
-    const src  = link.source
-    const tgt  = link.target
-    const col  = COLOR[tgt.verdict]
+    if (!nodes.length) { pulseTimer = setTimeout(firePulse, 1000); return }
+    const allLinks = linkGroup.selectAll('line').data()
+    if (!allLinks.length) { pulseTimer = setTimeout(firePulse, 800); return }
+    const link = allLinks[Math.floor(Math.random() * allLinks.length)]
+    if (!link?.source || !link?.target) { pulseTimer = setTimeout(firePulse, 600); return }
+    const src = link.source, tgt = link.target
+    const col = COLOR[tgt.verdict] || '#4ade80'
 
-    const ball = svg.append('circle')
-      .attr('r', 3.5)
-      .attr('cx', src.x).attr('cy', src.y)
-      .style('fill', col)
-      .style('opacity', 0.95)
-      .style('filter', 'url(#hviz-glow)')
+    const ball = svgSel.append('circle')
+      .attr('r', 3.5).attr('cx', src.x).attr('cy', src.y)
+      .style('fill', col).style('opacity', 0.9)
+      .style('filter', 'url(#hviz-glow2)')
 
     ball.transition()
-      .duration(700 + Math.random() * 500)
+      .duration(700 + Math.random() * 400)
       .ease(d3.easeQuadInOut)
       .attr('cx', tgt.x).attr('cy', tgt.y)
       .style('opacity', 0)
       .on('end', () => {
         ball.remove()
-        // Flash the target node
-        nodeSel.filter(d => d.id === tgt.id).select('.node-core')
+        nodeSel?.filter(d => d.id === tgt.id).select('.node-core')
           .transition().duration(150).style('stroke-width', 3).style('stroke', col)
           .transition().duration(500).style('stroke-width', 1.5).style('stroke', COLOR[tgt.verdict])
-        nodeSel.filter(d => d.id === tgt.id).select('.node-ring')
+        nodeSel?.filter(d => d.id === tgt.id).select('.node-ring')
           .transition().duration(150).style('opacity', 0.45)
           .transition().duration(600).style('opacity', 0.18)
       })
 
-    pulseTimer = setTimeout(firePulse, 400 + Math.random() * 700)
+    pulseTimer = setTimeout(firePulse, 400 + Math.random() * 600)
   }
-  pulseTimer = setTimeout(firePulse, 800)
+  pulseTimer = setTimeout(firePulse, 1000)
 
-  // Periodically shift a node's verdict
+  // Verdict shift
   function shiftVerdict() {
+    if (!nodes.length) { verdictTimer = setTimeout(shiftVerdict, 2000); return }
     const all = ['interested', 'interested', 'neutral', 'objection']
     const node = nodes[Math.floor(Math.random() * nodes.length)]
     node.verdict = all[Math.floor(Math.random() * all.length)]
     const col = COLOR[node.verdict]
-    nodeSel.filter(d => d.id === node.id).select('.node-core')
-      .transition().duration(600).style('stroke', col)
-    nodeSel.filter(d => d.id === node.id).select('.node-ring')
-      .transition().duration(600).style('stroke', col)
+    nodeSel?.filter(d => d.id === node.id).select('.node-core')
+      .transition().duration(500).style('stroke', col)
+    nodeSel?.filter(d => d.id === node.id).select('.node-ring')
+      .transition().duration(500).style('stroke', col)
     verdictTimer = setTimeout(shiftVerdict, 1200 + Math.random() * 1800)
   }
   verdictTimer = setTimeout(shiftVerdict, 2000)
 })
 
+// React to count changes with a small debounce
+let rebuildTimeout = null
+watch(() => props.count, (newCount) => {
+  if (rebuildTimeout) clearTimeout(rebuildTimeout)
+  rebuildTimeout = setTimeout(() => rebuildGraph(newCount), 80)
+})
+
 onUnmounted(() => {
-  if (simulation)   simulation.stop()
-  if (pulseTimer)   clearTimeout(pulseTimer)
-  if (verdictTimer) clearTimeout(verdictTimer)
+  if (simulation)    simulation.stop()
+  if (pulseTimer)    clearTimeout(pulseTimer)
+  if (verdictTimer)  clearTimeout(verdictTimer)
+  if (rebuildTimeout) clearTimeout(rebuildTimeout)
 })
 </script>
 
