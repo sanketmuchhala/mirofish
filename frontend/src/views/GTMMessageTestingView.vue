@@ -416,8 +416,7 @@ function goToPersonas() {
 }
 
 function continueToReport() {
-  // Phase 5 placeholder
-  router.push({ name: 'Home' })
+  router.push({ name: 'GTMReport', params: { briefId: briefId.value } })
 }
 
 // Init

@@ -53,6 +53,12 @@ const routes = [
     name: 'GTMMessages',
     component: () => import('../views/GTMMessageTestingView.vue'),
     props: true
+  },
+  {
+    path: '/gtm/report/:briefId',
+    name: 'GTMReport',
+    component: () => import('../views/GTMReportView.vue'),
+    props: true
   }
 ]
 
