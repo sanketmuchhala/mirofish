@@ -42,14 +42,28 @@
         </div>
         
         <div class="hero-right">
-          <!-- Logo area -->
-          <div class="logo-container">
-            <img src="../assets/logo/MiroFish_logo_left.jpeg" alt="GTM Simulation Lab" class="hero-logo" />
+          <!-- Abstract GTM visual — replaces logo -->
+          <div class="hero-visual">
+            <div class="hv-node hv-node--center">
+              <span class="hv-node-label">Your GTM Brief</span>
+            </div>
+            <div class="hv-row">
+              <div class="hv-node hv-node--sm">
+                <span class="hv-node-dot hv-green"></span>Buyer Personas
+              </div>
+              <div class="hv-node hv-node--sm">
+                <span class="hv-node-dot hv-amber"></span>Messages
+              </div>
+              <div class="hv-node hv-node--sm">
+                <span class="hv-node-dot hv-indigo"></span>Reactions
+              </div>
+            </div>
+            <div class="hv-node hv-node--report">
+              <span class="hv-node-label">GTM Report ↓</span>
+            </div>
           </div>
-          
-          <button class="scroll-down-btn" @click="scrollToBottom">
-            ↓
-          </button>
+
+          <button class="scroll-down-btn" @click="scrollToBottom">↓</button>
         </div>
       </section>
 
@@ -209,8 +223,29 @@
         </div>
       </section>
 
-      <!-- History database -->
-      <HistoryDatabase />
+      <!-- Footer -->
+      <footer class="home-footer">
+        <span class="home-footer-text">
+          GTM Simulation Lab — open source
+        </span>
+        <span class="home-footer-sep">·</span>
+        <a
+          href="https://github.com/sanketmuchhala/GTM-SImulator"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="home-footer-link"
+        >GitHub ↗</a>
+        <span class="home-footer-sep">·</span>
+        <span class="home-footer-credit">
+          Forked from
+          <a
+            href="https://github.com/camel-ai/oasis"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="home-footer-link"
+          >MiroFish / OASIS ↗</a>
+        </span>
+      </footer>
     </div>
   </div>
 </template>
@@ -218,7 +253,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import HistoryDatabase from '../components/HistoryDatabase.vue'
 import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 import GTMBriefForm from '../components/GTMBriefForm.vue'
 import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
@@ -501,17 +535,78 @@ function resetForm() {
   align-items: flex-end;
 }
 
-.logo-container {
-  width: 100%;
+/* ── Hero visual (replaces logo) ───────────────────────────── */
+.hero-visual {
   display: flex;
-  justify-content: flex-end;
-  padding-right: 40px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  background: #fafafa;
+  width: 100%;
+  max-width: 320px;
+  user-select: none;
 }
 
-.hero-logo {
-  max-width: 500px; /* adjust logo size */
-  width: 100%;
+.hv-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #222;
+  gap: 8px;
 }
+
+.hv-node--center {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.hv-node--report {
+  width: 100%;
+  background: linear-gradient(135deg, #FF5722, #FF8A65);
+  color: #fff;
+  border-color: transparent;
+}
+
+.hv-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.hv-node--sm {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+}
+
+.hv-node-label { font-size: 12px; font-weight: 700; }
+
+.hv-node-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hv-green  { background: #4CAF50; }
+.hv-amber  { background: #FF9800; }
+.hv-indigo { background: #6366f1; }
 
 .scroll-down-btn {
   width: 40px;
@@ -867,24 +962,38 @@ function resetForm() {
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .dashboard-section {
-    flex-direction: column;
-  }
-  
-  .hero-section {
-    flex-direction: column;
-  }
-  
-  .hero-left {
-    padding-right: 0;
-    margin-bottom: 40px;
-  }
-  
-  .hero-logo {
-    max-width: 200px;
-    margin-bottom: 20px;
-  }
+  .dashboard-section { flex-direction: column; }
+  .hero-section { flex-direction: column; }
+  .hero-left { padding-right: 0; margin-bottom: 40px; }
+  .hero-visual { max-width: 100%; }
 }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+.home-footer {
+  margin-top: 60px;
+  padding: 20px 0;
+  border-top: 1px solid #e8e8e8;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #aaa;
+}
+
+.home-footer-sep { color: #ddd; }
+
+.home-footer-text { color: #888; }
+
+.home-footer-credit { color: #aaa; }
+
+.home-footer-link {
+  color: #888;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.home-footer-link:hover { color: #111; }
 </style>
 
 <style>
