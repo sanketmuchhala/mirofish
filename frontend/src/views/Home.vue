@@ -5,7 +5,6 @@
     <nav class="navbar">
       <div class="nav-brand">GTM SIM LAB</div>
       <div class="nav-links">
-        <LanguageSwitcher />
         <a href="https://github.com/sanketmuchhala/GTM-SImulator" target="_blank" class="github-link">
           GitHub <span class="arrow">↗</span>
         </a>
@@ -171,7 +170,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 import GTMBriefForm from '../components/GTMBriefForm.vue'
 import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
 import { setGTMBrief, setSimulationPreview, resetGTMState, getGTMState } from '../store/gtmSimulation.js'
