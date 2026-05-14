@@ -7,41 +7,63 @@
 </script>
 
 <style>
-/* Global style reset */
-* {
+/* ── Design tokens ──────────────────────────────────────────── */
+:root {
+  /* Backgrounds (dark simulation views) */
+  --bg-base:     #0a0a0f;
+  --bg-surface:  #0d0d18;
+  --bg-card:     #12121e;
+  --bg-elevated: #1a1a2e;
+
+  /* Borders */
+  --border-subtle: #1e1e2e;
+  --border-muted:  #2e2e4e;
+
+  /* Text */
+  --text-primary:   #e8e8f0;
+  --text-secondary: #8888aa;
+  --text-tertiary:  #5a5a7a;
+
+  /* Accent */
+  --accent:    #6366f1;
+  --accent-dim: rgba(99, 102, 241, 0.12);
+
+  /* Semantic */
+  --green:  #4ade80;
+  --amber:  #f59e0b;
+  --red:    #f87171;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── Global reset ───────────────────────────────────────────── */
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 #app {
-  font-family: 'JetBrains Mono', 'Space Grotesk', 'Noto Sans SC', monospace;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #000000;
   background-color: #ffffff;
 }
 
-/* Scrollbar styles */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Focus-visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
+/* Scrollbar — dark for simulation views, light for home */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
 
-::-webkit-scrollbar-thumb {
-  background: #000000;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #333333;
-}
-
-/* Global button styles */
-button {
-  font-family: inherit;
-}
+button { font-family: inherit; cursor: pointer; }
 </style>

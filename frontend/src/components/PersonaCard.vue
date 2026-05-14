@@ -11,7 +11,7 @@
   </div>
 
   <!-- FULL MODE: for GTMPersonasView grid -->
-  <div v-else class="persona-card-full" :class="persona.reaction">
+  <div v-else class="persona-card-full" :class="[persona.reaction, { dark }]">
     <!-- Header -->
     <div class="pcf-header">
       <div class="pcf-identity">
@@ -84,16 +84,10 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  /** Full persona object from the GTM persona generator */
-  persona: {
-    type: Object,
-    required: true,
-  },
-  /** If true, renders the compact teaser card (for Home.vue preview) */
-  compact: {
-    type: Boolean,
-    default: false,
-  },
+  persona: { type: Object, required: true },
+  compact: { type: Boolean, default: false },
+  /** Use dark theme (for dark-bg simulation views) */
+  dark:    { type: Boolean, default: false },
 })
 
 const reactionLabel = computed(() => {
@@ -152,141 +146,103 @@ const angleLabel = computed(() => {
   padding-top: 6px;
 }
 
-/* ── FULL MODE ───────────────────────────────────────────────── */
+/* ── FULL MODE — light (default) ─────────────────────────── */
 .persona-card-full {
   background: #fff;
-  border: 1px solid #E5E5E5;
-  border-radius: 5px;
-  padding: 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  transition: box-shadow 0.15s;
+  gap: 10px;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-.persona-card-full:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-}
+.persona-card-full:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 
-.persona-card-full.interested { border-left: 4px solid #4CAF50; }
-.persona-card-full.neutral    { border-left: 4px solid #FF9800; }
-.persona-card-full.objection  { border-left: 4px solid #E53935; }
+.persona-card-full.interested { border-left: 3px solid #4CAF50; }
+.persona-card-full.neutral    { border-left: 3px solid #FF9800; }
+.persona-card-full.objection  { border-left: 3px solid #E53935; }
 
 /* Header */
 .pcf-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
 }
 
 .pcf-identity { flex: 1; min-width: 0; }
 
-.pcf-name {
-  font-weight: 700;
-  font-size: 14px;
-  color: #111;
-  line-height: 1.2;
-}
-
-.pcf-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: #444;
-  margin-top: 2px;
-}
-
-.pcf-company {
-  font-size: 10px;
-  color: #888;
-  margin-top: 2px;
-}
+.pcf-name  { font-weight: 700; font-size: 14px; color: #111; line-height: 1.2; }
+.pcf-title { font-size: 11px; color: #555; margin-top: 3px; }
+.pcf-company { font-size: 10px; color: #999; margin-top: 2px; }
 
 /* Badges */
 .pcf-badges {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
 .reaction-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 2px;
+  padding: 3px 7px;
+  border-radius: 4px;
   white-space: nowrap;
 }
-.reaction-badge.interested { background: #E8F5E9; color: #2E7D32; }
-.reaction-badge.neutral    { background: #FFF3E0; color: #E65100; }
-.reaction-badge.objection  { background: #FFEBEE; color: #C62828; }
+.reaction-badge.interested { background: #e8f5e9; color: #2e7d32; }
+.reaction-badge.neutral    { background: #fff3e0; color: #e65100; }
+.reaction-badge.objection  { background: #ffebee; color: #c62828; }
 
-.skep-bar {
-  display: flex;
-  gap: 2px;
-  cursor: help;
-}
+.skep-bar { display: flex; gap: 2px; cursor: help; }
 
 .skep-seg {
-  width: 8px;
-  height: 4px;
+  width: 8px; height: 4px;
   border-radius: 1px;
-  background: #E0E0E0;
+  background: #e0e0e0;
 }
-
-.skep-seg.filled {
-  background: #E65100;
-}
+.skep-seg.filled { background: #e65100; }
 
 .skep-label {
   font-size: 9px;
-  color: #AAA;
-  font-family: 'JetBrains Mono', monospace;
+  color: #aaa;
   margin-top: 1px;
 }
 
 /* Info rows */
-.pcf-row {
-  display: flex;
-  gap: 8px;
-  font-size: 11px;
-  line-height: 1.4;
-}
+.pcf-row { display: flex; gap: 8px; font-size: 12px; line-height: 1.5; }
 
 .pcf-row-label {
-  font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   font-weight: 700;
+  letter-spacing: 0.07em;
   color: #999;
-  letter-spacing: 0.8px;
   white-space: nowrap;
-  padding-top: 1px;
-  min-width: 56px;
+  padding-top: 2px;
+  min-width: 62px;
+  text-transform: uppercase;
 }
 
 .pcf-row-value { color: #333; }
-
 .objection-text { font-style: italic; color: #555; }
 
 .pcf-objection-chip {
   display: inline-block;
   font-size: 11px;
-  color: #C62828;
-  background: #FFEBEE;
-  border: 1px solid #FFCDD2;
-  border-radius: 3px;
-  padding: 2px 7px;
-  line-height: 1.4;
+  color: #c62828;
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 4px;
+  padding: 2px 8px;
+  line-height: 1.5;
 }
 
 /* Divider */
-.pcf-divider {
-  height: 1px;
-  background: #F0F0F0;
-  margin: 2px 0;
-}
+.pcf-divider { height: 1px; background: #f0f0f0; margin: 2px 0; }
 
 /* Meta row */
 .pcf-meta-row {
@@ -294,30 +250,70 @@ const angleLabel = computed(() => {
   align-items: center;
   gap: 6px;
   font-size: 10px;
-  color: #666;
+  color: #777;
   flex-wrap: wrap;
 }
 
-.pcf-meta-sep { color: #CCC; }
+.pcf-meta-sep { color: #ddd; }
+.pcf-meta-item strong { font-weight: 700; font-size: 9px; }
 
-.pcf-meta-item strong {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  font-size: 9px;
-}
-
-.sens-low, .risk-low   { color: #2E7D32; }
-.sens-medium, .risk-medium { color: #E65100; }
-.sens-high, .risk-high  { color: #C62828; }
+.sens-low, .risk-low     { color: #2e7d32; }
+.sens-medium, .risk-medium { color: #e65100; }
+.sens-high, .risk-high   { color: #c62828; }
 
 /* Summary quote */
 .pcf-summary {
-  font-size: 11px;
+  font-size: 12px;
   font-style: italic;
-  color: #555;
-  line-height: 1.4;
-  border-top: 1px solid #F0F0F0;
-  padding-top: 8px;
-  margin-top: 2px;
+  color: #666;
+  line-height: 1.5;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
 }
+
+/* ── FULL MODE — dark variant ─────────────────────────────── */
+.persona-card-full.dark {
+  background: var(--bg-card);
+  border-color: var(--border-subtle);
+}
+
+.persona-card-full.dark:hover {
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+  border-color: var(--border-muted);
+}
+
+.persona-card-full.dark.interested { border-left-color: var(--green); }
+.persona-card-full.dark.neutral    { border-left-color: var(--amber); }
+.persona-card-full.dark.objection  { border-left-color: var(--red); }
+
+.persona-card-full.dark .pcf-name    { color: var(--text-primary); }
+.persona-card-full.dark .pcf-title   { color: var(--text-secondary); }
+.persona-card-full.dark .pcf-company { color: var(--text-tertiary); }
+
+.persona-card-full.dark .reaction-badge.interested { background: rgba(74,222,128,0.12); color: var(--green); }
+.persona-card-full.dark .reaction-badge.neutral    { background: rgba(245,158,11,0.12); color: var(--amber); }
+.persona-card-full.dark .reaction-badge.objection  { background: rgba(248,113,113,0.12); color: var(--red); }
+
+.persona-card-full.dark .skep-seg         { background: var(--border-muted); }
+.persona-card-full.dark .skep-seg.filled  { background: var(--amber); }
+.persona-card-full.dark .skep-label       { color: var(--text-tertiary); }
+
+.persona-card-full.dark .pcf-row-label { color: var(--text-tertiary); }
+.persona-card-full.dark .pcf-row-value { color: #c8c8e0; }
+
+.persona-card-full.dark .pcf-objection-chip {
+  background: rgba(248,113,113,0.1);
+  border-color: rgba(248,113,113,0.25);
+  color: var(--red);
+}
+
+.persona-card-full.dark .pcf-divider { background: var(--border-subtle); }
+
+.persona-card-full.dark .pcf-meta-row  { color: var(--text-secondary); }
+.persona-card-full.dark .pcf-meta-sep  { color: var(--border-muted); }
+.persona-card-full.dark .sens-low, .persona-card-full.dark .risk-low     { color: var(--green); }
+.persona-card-full.dark .sens-medium, .persona-card-full.dark .risk-medium { color: var(--amber); }
+.persona-card-full.dark .sens-high, .persona-card-full.dark .risk-high   { color: var(--red); }
+
+.persona-card-full.dark .pcf-summary { color: var(--text-secondary); border-top-color: var(--border-subtle); }
 </style>
