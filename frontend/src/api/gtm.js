@@ -29,3 +29,23 @@ export const getGTMPreview = (briefId) =>
  */
 export const listGTMBriefs = (limit = 20) =>
   service.get('/api/gtm/briefs', { params: { limit } })
+
+/**
+ * Generate 10–12 buyer personas for a brief (LLM + fallback to mock).
+ * Idempotent — returns cached personas if already generated.
+ * @param {string} briefId
+ * @param {number} [count=12]
+ * @returns {Promise<{success: boolean, data: object[], cached: boolean}>}
+ */
+export const generatePersonas = (briefId, count = 12) =>
+  requestWithRetry(
+    () => service.post(`/api/gtm/personas/${briefId}`, { count }),
+    3, 1500
+  )
+
+/**
+ * Retrieve cached personas for a brief (generates if not yet cached).
+ * @param {string} briefId
+ */
+export const getPersonas = (briefId) =>
+  service.get(`/api/gtm/personas/${briefId}`)
