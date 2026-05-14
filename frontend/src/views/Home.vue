@@ -1,251 +1,169 @@
 <template>
   <div class="home-container">
-    <!-- Top navigation bar -->
+
+    <!-- ── Navbar ─────────────────────────────────────────────── -->
     <nav class="navbar">
       <div class="nav-brand">GTM SIM LAB</div>
       <div class="nav-links">
         <LanguageSwitcher />
-        <a href="https://github.com/sanketmuchhala/mirofish" target="_blank" class="github-link">
-          {{ $t('nav.visitGithub') }} <span class="arrow">↗</span>
+        <a href="https://github.com/sanketmuchhala/GTM-SImulator" target="_blank" class="github-link">
+          GitHub <span class="arrow">↗</span>
         </a>
       </div>
     </nav>
 
     <div class="main-content">
-      <!-- Top section: Hero area -->
-      <section class="hero-section">
-        <div class="hero-left">
-          <div class="tag-row">
-            <span class="orange-tag">{{ $t('home.tagline') }}</span>
-            <span class="version-text">{{ $t('home.version') }}</span>
-          </div>
-          
-          <h1 class="main-title">
-            {{ $t('home.heroTitle1') }}<br>
-            <span class="gradient-text">{{ $t('home.heroTitle2') }}</span>
-          </h1>
-          
-          <div class="hero-desc">
-            <p>
-              <i18n-t keypath="home.heroDesc" tag="span">
-                <template #brand><span class="highlight-bold">{{ $t('home.heroDescBrand') }}</span></template>
-                <template #agentScale><span class="highlight-orange">{{ $t('home.heroDescAgentScale') }}</span></template>
-                <template #optimalSolution><span class="highlight-code">{{ $t('home.heroDescOptimalSolution') }}</span></template>
-              </i18n-t>
-            </p>
-            <p class="slogan-text">
-              {{ $t('home.slogan') }}<span class="blinking-cursor">_</span>
-            </p>
-          </div>
-           
-          <div class="decoration-square"></div>
-        </div>
-        
-        <div class="hero-right">
-          <!-- Abstract GTM visual — replaces logo -->
-          <div class="hero-visual">
-            <div class="hv-node hv-node--center">
-              <span class="hv-node-label">Your GTM Brief</span>
-            </div>
-            <div class="hv-row">
-              <div class="hv-node hv-node--sm">
-                <span class="hv-node-dot hv-green"></span>Buyer Personas
-              </div>
-              <div class="hv-node hv-node--sm">
-                <span class="hv-node-dot hv-amber"></span>Messages
-              </div>
-              <div class="hv-node hv-node--sm">
-                <span class="hv-node-dot hv-indigo"></span>Reactions
-              </div>
-            </div>
-            <div class="hv-node hv-node--report">
-              <span class="hv-node-label">GTM Report ↓</span>
-            </div>
-          </div>
 
-          <button class="scroll-down-btn" @click="scrollToBottom">↓</button>
+      <!-- ── Hero ──────────────────────────────────────────────── -->
+      <section class="hero-section">
+        <div class="hero-eyebrow">
+          <span class="hero-badge">AI-Powered GTM Lab</span>
+          <span class="hero-version">v0.1 Preview</span>
+        </div>
+
+        <h1 class="hero-title">
+          Simulate your GTM<br>
+          <span class="hero-title-accent">before you launch outreach.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Enter a product brief. Get 12 AI buyer personas, 3 tested message angles,
+          36 simulated reactions, and a ready-to-run 7-day outbound experiment —
+          in under 2 minutes.
+        </p>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat-num">12</span>
+            <span class="hero-stat-label">Buyer Personas</span>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">36</span>
+            <span class="hero-stat-label">Simulated Reactions</span>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">~$5</span>
+            <span class="hero-stat-label">Per Simulation</span>
+          </div>
+          <div class="hero-stat-sep"></div>
+          <div class="hero-stat">
+            <span class="hero-stat-num">&lt;2 min</span>
+            <span class="hero-stat-label">End to End</span>
+          </div>
         </div>
       </section>
 
-      <!-- Bottom section: Two-column layout -->
-      <section class="dashboard-section">
-        <!-- Left column: Status and steps -->
-        <div class="left-panel">
-          <div class="panel-header">
-            <span class="status-dot">■</span> {{ $t('home.systemStatus') }}
-          </div>
-          
-          <h2 class="section-title">{{ $t('home.systemReady') }}</h2>
-          <p class="section-desc">
-            {{ $t('home.systemReadyDesc') }}
-          </p>
-          
-          <!-- Data metrics cards -->
-          <div class="metrics-row">
-            <div class="metric-card">
-              <div class="metric-value">{{ $t('home.metricLowCost') }}</div>
-              <div class="metric-label">{{ $t('home.metricLowCostDesc') }}</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-value">{{ $t('home.metricHighAvail') }}</div>
-              <div class="metric-label">{{ $t('home.metricHighAvailDesc') }}</div>
-            </div>
-          </div>
+      <!-- ── Main: Workflow + Form ─────────────────────────────── -->
+      <section class="main-section">
 
-          <!-- Project simulation workflow steps -->
-          <div class="steps-container">
-            <div class="steps-header">
-               <span class="diamond-icon">◇</span> {{ $t('home.workflowSequence') }}
-            </div>
-            <div class="workflow-list">
-              <div class="workflow-item">
-                <span class="step-num">01</span>
-                <div class="step-info">
-                  <div class="step-title">{{ $t('home.step01Title') }}</div>
-                  <div class="step-desc">{{ $t('home.step01Desc') }}</div>
-                </div>
+        <!-- Left: How it works -->
+        <div class="how-it-works">
+          <div class="hiw-header">How it works</div>
+          <div class="hiw-steps">
+            <div class="hiw-step" v-for="(step, i) in steps" :key="i">
+              <div class="hiw-step-left">
+                <div class="hiw-step-num">{{ String(i + 1).padStart(2, '0') }}</div>
+                <div class="hiw-step-line" v-if="i < steps.length - 1"></div>
               </div>
-              <div class="workflow-item">
-                <span class="step-num">02</span>
-                <div class="step-info">
-                  <div class="step-title">{{ $t('home.step02Title') }}</div>
-                  <div class="step-desc">{{ $t('home.step02Desc') }}</div>
-                </div>
-              </div>
-              <div class="workflow-item">
-                <span class="step-num">03</span>
-                <div class="step-info">
-                  <div class="step-title">{{ $t('home.step03Title') }}</div>
-                  <div class="step-desc">{{ $t('home.step03Desc') }}</div>
-                </div>
-              </div>
-              <div class="workflow-item">
-                <span class="step-num">04</span>
-                <div class="step-info">
-                  <div class="step-title">{{ $t('home.step04Title') }}</div>
-                  <div class="step-desc">{{ $t('home.step04Desc') }}</div>
-                </div>
-              </div>
-              <div class="workflow-item">
-                <span class="step-num">05</span>
-                <div class="step-info">
-                  <div class="step-title">{{ $t('home.step05Title') }}</div>
-                  <div class="step-desc">{{ $t('home.step05Desc') }}</div>
-                </div>
+              <div class="hiw-step-content">
+                <div class="hiw-step-title">{{ step.title }}</div>
+                <div class="hiw-step-desc">{{ step.desc }}</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Right column: GTM Brief Form or Preview -->
-        <div class="right-panel">
-          <div class="console-box">
+        <!-- Right: Form card -->
+        <div class="form-panel">
 
-            <!-- State: form -->
-            <div v-if="homeState === 'form'" class="console-section form-section-wrapper">
-              <div class="demo-banner">
-                <span class="demo-banner-text">New here? Try a pre-filled example.</span>
-                <button class="demo-btn" @click="loadDemoScenario">⚡ Load Example Simulation</button>
-              </div>
+          <!-- Form header -->
+          <div class="form-panel-header">
+            <div class="form-panel-title">GTM Brief</div>
+            <button class="demo-pill" @click="loadDemoScenario">
+              ⚡ Try example
+            </button>
+          </div>
+
+          <!-- States -->
+          <div class="form-panel-body">
+
+            <!-- form -->
+            <div v-if="homeState === 'form'">
               <GTMBriefForm :loading="loading" :initialData="demoData" @submit="handleBriefSubmit" />
             </div>
 
-            <!-- State: submitting (transitional) -->
-            <div v-else-if="homeState === 'submitting'" class="console-section preview-section">
-              <div class="preview-header">
-                <span class="preview-status-dot loading"></span>
-                <span class="preview-status-text">Analyzing GTM brief...</span>
-              </div>
-              <div class="submitting-steps">
-                <div class="sub-step sub-step--done">● Brief validated</div>
-                <div class="sub-step sub-step--active">◉ Generating buyer persona preview...</div>
-                <div class="sub-step sub-step--pending">○ Preparing simulation environment</div>
+            <!-- submitting -->
+            <div v-else-if="homeState === 'submitting'" class="state-loading">
+              <div class="state-spinner"></div>
+              <div class="state-loading-steps">
+                <div class="sls-step sls-done">✓ Brief validated</div>
+                <div class="sls-step sls-active">◉ Generating persona preview…</div>
+                <div class="sls-step sls-pending">○ Preparing simulation</div>
               </div>
             </div>
 
-            <!-- State: preview -->
-            <div v-else-if="homeState === 'preview'" class="console-section preview-section">
-              <div class="preview-header">
-                <span class="preview-status-dot ready"></span>
-                <span class="preview-status-text">GTM brief received — simulation ready</span>
+            <!-- preview -->
+            <div v-else-if="homeState === 'preview'" class="state-preview">
+              <div class="state-preview-header">
+                <span class="state-dot state-dot--ready"></span>
+                <span class="state-preview-title">Simulation ready</span>
               </div>
 
-              <div class="preview-label">Buyer Persona Preview</div>
-              <div class="persona-grid">
+              <div class="preview-section-label">Buyer persona preview</div>
+              <div class="preview-personas">
                 <div
                   v-for="persona in previewPersonas"
                   :key="persona.id"
-                  class="persona-card"
+                  class="preview-persona"
                   :class="persona.reaction"
                 >
-                  <div class="persona-name">{{ persona.name }}</div>
-                  <div class="persona-role">{{ persona.role }}</div>
-                  <div class="persona-company">{{ persona.company }}</div>
-                  <div class="persona-reaction-badge" :class="persona.reaction">
-                    {{ reactionLabel(persona.reaction) }}
+                  <div class="pp-header">
+                    <span class="pp-name">{{ persona.name }}</span>
+                    <span class="pp-badge" :class="persona.reaction">{{ reactionLabel(persona.reaction) }}</span>
                   </div>
-                  <div class="persona-quote">"{{ persona.likely_response }}"</div>
+                  <div class="pp-role">{{ persona.role }}</div>
+                  <div class="pp-quote">"{{ persona.likely_response }}"</div>
                 </div>
               </div>
 
-              <div v-if="previewTeasers.length" class="message-teasers">
-                <div class="preview-label">Message Angle Signals</div>
-                <div
-                  v-for="teaser in previewTeasers"
-                  :key="teaser.angle"
-                  class="teaser-row"
-                >
-                  <span class="teaser-label">{{ teaser.label }}</span>
-                  <span class="teaser-text">{{ teaser.preview }}</span>
+              <div v-if="previewTeasers.length" class="preview-teasers">
+                <div class="preview-section-label">Message angle signals</div>
+                <div v-for="teaser in previewTeasers" :key="teaser.angle" class="teaser-item">
+                  <span class="teaser-angle">{{ teaser.label }}</span>
+                  <span class="teaser-preview">{{ teaser.preview }}</span>
                 </div>
               </div>
 
               <div class="preview-actions">
-                <button class="continue-btn" @click="continueToSimulation">
-                  Continue to Full Simulation →
+                <button class="btn-primary" @click="continueToSimulation">
+                  Run Full Simulation →
                 </button>
-                <button class="restart-btn" @click="resetForm">
-                  ← Edit Brief
-                </button>
+                <button class="btn-ghost" @click="resetForm">← Edit Brief</button>
               </div>
             </div>
 
-            <!-- State: error -->
-            <div v-else-if="homeState === 'error'" class="console-section preview-section">
-              <div class="preview-header">
-                <span class="preview-status-dot error"></span>
-                <span class="preview-status-text">{{ submitError || 'Brief submission failed. Check your API connection and try again.' }}</span>
-              </div>
-              <button class="restart-btn" style="margin-top:16px" @click="resetForm">← Edit Brief</button>
+            <!-- error -->
+            <div v-else-if="homeState === 'error'" class="state-error">
+              <div class="state-error-icon">⚠</div>
+              <div class="state-error-msg">{{ submitError || 'Brief submission failed. Check your connection and try again.' }}</div>
+              <button class="btn-ghost" @click="resetForm">← Edit Brief</button>
             </div>
 
           </div>
         </div>
       </section>
 
-      <!-- Footer -->
+      <!-- ── Footer ─────────────────────────────────────────────── -->
       <footer class="home-footer">
-        <span class="home-footer-text">
-          GTM Simulation Lab — open source
-        </span>
+        <span>GTM Simulation Lab — open source</span>
         <span class="home-footer-sep">·</span>
-        <a
-          href="https://github.com/sanketmuchhala/GTM-SImulator"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="home-footer-link"
-        >GitHub ↗</a>
+        <a href="https://github.com/sanketmuchhala/GTM-SImulator" target="_blank" rel="noopener" class="home-footer-link">GitHub ↗</a>
         <span class="home-footer-sep">·</span>
-        <span class="home-footer-credit">
-          Forked from
-          <a
-            href="https://github.com/666ghj/MiroFish"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="home-footer-link"
-          >MiroFish ↗</a>
-        </span>
+        <span>Forked from <a href="https://github.com/666ghj/MiroFish" target="_blank" rel="noopener" class="home-footer-link">MiroFish ↗</a></span>
       </footer>
+
     </div>
   </div>
 </template>
@@ -261,6 +179,14 @@ import { MOCK_GTM_PREVIEW } from '../mock/gtm_preview.js'
 import { DEMO_BRIEF } from '../mock/gtm_demo.js'
 
 const router = useRouter()
+
+const steps = [
+  { title: 'Input Brief',      desc: 'Describe your product, ICP, pricing, and GTM goal.' },
+  { title: 'Buyer Personas',   desc: 'AI generates 12 distinct buyer archetypes from your ICP.' },
+  { title: 'Message Testing',  desc: '3 outreach angles (pain-first, ROI-first, curiosity-first) tested against each persona.' },
+  { title: 'Buyer Reactions',  desc: 'Each persona responds with interest scores, objections, and a simulated reply.' },
+  { title: 'GTM Report',       desc: 'Best angle, top objections with rebuttals, and a 7-day outbound experiment plan.' },
+]
 
 // 'form' | 'submitting' | 'preview' | 'error'
 const homeState = ref('form')
@@ -337,46 +263,34 @@ function resetForm() {
 </script>
 
 <style scoped>
-/* Global variables and reset */
-:root {
-  --black: #000000;
-  --white: #FFFFFF;
-  --orange: #FF4500;
-  --gray-light: #F5F5F5;
-  --gray-text: #666666;
-  --border: #E5E5E5;
-  /*
-    Space Grotesk as the primary heading font, JetBrains Mono as code/label font
-    Make sure these Google Fonts are imported in index.html
-  */
-  --font-mono: 'JetBrains Mono', monospace;
-  --font-sans: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
-  --font-cn: 'Noto Sans SC', system-ui, sans-serif;
-}
-
+/* ── Shell ───────────────────────────────────────────────────── */
 .home-container {
   min-height: 100vh;
-  background: var(--white);
+  background: #fff;
   font-family: var(--font-sans);
-  color: var(--black);
+  color: #111;
 }
 
-/* Top navigation */
+/* ── Navbar ──────────────────────────────────────────────────── */
 .navbar {
-  height: 60px;
-  background: var(--black);
-  color: var(--white);
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid #ebebeb;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .nav-brand {
   font-family: var(--font-mono);
   font-weight: 800;
-  letter-spacing: 1px;
-  font-size: 1.2rem;
+  letter-spacing: 0.1em;
+  font-size: 13px;
+  color: #111;
 }
 
 .nav-links {
@@ -386,606 +300,477 @@ function resetForm() {
 }
 
 .github-link {
-  color: var(--white);
+  color: #555;
   text-decoration: none;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 13px;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: opacity 0.2s;
+  gap: 4px;
+  transition: color 0.15s;
 }
 
-.github-link:hover {
-  opacity: 0.8;
-}
+.github-link:hover { color: #111; }
+.arrow { font-size: 11px; }
 
-.arrow {
-  font-family: sans-serif;
-}
-
-/* Main content area */
+/* ── Main content wrapper ────────────────────────────────────── */
 .main-content {
-  max-width: 1400px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 60px 40px;
+  padding: 64px 40px 0;
 }
 
-/* Hero area */
+/* ── Hero ────────────────────────────────────────────────────── */
 .hero-section {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 80px;
-  position: relative;
+  margin-bottom: 64px;
+  max-width: 760px;
 }
 
-.hero-left {
-  flex: 1;
-  padding-right: 60px;
-}
-
-.tag-row {
+.hero-eyebrow {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
-.orange-tag {
-  background: var(--orange);
-  color: var(--white);
+.hero-badge {
+  background: #f0f0f8;
+  color: #6366f1;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   padding: 4px 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  font-size: 0.75rem;
+  border-radius: 20px;
 }
 
-.version-text {
-  color: #999;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-}
-
-.main-title {
-  font-size: 4.5rem;
-  line-height: 1.2;
-  font-weight: 500;
-  margin: 0 0 40px 0;
-  letter-spacing: -2px;
-  color: var(--black);
-}
-
-.gradient-text {
-  background: linear-gradient(90deg, #000000 0%, #444444 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-}
-
-.hero-desc {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: var(--gray-text);
-  max-width: 640px;
-  margin-bottom: 50px;
-  font-weight: 400;
-  text-align: justify;
-}
-
-.hero-desc p {
-  margin-bottom: 1.5rem;
-}
-
-.highlight-bold {
-  color: var(--black);
-  font-weight: 700;
-}
-
-.highlight-orange {
-  color: var(--orange);
-  font-weight: 700;
+.hero-version {
+  font-size: 12px;
+  color: #aaa;
   font-family: var(--font-mono);
 }
 
-.highlight-code {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 2px 6px;
-  border-radius: 2px;
-  font-family: var(--font-mono);
-  font-size: 0.9em;
-  color: var(--black);
-  font-weight: 600;
-}
-
-.slogan-text {
-  font-size: 1.2rem;
-  font-weight: 520;
-  color: var(--black);
-  letter-spacing: 1px;
-  border-left: 3px solid var(--orange);
-  padding-left: 15px;
-  margin-top: 20px;
-}
-
-.blinking-cursor {
-  color: var(--orange);
-  animation: blink 1s step-end infinite;
+.hero-title {
+  font-size: 3.2rem;
   font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: #111;
+  margin: 0 0 20px;
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.hero-title-accent {
+  color: #6366f1;
 }
 
-.decoration-square {
-  width: 16px;
-  height: 16px;
-  background: var(--orange);
+.hero-sub {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #555;
+  max-width: 600px;
+  margin: 0 0 32px;
 }
 
-.hero-right {
-  flex: 0.8;
+.hero-stats {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+  width: fit-content;
 }
 
-/* ── Hero visual (replaces logo) ───────────────────────────── */
-.hero-visual {
+.hero-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 32px;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
-  background: #fafafa;
-  width: 100%;
-  max-width: 320px;
-  user-select: none;
+  padding: 14px 28px;
+  gap: 3px;
 }
 
-.hv-node {
+.hero-stat-sep {
+  width: 1px;
+  height: 36px;
+  background: #ebebeb;
+  flex-shrink: 0;
+}
+
+.hero-stat-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: -0.02em;
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  color: #aaa;
+  white-space: nowrap;
+}
+
+/* ── Main section: How it works + Form ───────────────────────── */
+.main-section {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 48px;
+  align-items: start;
+  border-top: 1px solid #ebebeb;
+  padding-top: 48px;
+}
+
+/* ── Left: How it works ─────────────────────────────────────── */
+.how-it-works {
+  position: sticky;
+  top: 80px;
+}
+
+.hiw-header {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 24px;
+}
+
+.hiw-steps {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiw-step {
+  display: flex;
+  gap: 16px;
+}
+
+.hiw-step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.hiw-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f4f4f8;
+  border: 1px solid #e8e8f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.hiw-step-line {
+  width: 1px;
+  flex: 1;
+  min-height: 20px;
+  background: #ebebeb;
+  margin: 4px 0;
+}
+
+.hiw-step-content {
+  padding-bottom: 20px;
+}
+
+.hiw-step-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 4px;
+}
+
+.hiw-step-desc {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.6;
+}
+
+/* ── Right: Form panel ──────────────────────────────────────── */
+.form-panel {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  overflow: hidden;
   background: #fff;
-  font-family: 'JetBrains Mono', monospace;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.form-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid #ebebeb;
+  background: #fafafa;
+}
+
+.form-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.02em;
+}
+
+.demo-pill {
+  background: #f0f0f8;
+  color: #6366f1;
+  border: 1px solid rgba(99,102,241,0.25);
+  border-radius: 20px;
+  padding: 5px 12px;
   font-size: 12px;
   font-weight: 600;
-  color: #222;
-  gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
-.hv-node--center {
-  width: 100%;
-  background: #111;
-  color: #fff;
-  border-color: #111;
+.demo-pill:hover {
+  background: rgba(99,102,241,0.12);
 }
 
-.hv-node--report {
-  width: 100%;
-  background: linear-gradient(135deg, #FF5722, #FF8A65);
-  color: #fff;
-  border-color: transparent;
+.form-panel-body {
+  background: #fff;
 }
 
-.hv-row {
+/* ── Submitting state ───────────────────────────────────────── */
+.state-loading {
+  padding: 40px 24px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.state-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ebebeb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { opacity: 0.4; } }
+
+.state-loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.sls-step {
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+
+.sls-done    { color: #16a34a; }
+.sls-active  { color: #111; animation: pulse 1.2s ease-in-out infinite; }
+.sls-pending { color: #ccc; }
+
+/* ── Preview state ──────────────────────────────────────────── */
+.state-preview {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.state-preview-header {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  width: 100%;
-  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
 }
 
-.hv-node--sm {
-  flex: 1;
-  padding: 8px 10px;
-  font-size: 10px;
-  letter-spacing: 0.02em;
-  border-radius: 6px;
-}
-
-.hv-node-label { font-size: 12px; font-weight: 700; }
-
-.hv-node-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
+.state-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.hv-green  { background: #4CAF50; }
-.hv-amber  { background: #FF9800; }
-.hv-indigo { background: #6366f1; }
+.state-dot--ready { background: #16a34a; }
 
-.scroll-down-btn {
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--border);
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--orange);
-  font-size: 1.2rem;
-  transition: all 0.2s;
-}
+.state-preview-title { font-size: 13px; font-weight: 600; }
 
-.scroll-down-btn:hover {
-  border-color: var(--orange);
-}
-
-/* Dashboard two-column layout */
-.dashboard-section {
-  display: flex;
-  gap: 60px;
-  border-top: 1px solid var(--border);
-  padding-top: 60px;
-  align-items: flex-start;
-}
-
-.dashboard-section .left-panel,
-.dashboard-section .right-panel {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Left panel */
-.left-panel {
-  flex: 0.8;
-}
-
-.panel-header {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: #999;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-
-.status-dot {
-  color: var(--orange);
-  font-size: 0.8rem;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 520;
-  margin: 0 0 15px 0;
-}
-
-.section-desc {
-  color: var(--gray-text);
-  margin-bottom: 25px;
-  line-height: 1.6;
-}
-
-.metrics-row {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 15px;
-}
-
-.metric-card {
-  border: 1px solid var(--border);
-  padding: 20px 30px;
-  min-width: 150px;
-}
-
-.metric-value {
-  font-family: var(--font-mono);
-  font-size: 1.8rem;
-  font-weight: 520;
-  margin-bottom: 5px;
-}
-
-.metric-label {
-  font-size: 0.85rem;
-  color: #999;
-}
-
-/* Project simulation steps overview */
-.steps-container {
-  border: 1px solid var(--border);
-  padding: 30px;
-  position: relative;
-}
-
-.steps-header {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: #999;
-  margin-bottom: 25px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.diamond-icon {
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
-.workflow-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.workflow-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.step-num {
-  font-family: var(--font-mono);
+.preview-section-label {
+  font-size: 10px;
   font-weight: 700;
-  color: var(--black);
-  opacity: 0.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: 8px;
 }
 
-.step-info {
-  flex: 1;
+.preview-personas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.step-title {
-  font-weight: 520;
-  font-size: 1rem;
-  margin-bottom: 4px;
-}
-
-.step-desc {
-  font-size: 0.85rem;
-  color: var(--gray-text);
-}
-
-/* Right-side interactive console */
-.right-panel {
-  flex: 1.2;
-}
-
-.console-box {
-  border: 1px solid #CCC; /* outer solid border */
-  padding: 8px; /* padding creates a double-border effect */
-}
-
-.console-section {
-  padding: 20px;
-}
-
-.console-section.btn-section {
-  padding-top: 0;
-}
-
-.console-header {
+.preview-persona {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fafafa;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #666;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.upload-zone {
-  border: 1px dashed #CCC;
-  height: 200px;
-  overflow-y: auto;
+.preview-persona.interested { border-left: 3px solid #16a34a; }
+.preview-persona.neutral    { border-left: 3px solid #ea580c; }
+.preview-persona.objection  { border-left: 3px solid #dc2626; }
+
+.pp-header {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  background: #FAFAFA;
-}
-
-.upload-zone.has-files {
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
 }
 
-.upload-zone:hover {
-  background: #F0F0F0;
-  border-color: #999;
+.pp-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.2;
 }
 
-.upload-placeholder {
+.pp-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pp-badge.interested { background: #dcfce7; color: #15803d; }
+.pp-badge.neutral    { background: #ffedd5; color: #c2410c; }
+.pp-badge.objection  { background: #fee2e2; color: #b91c1c; }
+
+.pp-role {
+  font-size: 11px;
+  color: #777;
+}
+
+.pp-quote {
+  font-size: 11px;
+  color: #666;
+  font-style: italic;
+  line-height: 1.5;
+  border-top: 1px solid #eee;
+  padding-top: 6px;
+  margin-top: 2px;
+}
+
+.preview-teasers {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.teaser-item {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  align-items: baseline;
+}
+
+.teaser-angle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: #6366f1;
+  min-width: 70px;
+}
+
+.teaser-preview {
+  color: #555;
+  line-height: 1.4;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding-top: 4px;
+}
+
+/* ── Error state ────────────────────────────────────────────── */
+.state-error {
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
   text-align: center;
 }
 
-.upload-icon {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #DDD;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 15px;
-  color: #999;
-}
+.state-error-icon { font-size: 28px; }
 
-.upload-title {
-  font-weight: 500;
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-}
-
-.upload-hint {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: #999;
-}
-
-.file-list {
-  width: 100%;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.file-item {
-  display: flex;
-  align-items: center;
-  background: var(--white);
-  padding: 8px 12px;
-  border: 1px solid #EEE;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
-}
-
-.file-name {
-  flex: 1;
-  margin: 0 10px;
-}
-
-.remove-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.2rem;
-  color: #999;
-}
-
-.console-divider {
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
-}
-
-.console-divider::before,
-.console-divider::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background: #EEE;
-}
-
-.console-divider span {
-  padding: 0 15px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: #BBB;
-  letter-spacing: 1px;
-}
-
-.input-wrapper {
-  position: relative;
-  border: 1px solid #DDD;
-  background: #FAFAFA;
-}
-
-.code-input {
-  width: 100%;
-  border: none;
-  background: transparent;
-  padding: 20px;
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
+.state-error-msg {
+  font-size: 13px;
+  color: #666;
+  max-width: 360px;
   line-height: 1.6;
-  resize: vertical;
-  outline: none;
-  min-height: 150px;
 }
 
-.model-badge {
-  position: absolute;
-  bottom: 10px;
-  right: 15px;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: #AAA;
-}
-
-.start-engine-btn {
-  width: 100%;
-  background: var(--black);
-  color: var(--white);
+/* ── Buttons ────────────────────────────────────────────────── */
+.btn-primary {
+  flex: 1;
+  padding: 11px 18px;
+  background: #111;
+  color: #fff;
   border: none;
-  padding: 20px;
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: 1.1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 1px;
-  position: relative;
-  overflow: hidden;
+  transition: background 0.15s;
+  text-align: center;
 }
 
-/* Clickable state (non-disabled) */
-.start-engine-btn:not(:disabled) {
-  background: var(--black);
-  border: 1px solid var(--black);
-  animation: pulse-border 2s infinite;
+.btn-primary:hover { background: #6366f1; }
+
+.btn-ghost {
+  padding: 11px 14px;
+  background: transparent;
+  color: #666;
+  border: 1px solid #d5d5d5;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 
-.start-engine-btn:hover:not(:disabled) {
-  background: var(--orange);
-  border-color: var(--orange);
-  transform: translateY(-2px);
-}
-
-.start-engine-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.start-engine-btn:disabled {
-  background: #E5E5E5;
-  color: #999;
-  cursor: not-allowed;
-  transform: none;
-  border: 1px solid #E5E5E5;
-}
-
-/* Guide animation: subtle border pulse */
-@keyframes pulse-border {
-  0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2); }
-  70% { box-shadow: 0 0 0 6px rgba(0, 0, 0, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .dashboard-section { flex-direction: column; }
-  .hero-section { flex-direction: column; }
-  .hero-left { padding-right: 0; margin-bottom: 40px; }
-  .hero-visual { max-width: 100%; }
-}
+.btn-ghost:hover { border-color: #999; color: #111; }
 
 /* ── Footer ─────────────────────────────────────────────────── */
 .home-footer {
-  margin-top: 60px;
-  padding: 20px 0;
-  border-top: 1px solid #e8e8e8;
+  margin-top: 64px;
+  padding: 20px 0 32px;
+  border-top: 1px solid #ebebeb;
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 12px;
   color: #aaa;
 }
 
 .home-footer-sep { color: #ddd; }
-
-.home-footer-text { color: #888; }
-
-.home-footer-credit { color: #aaa; }
 
 .home-footer-link {
   color: #888;
@@ -994,295 +779,15 @@ function resetForm() {
 }
 
 .home-footer-link:hover { color: #111; }
-</style>
 
-<style>
-/* English locale adjustments (unscoped to target html[lang]) */
-html[lang="en"] .main-title {
-  font-size: 3.5rem;
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: -1px;
-}
-
-html[lang="en"] .hero-desc {
-  text-align: left;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: 0;
-}
-
-html[lang="en"] .slogan-text {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  letter-spacing: 0;
-}
-
-html[lang="en"] .tag-row {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-html[lang="en"] .navbar .nav-links {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* Left pane: system status + workflow */
-html[lang="en"] .status-section {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-html[lang="en"] .status-section .status-ready {
-  font-size: 1.6rem;
-}
-
-html[lang="en"] .status-section .metric-value {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 1.4rem;
-}
-
-html[lang="en"] .workflow-list .step-title {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-html[lang="en"] .workflow-list .step-desc {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  font-size: 0.72rem !important;
-  line-height: 1.4 !important;
-}
-
-html[lang="en"] .workflow-list {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-/* GTM form wrapper inside console-box */
-.form-section-wrapper {
-  padding: 0;
-}
-
-/* Demo / example simulation banner */
-.demo-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 20px;
-  background: #FFF8F0;
-  border-bottom: 1px solid #FFE0C0;
-}
-
-.demo-banner-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: #888;
-}
-
-.demo-btn {
-  background: #FF5722;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  padding: 6px 12px;
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.15s;
-}
-
-.demo-btn:hover {
-  background: #E64A19;
-}
-
-/* Preview state */
-.preview-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 20px;
-}
-
-.preview-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: #444;
-}
-
-.preview-status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.preview-status-dot.loading { background: #FF9800; animation: pulse 1s infinite; }
-.preview-status-dot.ready   { background: #4CAF50; }
-.preview-status-dot.error   { background: #E53935; }
-
-@keyframes pulse { 50% { opacity: 0.4; } }
-
-.preview-status-text {
-  font-weight: 600;
-}
-
-.preview-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: #999;
-}
-
-/* Persona cards */
-.persona-grid {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.persona-card {
-  flex: 1;
-  min-width: 140px;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  padding: 12px;
-  background: #FAFAFA;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.persona-card.interested { border-left: 3px solid #4CAF50; }
-.persona-card.neutral    { border-left: 3px solid #FF9800; }
-.persona-card.objection  { border-left: 3px solid #E53935; }
-
-.persona-name {
-  font-weight: 700;
-  font-size: 13px;
-  color: #111;
-}
-
-.persona-role {
-  font-size: 11px;
-  color: #555;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.persona-company {
-  font-size: 10px;
-  color: #888;
-}
-
-.persona-reaction-badge {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 2px;
-  width: fit-content;
-  margin-top: 4px;
-}
-.persona-reaction-badge.interested { background: #E8F5E9; color: #2E7D32; }
-.persona-reaction-badge.neutral    { background: #FFF3E0; color: #E65100; }
-.persona-reaction-badge.objection  { background: #FFEBEE; color: #C62828; }
-
-.persona-quote {
-  font-size: 11px;
-  color: #555;
-  font-style: italic;
-  margin-top: 6px;
-  line-height: 1.4;
-  border-top: 1px solid #EEE;
-  padding-top: 6px;
-}
-
-/* Message teasers */
-.message-teasers {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.teaser-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  font-size: 12px;
-}
-
-.teaser-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 700;
-  font-size: 10px;
-  color: #555;
-  white-space: nowrap;
-  padding-top: 1px;
-  min-width: 80px;
-}
-
-.teaser-text {
-  color: #444;
-  line-height: 1.4;
-}
-
-/* Submitting state steps */
-.submitting-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 8px 0;
-}
-
-.sub-step {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-}
-
-.sub-step--done    { color: #4CAF50; }
-.sub-step--active  { color: #111; animation: pulse 1.2s ease-in-out infinite; }
-.sub-step--pending { color: #CCC; }
-
-/* Preview action buttons */
-.preview-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.continue-btn {
-  flex: 1;
-  padding: 11px 16px;
-  background: #000;
-  color: #fff;
-  border: 1px solid #000;
-  border-radius: 3px;
-  font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.continue-btn:hover {
-  background: #FF5722;
-  border-color: #FF5722;
-}
-
-.restart-btn {
-  padding: 11px 14px;
-  background: transparent;
-  color: #666;
-  border: 1px solid #CCC;
-  border-radius: 3px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-
-.restart-btn:hover {
-  border-color: #999;
-  color: #333;
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .main-section { grid-template-columns: 1fr; }
+  .how-it-works { position: static; }
+  .hero-title { font-size: 2.4rem; }
+  .hero-stats { flex-wrap: wrap; width: 100%; }
+  .preview-personas { grid-template-columns: 1fr; }
+  .main-content { padding: 40px 20px 0; }
+  .navbar { padding: 0 20px; }
 }
 </style>
