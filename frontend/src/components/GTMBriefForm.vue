@@ -188,13 +188,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { validateGTMBrief, formatGTMBrief } from '../utils/gtmFormatter.js'
 
 const props = defineProps({
   loading: {
     type: Boolean,
     default: false,
+  },
+  initialData: {
+    type: Object,
+    default: null,
   },
 })
 
@@ -219,6 +223,18 @@ const form = reactive({
   existingProblems: '',
   outreachStrategy: '',
 })
+
+function applyInitialData(data) {
+  if (!data) return
+  Object.assign(form, data)
+  // Show optional section if any optional fields are populated
+  if (data.companyStage || data.teamSize || data.existingProblems || data.outreachStrategy) {
+    showOptional.value = true
+  }
+}
+
+onMounted(() => applyInitialData(props.initialData))
+watch(() => props.initialData, applyInitialData)
 
 const allErrors = computed(() => {
   const errs = validateGTMBrief(form)

@@ -129,7 +129,11 @@
 
             <!-- State: form -->
             <div v-if="homeState === 'form'" class="console-section form-section-wrapper">
-              <GTMBriefForm :loading="loading" @submit="handleBriefSubmit" />
+              <div class="demo-banner">
+                <span class="demo-banner-text">New here? Try a pre-filled example.</span>
+                <button class="demo-btn" @click="loadDemoScenario">⚡ Load Example Simulation</button>
+              </div>
+              <GTMBriefForm :loading="loading" :initialData="demoData" @submit="handleBriefSubmit" />
             </div>
 
             <!-- State: submitting (transitional) -->
@@ -196,9 +200,9 @@
             <div v-else-if="homeState === 'error'" class="console-section preview-section">
               <div class="preview-header">
                 <span class="preview-status-dot error"></span>
-                <span class="preview-status-text">{{ submitError || 'Something went wrong.' }}</span>
+                <span class="preview-status-text">{{ submitError || 'Brief submission failed. Check your API connection and try again.' }}</span>
               </div>
-              <button class="restart-btn" style="margin-top:16px" @click="resetForm">← Try again</button>
+              <button class="restart-btn" style="margin-top:16px" @click="resetForm">← Edit Brief</button>
             </div>
 
           </div>
@@ -220,6 +224,7 @@ import GTMBriefForm from '../components/GTMBriefForm.vue'
 import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
 import { setGTMBrief, setSimulationPreview, resetGTMState, getGTMState } from '../store/gtmSimulation.js'
 import { MOCK_GTM_PREVIEW } from '../mock/gtm_preview.js'
+import { DEMO_BRIEF } from '../mock/gtm_demo.js'
 
 const router = useRouter()
 
@@ -229,6 +234,11 @@ const loading = ref(false)
 const submitError = ref('')
 const previewPersonas = ref([])
 const previewTeasers = ref([])
+const demoData = ref(null)
+
+function loadDemoScenario() {
+  demoData.value = { ...DEMO_BRIEF }
+}
 
 const scrollToBottom = () => {
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
@@ -286,6 +296,7 @@ function resetForm() {
   resetGTMState()
   previewPersonas.value = []
   previewTeasers.value = []
+  demoData.value = null
   homeState.value = 'form'
   submitError.value = ''
 }
@@ -934,6 +945,41 @@ html[lang="en"] .workflow-list {
 /* GTM form wrapper inside console-box */
 .form-section-wrapper {
   padding: 0;
+}
+
+/* Demo / example simulation banner */
+.demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 20px;
+  background: #FFF8F0;
+  border-bottom: 1px solid #FFE0C0;
+}
+
+.demo-banner-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #888;
+}
+
+.demo-btn {
+  background: #FF5722;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  padding: 6px 12px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.demo-btn:hover {
+  background: #E64A19;
 }
 
 /* Preview state */
