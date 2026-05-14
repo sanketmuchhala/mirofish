@@ -1,199 +1,175 @@
-# Jeeva GTM Simulation Lab
+# GTM Simulation Lab
 
 > **Simulate your GTM before launching outreach.**
 
-A Jeeva-inspired, open-source GTM simulation engine for B2B founders and GTM teams.
-Enter your product brief, ICP, and messaging. Get back AI-generated buyer personas,
-message reaction simulations, ranked objections, and a recommended 7-day outbound experiment —
-before sending a single real email.
-
-> **Note:** This is a Jeeva-inspired research project, not an official Jeeva product.
-> It is not affiliated with, endorsed by, or built by Jeeva Inc.
+An open-source AI simulation engine for B2B founders. Enter your product brief, ICP, and messaging strategy. Get back AI-generated buyer personas, message reaction simulations, ranked objections, and a ready-to-execute 7-day outbound experiment — before you send a single real email.
 
 ---
 
 ## What It Does
 
-Most GTM failures happen because founders never tested their assumptions before spending weeks on outreach.
-This tool simulates what happens when your message hits your ICP — at zero cost, before you launch.
+Most GTM failures happen because founders never tested their assumptions. This tool simulates what happens when your message hits real buyer types — at zero cost, in minutes.
 
-1. **Input Brief** — Describe your product, ICP, pricing, target market, and pain point
-2. **Persona Generation** — AI generates 12 buyer persona types based on your ICP
-3. **Message Testing** — 3 outreach angle variants (pain-led, ROI-led, social-proof-led) tested against each persona
-4. **Buyer Reactions** — Each persona responds: interested / neutral / objection + likely reply text
-5. **GTM Report** — Aggregated analysis: best message angle, top objections with rebuttals, segment readiness scores, 7-day outbound experiment plan
-
----
-
-## Core Features
-
-- **AI-generated buyer personas** — 12 archetypes from Skeptical VP Sales to Enthusiastic Founder-Seller
-- **Outreach message testing** — 3 message angle variants, each scored against every persona
-- **Objection simulation** — Surface the exact objections before your SDRs hear them live
-- **GTM recommendation engine** — ReACT-pattern agentic analysis with reflection loops
-- **Outbound experiment planner** — Concrete 7-day first-outbound plan with success metrics
-- **Downloadable report** — Full GTM analysis exported as Markdown
-- **Mock mode** — Runs fully without API keys for demos (`MOCK_MODE=true`)
+| Step | What Happens |
+|------|-------------|
+| 1. **GTM Brief** | Describe your product, ICP, pricing, pain point, and GTM goal |
+| 2. **Buyer Personas** | AI generates 12 distinct buyer archetypes from your ICP |
+| 3. **Message Testing** | 3 outreach variants (pain-first, ROI-first, curiosity-first) tested against each persona |
+| 4. **Buyer Reactions** | Each of 36 persona × message pairs generates interest scores, objections, and simulated replies |
+| 5. **GTM Report** | Winner analysis, best ICP segment, top objections with rebuttals, risk signals, recommended workflow, and 7-day outbound experiment |
 
 ---
 
-## How It Works
+## Demo
 
-```
-Input Brief (8 fields)
-    ↓
-Persona Generator       → 12 buyer personas with pain points, skepticism, channels
-    ↓
-Message Generator       → 3 outreach angle variants per your brief
-    ↓
-Buyer Reaction Sim      → LLM simulates reaction per persona × message angle
-    ↓
-GTM Analyst             → Aggregates results, ranks objections, scores segments
-    ↓
-Report UI + Download    → Full GTM report with 7-day experiment recommendation
+Click **"⚡ Load Example Simulation"** on the home page to instantly pre-fill the form with a realistic AI SDR product scenario. No signup required.
+
+The full flow runs in under 2 minutes (LLM-dependent). In mock mode, it runs instantly.
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Python 3.11+
+- Node.js 18+
+- OpenAI-compatible LLM API key (or run in mock mode without one)
+
+### Run with Docker
+
+```bash
+git clone https://github.com/sanketmuchhala/GTM-SImulator.git
+cd GTM-SImulator
+cp .env.example .env  # Add your LLM API key
+docker compose up
 ```
 
----
+Open [http://localhost:5173](http://localhost:5173)
 
-## Architecture Overview
+### Run Manually
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Vue 3 SPA + Vue Router + Pinia + Vue i18n |
-| Backend | Flask (Python 3.11+) |
-| LLM | OpenAI-compatible API (configurable — works with any provider) |
-| Memory / Graph | Zep Cloud SDK (knowledge graph for persona context) |
-| Simulation Engine | OASIS framework (multi-agent social simulation — used for future deep simulation phases) |
-| Report Generation | ReACT-pattern agentic loop with tool-use and reflection |
-| Persistence | File-system based — no database required |
+```bash
+# Backend
+cd backend
+pip install -r requirements.txt
+python run.py
 
----
+# Frontend (separate terminal)
+cd frontend
+npm install
+npm run dev
+```
 
-## MVP Scope
+### Mock Mode (no LLM required)
 
-This is intentionally a lightweight simulation demo, not a production outreach tool.
+```bash
+MOCK_MODE=true docker compose up
+```
 
-**What it is:**
-- A fast way to stress-test GTM assumptions before writing a single email
-- A structured way to surface likely buyer objections early
-- A demo-able prototype for founder pitches, investor presentations, or GTM kickoffs
-
-**What it is not:**
-- A replacement for real customer interviews
-- A CRM or outreach sequencer
-- A guarantee of real-world reply rates
-
-Treat the output as a structured first hypothesis, not a prediction.
+Or append `?mock=true` to any API endpoint URL.
+All GTM endpoints return pre-generated realistic data from `backend/mock_data/`.
 
 ---
 
-## Example Use Cases
+## Architecture
 
-- **ICP validation** — Does my ICP description actually produce consistent, realistic buyer personas?
-- **Messaging triage** — Which of my 3 message angles is most likely to land?
-- **Objection discovery** — What objections will I hear before I hear them?
-- **Segment prioritization** — Which buyer segment has the highest readiness score right now?
-- **Outbound experiment design** — What should my first 7-day outreach test look like?
+```
+GTM Brief
+  → POST /api/gtm/brief           (persisted to uploads/)
+  → POST /api/gtm/personas        (LLM → 12 buyer personas)
+  → POST /api/gtm/messages        (LLM → 3 message variants)
+  → POST /api/gtm/reactions       (LLM → 36 buyer reactions)
+  → POST /api/gtm/report          (LLM + deterministic → GTM report)
+  → Download .md                  (client-side markdown export)
+```
+
+All resources are cached per `brief_id` in `uploads/gtm_briefs/<brief_id>/`.
+No database required. No auth required.
 
 ---
 
 ## Tech Stack
 
-| Component | Stack |
-|-----------|-------|
-| Frontend | Vue 3, Vue Router, Pinia, Vue i18n, Vite |
-| Backend | Python 3.11+, Flask 3.x, flask-cors |
-| LLM Client | OpenAI SDK (compatible with any OpenAI-format provider) |
-| Memory | Zep Cloud SDK |
-| Simulation | OASIS (camel-oasis, camel-ai) |
-| File Parsing | PyMuPDF, charset-normalizer |
-| Package Manager | uv (Python), npm (Node) |
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vue 3 (Composition API), Vue Router, no Pinia |
+| Backend | Flask, Python 3.11 |
+| LLM | OpenAI-compatible API via `LLMClient` (`utils/llm_client.py`) |
+| Persistence | File system (`uploads/gtm_briefs/`) |
+| Mock data | `backend/mock_data/` JSON files |
+| Simulation engine | OASIS (camel-ai) — underlying framework, not used in GTM flow |
+| Memory layer | Zep Cloud — underlying framework, not used in GTM flow |
 
 ---
 
-## Running Locally
+## Simulation Methodology
 
-### Prerequisites
+- All personas, reactions, and scores are **AI-generated**, not real buyer responses.
+- The simulation is **directional signal** — useful for testing message angles and identifying likely objections before real outreach.
+- Results should be **validated with real outbound** before making major GTM decisions.
+- Each simulation run is deterministic per brief (idempotent API endpoints, cached results).
 
-| Tool | Version |
-|------|---------|
-| Node.js | 18+ |
-| Python | 3.11–3.12 |
-| uv | latest |
+---
 
-### 1. Configure environment
+## Project Structure
 
-```bash
-cp .env.example .env
+```
+frontend/src/
+  views/          ← GTMPersonasView, GTMMessageTestingView, GTMReportView + 4 legacy views
+  components/     ← GTMBriefForm, PersonaCard + legacy components
+  mock/           ← gtm_preview, gtm_messages, gtm_report, gtm_demo (offline fallbacks)
+  api/            ← gtm.js (API client), index.js (axios setup with retry)
+  store/          ← gtmSimulation.js (reactive singleton session state)
+  utils/          ← gtmFormatter.js, downloadMarkdown.js
+
+backend/app/
+  api/            ← gtm.py (all GTM routes), legacy blueprints
+  services/       ← gtm_persona_generator, gtm_message_generator,
+                     gtm_reaction_simulator, gtm_aggregator, gtm_report_generator
+  models/         ← gtm_brief.py (GTMBrief dataclass + GTMBriefManager)
+  utils/          ← llm_client.py, retry.py, logger.py
+
+backend/mock_data/
+  gtm_personas_full.json, gtm_messages.json, gtm_reactions.json, gtm_report.json
 ```
 
-Edit `.env` and fill in:
+---
 
-```env
-# Required: any OpenAI-compatible LLM API
-LLM_API_KEY=your_api_key
-LLM_BASE_URL=https://api.openai.com/v1
-LLM_MODEL_NAME=gpt-4o-mini
+## FAQ
 
-# Required: Zep Cloud (free tier sufficient)
-# https://app.getzep.com/
-ZEP_API_KEY=your_zep_api_key
+**How long does generation take?**
+With an LLM: 30–90 seconds total (personas ~15s, messages ~10s, reactions ~30s, report ~20s). With `MOCK_MODE=true`: instant.
 
-# Optional: run in mock mode (no API keys needed)
-# MOCK_MODE=true
-```
+**Can I use my own LLM endpoint?**
+Yes. Set `OPENAI_API_BASE` and `OPENAI_API_KEY` in your `.env` to point at any OpenAI-compatible API (Ollama, Azure OpenAI, Groq, etc.).
 
-### 2. Install dependencies
+**Is this real buyer data?**
+No. All personas, reactions, and scores are AI-generated. This is a simulation tool for testing GTM hypotheses, not a source of real market research.
 
-```bash
-npm run setup:all
-```
+**Can I export reports?**
+Yes. The "Download GTM Report" button exports a complete `.md` file including all sections, the 7-day experiment, and a simulation disclaimer.
 
-### 3. Start
-
-```bash
-npm run dev
-```
-
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:5001`
-
-### Mock mode (no API keys needed)
-
-```bash
-MOCK_MODE=true npm run dev
-```
-
-All simulation endpoints return pre-built realistic mock data. Full demo flow works without any API keys.
-
-### Docker
-
-```bash
-cp .env.example .env
-docker compose up -d
-```
+**Does it work offline?**
+In mock mode, yes. The full UI renders with pre-generated data from `backend/mock_data/` and `frontend/src/mock/`.
 
 ---
 
 ## Roadmap
 
-- [ ] Richer persona memory (multi-round conversation history per persona)
-- [ ] Multi-round message refinement (iterate on message based on objections)
-- [ ] CRM integrations (export personas + experiment plan to HubSpot / Salesforce)
-- [ ] Real outbound feedback loops (compare simulated vs. actual reply rates)
-- [ ] Agentic workflow automation (autonomous multi-step GTM planning)
-- [ ] Custom persona library (upload your own ICP research)
-- [ ] Team collaboration (shared briefs and reports)
-
----
-
-## Acknowledgments
-
-Built on top of the [MiroFish](https://github.com/666ghj/MiroFish) open-source swarm intelligence engine.
-The simulation infrastructure is powered by [OASIS](https://github.com/camel-ai/oasis) from the CAMEL-AI team.
+- [x] Phase 1 — Rebrand + copy cleanup
+- [x] Phase 2 — GTM brief input form
+- [x] Phase 3 — AI buyer persona generation
+- [x] Phase 4 — Message testing + buyer reaction simulation
+- [x] Phase 5 — GTM report + 7-day outbound experiment
+- [x] Phase 6 — Demo polish + UX refinement
+- [ ] Phase 7 — History view: browse past simulations by brief
+- [ ] Phase 8 — Side-by-side brief comparison (A/B test two ICPs)
+- [ ] Phase 9 — Real reply ingestion (paste actual replies, update simulation hypothesis)
+- [ ] Phase 10 — Team workspace + shareable report links
 
 ---
 
 ## License
 
-AGPL-3.0
+MIT
