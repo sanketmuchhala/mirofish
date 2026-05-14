@@ -4,130 +4,131 @@
     <!-- Navbar -->
     <nav class="sim-nav">
       <router-link to="/" class="sim-nav-brand">GTM SIM LAB</router-link>
+      <div class="sim-nav-center">
+        <span class="sim-nav-step-item" :class="{ active: true }">1. Brief</span>
+        <span class="sim-nav-arrow">→</span>
+        <span class="sim-nav-step-item">2. Personas</span>
+        <span class="sim-nav-arrow">→</span>
+        <span class="sim-nav-step-item">3. Messages</span>
+        <span class="sim-nav-arrow">→</span>
+        <span class="sim-nav-step-item">4. Report</span>
+      </div>
       <div class="sim-nav-right">
-        <span class="sim-nav-step">New Simulation</span>
+        <button class="sim-nav-demo" @click="loadDemo" type="button">Load example</button>
       </div>
     </nav>
 
-    <!-- Two-panel layout -->
-    <div class="sim-layout">
+    <!-- Body -->
+    <div class="sim-body">
 
       <!-- Left: Form -->
       <div class="sim-left">
-        <div class="sim-left-header">
-          <h1 class="sim-title">GTM Simulation Brief</h1>
-          <p class="sim-subtitle">
-            Describe your product and buyer — the AI will generate buyer personas,
-            test outreach angles, simulate reactions, and produce a GTM report.
-          </p>
+        <div class="sim-left-top">
+          <h1 class="sim-title">New GTM Simulation</h1>
+          <p class="sim-subtitle">Describe your product and target buyer. The AI generates personas, tests outreach angles, simulates reactions, and produces a GTM strategy report.</p>
         </div>
-
-        <div class="sim-form-wrap">
-          <GTMBriefForm
-            :loading="loading"
-            :initialData="demoData"
-            :hideParams="true"
-            @submit="handleSubmit"
-          />
-        </div>
+        <GTMBriefForm
+          :loading="loading"
+          :initialData="demoData"
+          :hideParams="true"
+          @submit="handleSubmit"
+        />
       </div>
 
-      <!-- Right: Sticky parameters + viz -->
+      <!-- Right: Simulation Scale Panel -->
       <div class="sim-right">
-        <div class="sim-right-inner">
 
-          <!-- Parameters block -->
-          <div class="sim-params">
-            <div class="sim-params-label">Simulation Scale</div>
-
-            <!-- Persona count -->
-            <div class="sim-param-row">
-              <div class="sim-param-header">
-                <span class="sim-param-name">Buyer Personas</span>
-                <span class="sim-param-val">{{ numPersonas }}</span>
-              </div>
-              <input
-                v-model.number="numPersonas"
-                type="range"
-                class="sim-slider"
-                min="6" max="500" step="1"
-              />
-              <div class="sim-slider-ticks">
-                <span>6</span><span>50</span><span>100</span><span>200</span><span>500</span>
-              </div>
-            </div>
-
-            <!-- Message variants -->
-            <div class="sim-param-row">
-              <div class="sim-param-header">
-                <span class="sim-param-name">Message Angles</span>
-              </div>
-              <div class="sim-pills">
-                <button
-                  v-for="n in [2, 3, 4, 5]"
-                  :key="n"
-                  class="sim-pill"
-                  :class="{ active: numMessages === n }"
-                  @click="numMessages = n"
-                  type="button"
-                >{{ n }}</button>
-              </div>
-            </div>
-
-            <!-- Live math -->
-            <div class="sim-math">
-              <div class="sim-math-row">
-                <span class="sim-math-label">Reactions simulated</span>
-                <span class="sim-math-val">{{ numPersonas }} × {{ numMessages }} = <strong>{{ numPersonas * numMessages }}</strong></span>
-              </div>
-              <div class="sim-math-row">
-                <span class="sim-math-label">Estimated time</span>
-                <span class="sim-math-val">{{ timeEstimate }}</span>
-              </div>
-              <div class="sim-math-row">
-                <span class="sim-math-label">Approx. LLM cost</span>
-                <span class="sim-math-val">~${{ costEstimate }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Demo fill button -->
-          <button class="sim-demo-btn" @click="loadDemo" type="button">
-            Load example brief (AI SDR)
-          </button>
-
-          <!-- HeroViz -->
-          <div class="sim-viz-wrap">
-            <div class="sim-viz-label">Agent simulation preview</div>
-            <HeroViz />
-          </div>
-
-          <!-- What you'll get -->
-          <div class="sim-what">
-            <div class="sim-what-item">
-              <span class="sim-what-num">{{ numPersonas }}</span>
-              <span class="sim-what-label">Buyer Personas</span>
-            </div>
-            <div class="sim-what-sep"></div>
-            <div class="sim-what-item">
-              <span class="sim-what-num">{{ numMessages }}</span>
-              <span class="sim-what-label">Message Angles</span>
-            </div>
-            <div class="sim-what-sep"></div>
-            <div class="sim-what-item">
-              <span class="sim-what-num">{{ numPersonas * numMessages }}</span>
-              <span class="sim-what-label">Reactions</span>
-            </div>
-            <div class="sim-what-sep"></div>
-            <div class="sim-what-item">
-              <span class="sim-what-num">1</span>
-              <span class="sim-what-label">GTM Report</span>
-            </div>
-          </div>
-
+        <!-- Scale header -->
+        <div class="sim-scale-header">
+          <span class="sim-scale-label">Simulation Scale</span>
+          <span class="sim-scale-hint">Drag to set number of AI buyer personas</span>
         </div>
-      </div>
 
+        <!-- Count display + slider -->
+        <div class="sim-count-block">
+          <div class="sim-count-row">
+            <div class="sim-count-display">
+              <span class="sim-count-num">{{ numPersonas }}</span>
+              <span class="sim-count-unit">personas</span>
+            </div>
+            <div class="sim-count-meta">
+              <span class="sim-count-time">{{ timeEstimate }}</span>
+              <span class="sim-count-cost">~${{ costEstimate }}</span>
+            </div>
+          </div>
+          <input
+            v-model.number="numPersonas"
+            type="range"
+            class="sim-slider"
+            min="6" max="500" step="1"
+          />
+          <div class="sim-slider-ticks">
+            <span>6</span><span>50</span><span>100</span><span>200</span><span>500</span>
+          </div>
+        </div>
+
+        <!-- Message angles -->
+        <div class="sim-angles-block">
+          <div class="sim-angles-label">Outreach angles to test</div>
+          <div class="sim-pills">
+            <button
+              v-for="n in [2, 3, 4, 5]"
+              :key="n"
+              class="sim-pill"
+              :class="{ active: numMessages === n }"
+              @click="numMessages = n"
+              type="button"
+            >
+              <span class="sim-pill-num">{{ n }}</span>
+              <span class="sim-pill-label">{{ angleNames[n] }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Agent dot grid -->
+        <div class="sim-agent-section">
+          <div class="sim-agent-header">
+            <span class="sim-agent-label">Agent pool</span>
+            <span class="sim-agent-count">
+              <span class="sim-agent-g">{{ interestedCount }} interested</span>
+              <span class="sim-agent-sep">·</span>
+              <span class="sim-agent-a">{{ neutralCount }} neutral</span>
+              <span class="sim-agent-sep">·</span>
+              <span class="sim-agent-r">{{ objectionCount }} objection</span>
+            </span>
+          </div>
+          <div class="sim-agent-grid" :style="{ '--dot': dotSize + 'px', '--gap': dotGap + 'px' }">
+            <TransitionGroup name="dot" tag="div" class="sim-agent-dots">
+              <div
+                v-for="dot in agentDots"
+                :key="dot.id"
+                class="sim-dot"
+                :class="`sim-dot--${dot.verdict}`"
+                :title="dot.verdict"
+              ></div>
+            </TransitionGroup>
+          </div>
+        </div>
+
+        <!-- Reaction math -->
+        <div class="sim-math-strip">
+          <div class="sim-math-item">
+            <span class="sim-math-big">{{ numPersonas * numMessages }}</span>
+            <span class="sim-math-desc">total reactions</span>
+          </div>
+          <div class="sim-math-div"></div>
+          <div class="sim-math-item">
+            <span class="sim-math-big">{{ numPersonas }}</span>
+            <span class="sim-math-desc">personas</span>
+          </div>
+          <div class="sim-math-op">×</div>
+          <div class="sim-math-item">
+            <span class="sim-math-big">{{ numMessages }}</span>
+            <span class="sim-math-desc">angles</span>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <!-- Error toast -->
@@ -143,7 +144,6 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import GTMBriefForm from '../components/GTMBriefForm.vue'
-import HeroViz from '../components/HeroViz.vue'
 import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
 import { setGTMBrief, setSimulationPreview } from '../store/gtmSimulation.js'
 import { MOCK_GTM_PREVIEW } from '../mock/gtm_preview.js'
@@ -151,23 +151,60 @@ import { DEMO_BRIEF } from '../mock/gtm_demo.js'
 
 const router = useRouter()
 
-const loading = ref(false)
+const loading    = ref(false)
 const submitError = ref('')
-const demoData = ref(null)
+const demoData   = ref(null)
 const numPersonas = ref(12)
 const numMessages = ref(3)
 
+const angleNames = { 2: 'Pain · ROI', 3: '+Curiosity', 4: '+Feature', 5: '+Social' }
+
+// Time + cost
 const timeEstimate = computed(() => {
   const n = numPersonas.value
   if (n <= 12)  return '~1 min'
-  if (n <= 50)  return '~2–4 min'
-  if (n <= 100) return '~5–10 min'
-  if (n <= 200) return '~15–25 min'
-  return '~30–60 min'
+  if (n <= 50)  return '~3 min'
+  if (n <= 100) return '~8 min'
+  if (n <= 200) return '~20 min'
+  return '~45 min'
 })
 
-const costEstimate = computed(() => {
-  return (numPersonas.value * 0.008 * numMessages.value).toFixed(2)
+const costEstimate = computed(() =>
+  (numPersonas.value * 0.008 * numMessages.value).toFixed(2)
+)
+
+// Dot grid
+// Deterministic verdict distribution: 50% interested, 30% neutral, 20% objection
+function verdictFor(i) {
+  const h = ((i * 2654435761) >>> 0) % 100
+  if (h < 50) return 'interested'
+  if (h < 80) return 'neutral'
+  return 'objection'
+}
+
+const agentDots = computed(() =>
+  Array.from({ length: numPersonas.value }, (_, i) => ({ id: i, verdict: verdictFor(i) }))
+)
+
+const interestedCount = computed(() => agentDots.value.filter(d => d.verdict === 'interested').length)
+const neutralCount    = computed(() => agentDots.value.filter(d => d.verdict === 'neutral').length)
+const objectionCount  = computed(() => agentDots.value.filter(d => d.verdict === 'objection').length)
+
+const dotSize = computed(() => {
+  const n = numPersonas.value
+  if (n <= 20)  return 14
+  if (n <= 50)  return 11
+  if (n <= 100) return 9
+  if (n <= 200) return 7
+  if (n <= 350) return 5
+  return 4
+})
+
+const dotGap = computed(() => {
+  const n = numPersonas.value
+  if (n <= 50)  return 4
+  if (n <= 150) return 3
+  return 2
 })
 
 function loadDemo() {
@@ -178,7 +215,6 @@ async function handleSubmit(payload) {
   loading.value = true
   submitError.value = ''
 
-  // Inject simulation params from the right panel
   const fullPayload = {
     ...payload,
     num_personas: numPersonas.value,
@@ -188,15 +224,13 @@ async function handleSubmit(payload) {
   try {
     setGTMBrief(fullPayload)
     const res = await submitGTMBrief(fullPayload)
-
     if (!res.success) throw new Error(res.error || 'Submission failed')
 
     const briefId = res.data.brief_id
-
     let preview = MOCK_GTM_PREVIEW
     try {
-      const previewRes = await getGTMPreview(briefId)
-      if (previewRes.success && previewRes.data) preview = previewRes.data
+      const pr = await getGTMPreview(briefId)
+      if (pr.success && pr.data) preview = pr.data
     } catch (_) {}
 
     setSimulationPreview(briefId, preview)
@@ -209,120 +243,133 @@ async function handleSubmit(payload) {
 </script>
 
 <style scoped>
-/* ── Shell ──────────────────────────────────────────────── */
+/* ── Page shell ─────────────────────────────────────────── */
 .sim-page {
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  display: flex;
-  flex-direction: column;
+  overflow: hidden;
 }
 
 /* ── Navbar ─────────────────────────────────────────────── */
 .sim-nav {
-  height: 56px;
-  background: rgba(0,0,0,0.8);
+  height: 52px;
+  flex-shrink: 0;
+  background: rgba(0,0,0,0.85);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-subtle);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  position: sticky;
-  top: 0;
+  padding: 0 24px;
   z-index: 20;
-  flex-shrink: 0;
 }
 
 .sim-nav-brand {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text-primary);
   text-decoration: none;
 }
 
-.sim-nav-right {
+.sim-nav-center {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-
-.sim-nav-step {
-  font-size: 12px;
-  color: var(--text-tertiary);
+  gap: 8px;
+  font-size: 11px;
   font-family: var(--font-mono);
 }
 
-/* ── Layout ─────────────────────────────────────────────── */
-.sim-layout {
+.sim-nav-step-item {
+  color: var(--text-tertiary);
+  padding: 3px 8px;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+
+.sim-nav-step-item.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.sim-nav-arrow { color: var(--border-muted); font-size: 10px; }
+
+.sim-nav-right { display: flex; justify-content: flex-end; }
+
+.sim-nav-demo {
+  font-size: 11px;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border-muted);
+  border-radius: 5px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.sim-nav-demo:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ── Body ───────────────────────────────────────────────── */
+.sim-body {
   display: grid;
-  grid-template-columns: 1fr 420px;
+  grid-template-columns: 1fr 400px;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 /* ── Left panel ─────────────────────────────────────────── */
 .sim-left {
   border-right: 1px solid var(--border-subtle);
   overflow-y: auto;
-  padding: 40px 48px 80px;
+  padding: 32px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.sim-left-header {
-  margin-bottom: 28px;
+.sim-left-top {
+  margin-bottom: 24px;
 }
 
 .sim-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--text-primary);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .sim-subtitle {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
-  line-height: 1.65;
-  max-width: 520px;
-}
-
-.sim-form-wrap {
-  max-width: 600px;
+  line-height: 1.6;
+  max-width: 480px;
 }
 
 /* ── Right panel ────────────────────────────────────────── */
 .sim-right {
   background: var(--bg-surface);
   overflow-y: auto;
-}
-
-.sim-right-inner {
-  position: sticky;
-  top: 0;
-  padding: 24px 24px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-height: calc(100vh - 56px);
-  overflow-y: auto;
-}
-
-/* ── Parameters ─────────────────────────────────────────── */
-.sim-params {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  padding: 18px;
+  padding: 20px 20px 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.sim-params-label {
+/* Scale header */
+.sim-scale-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sim-scale-label {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -330,40 +377,77 @@ async function handleSubmit(payload) {
   color: var(--accent);
 }
 
-.sim-param-row {
+.sim-scale-hint {
+  font-size: 10px;
+  color: var(--text-tertiary);
+}
+
+/* Count display */
+.sim-count-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px 16px 12px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.sim-count-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.sim-count-display {
+  display: flex;
+  align-items: baseline;
   gap: 6px;
 }
 
-.sim-param-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sim-param-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.sim-param-val {
+.sim-count-num {
   font-family: var(--font-mono);
-  font-size: 20px;
+  font-size: 36px;
   font-weight: 800;
   color: var(--accent);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.sim-count-unit {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.sim-count-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.sim-count-time {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.sim-count-cost {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
 }
 
 /* Slider */
 .sim-slider {
   width: 100%;
-  height: 4px;
+  height: 5px;
   -webkit-appearance: none;
   appearance: none;
-  background: var(--border-muted);
-  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) 0%, var(--accent) calc(((var(--v,12) - 6) / 494) * 100%), var(--border-muted) calc(((var(--v,12) - 6) / 494) * 100%), var(--border-muted) 100%);
+  border-radius: 3px;
   outline: none;
   cursor: pointer;
   border: none;
@@ -371,18 +455,18 @@ async function handleSubmit(payload) {
 }
 .sim-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 16px; height: 16px;
+  width: 18px; height: 18px;
   border-radius: 50%;
   background: var(--accent);
   cursor: pointer;
-  border: 2px solid var(--bg-card);
-  box-shadow: 0 0 6px rgba(59,130,246,0.4);
+  border: 3px solid var(--bg-card);
+  box-shadow: 0 0 8px rgba(59,130,246,0.5);
 }
 .sim-slider::-moz-range-thumb {
-  width: 16px; height: 16px;
+  width: 18px; height: 18px;
   border-radius: 50%;
   background: var(--accent);
-  border: 2px solid var(--bg-card);
+  border: 3px solid var(--bg-card);
 }
 
 .sim-slider-ticks {
@@ -391,137 +475,182 @@ async function handleSubmit(payload) {
   font-size: 9px;
   color: var(--text-tertiary);
   font-family: var(--font-mono);
+  margin-top: -2px;
 }
 
-/* Pills */
-.sim-pills {
+/* Message angle pills */
+.sim-angles-block {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sim-angles-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sim-pills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
 
 .sim-pill {
-  flex: 1;
-  padding: 7px;
+  padding: 8px 4px;
   border: 1px solid var(--border-muted);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-secondary);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  font-weight: 700;
+  border-radius: 7px;
+  background: var(--bg-card);
   cursor: pointer;
   transition: all 0.15s;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 .sim-pill.active {
   border-color: var(--accent);
   background: var(--accent-dim);
-  color: var(--accent);
 }
 
-/* Math display */
-.sim-math {
-  background: var(--bg-elevated);
-  border-radius: 6px;
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sim-math-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-}
-
-.sim-math-label { color: var(--text-tertiary); }
-.sim-math-val   { color: var(--text-secondary); }
-.sim-math-val strong { color: var(--text-primary); }
-
-/* Demo btn */
-.sim-demo-btn {
-  width: 100%;
-  padding: 10px;
-  background: transparent;
-  border: 1px dashed var(--border-muted);
-  border-radius: 8px;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-family: var(--font-sans);
-  cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
-  text-align: center;
-}
-.sim-demo-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* Viz */
-.sim-viz-wrap {
-  position: relative;
-  height: 220px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  flex-shrink: 0;
-}
-
-.sim-viz-label {
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  z-index: 10;
+.sim-pill-num {
   font-family: var(--font-mono);
-  opacity: 0.7;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-secondary);
+  line-height: 1;
 }
 
-/* What you'll get strip */
-.sim-what {
-  display: flex;
-  align-items: center;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  overflow: hidden;
+.sim-pill-label {
+  font-size: 8px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
 }
 
-.sim-what-item {
+.sim-pill.active .sim-pill-num  { color: var(--accent); }
+.sim-pill.active .sim-pill-label { color: rgba(59,130,246,0.7); }
+
+/* Agent dot section */
+.sim-agent-section {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 10px 8px;
-  gap: 2px;
+  gap: 8px;
+  min-height: 0;
 }
 
-.sim-what-sep {
-  width: 1px;
-  height: 32px;
-  background: var(--border-subtle);
+.sim-agent-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   flex-shrink: 0;
 }
 
-.sim-what-num {
-  font-size: 16px;
+.sim-agent-label {
+  font-size: 10px;
   font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.02em;
+  color: var(--text-tertiary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sim-agent-count {
+  font-size: 9px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
   font-family: var(--font-mono);
 }
 
-.sim-what-label {
+.sim-agent-g   { color: var(--green); }
+.sim-agent-a   { color: var(--amber); }
+.sim-agent-r   { color: var(--red); }
+.sim-agent-sep { color: var(--border-muted); }
+
+.sim-agent-grid {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 12px;
+  flex: 1;
+  min-height: 120px;
+  overflow: hidden;
+}
+
+.sim-agent-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap, 4px);
+  align-content: flex-start;
+}
+
+/* Dot */
+.sim-dot {
+  width: var(--dot, 10px);
+  height: var(--dot, 10px);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sim-dot--interested { background: var(--green);  opacity: 0.75; }
+.sim-dot--neutral    { background: var(--amber); opacity: 0.65; }
+.sim-dot--objection  { background: var(--red);   opacity: 0.65; }
+
+/* TransitionGroup animations */
+.dot-enter-active { transition: transform 0.2s ease, opacity 0.2s ease; }
+.dot-leave-active { transition: transform 0.1s ease, opacity 0.1s ease; position: absolute; }
+.dot-enter-from  { transform: scale(0); opacity: 0; }
+.dot-leave-to    { transform: scale(0); opacity: 0; }
+.dot-move        { transition: transform 0.15s ease; }
+
+/* Math strip */
+.sim-math-strip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.sim-math-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.sim-math-big {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.sim-math-desc {
   font-size: 9px;
   color: var(--text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+.sim-math-div {
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.sim-math-op {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-weight: 700;
 }
 
 /* Error toast */
@@ -547,7 +676,7 @@ async function handleSubmit(payload) {
   background: none;
   border: none;
   color: var(--red);
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -555,9 +684,10 @@ async function handleSubmit(payload) {
 
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .sim-layout { grid-template-columns: 1fr; }
-  .sim-right  { position: static; border-top: 1px solid var(--border-subtle); }
-  .sim-right-inner { position: static; max-height: none; }
-  .sim-left   { padding: 24px 20px 60px; border-right: none; }
+  .sim-page { height: auto; overflow: auto; }
+  .sim-body { grid-template-columns: 1fr; overflow: auto; }
+  .sim-right { border-top: 1px solid var(--border-subtle); }
+  .sim-left { overflow: visible; padding: 24px 20px 40px; }
+  .sim-nav-center { display: none; }
 }
 </style>
