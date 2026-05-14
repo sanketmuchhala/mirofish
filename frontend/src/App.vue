@@ -9,24 +9,24 @@
 <style>
 /* ── Design tokens ──────────────────────────────────────────── */
 :root {
-  /* Backgrounds (dark simulation views) */
-  --bg-base:     #0a0a0f;
-  --bg-surface:  #0d0d18;
-  --bg-card:     #12121e;
-  --bg-elevated: #1a1a2e;
+  /* Backgrounds */
+  --bg-base:     #000000;
+  --bg-surface:  #080810;
+  --bg-card:     #0e0e18;
+  --bg-elevated: #151520;
 
   /* Borders */
-  --border-subtle: #1e1e2e;
-  --border-muted:  #2e2e4e;
+  --border-subtle: #17172a;
+  --border-muted:  #232338;
 
   /* Text */
   --text-primary:   #e8e8f0;
-  --text-secondary: #8888aa;
-  --text-tertiary:  #5a5a7a;
+  --text-secondary: #8080a0;
+  --text-tertiary:  #50507a;
 
-  /* Accent */
-  --accent:    #6366f1;
-  --accent-dim: rgba(99, 102, 241, 0.12);
+  /* Accent — blue */
+  --accent:     #3b82f6;
+  --accent-dim: rgba(59, 130, 246, 0.12);
 
   /* Semantic */
   --green:  #4ade80;
@@ -49,8 +49,8 @@
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #000000;
-  background-color: #ffffff;
+  color: var(--text-primary);
+  background-color: var(--bg-base);
 }
 
 /* Focus-visible for keyboard nav */

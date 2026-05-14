@@ -26,7 +26,7 @@
             class="gr-step"
             :class="{ done: i < loadingStep, active: i === loadingStep }"
           >
-            <span class="gr-step-dot">{{ i < loadingStep ? '●' : i === loadingStep ? '◉' : '○' }}</span>
+            <span class="gr-step-dot">{{ i < loadingStep ? '–' : i === loadingStep ? '>' : '·' }}</span>
             <span class="gr-step-label">{{ step }}</span>
           </div>
         </div>
@@ -35,7 +35,7 @@
 
       <!-- Error state -->
       <div v-else-if="viewState === 'error'" class="gr-error">
-        <div class="gr-error-icon">⚠</div>
+        <div class="gr-error-icon">!</div>
         <div class="gr-error-title">Report Generation Failed</div>
         <div class="gr-error-msg">{{ errorMsg || 'Report generation failed. Showing a sample report so you can preview the output.' }}</div>
         <button class="gr-btn-primary" @click="retryLoad">Retry</button>
@@ -74,7 +74,7 @@
           <div class="gr-section-label">Executive Summary</div>
           <div class="gr-summary-text">{{ report.executive_summary }}</div>
           <div class="gr-confidence-note">
-            ⚡ Strong directional signal — based on 36 simulated buyer reactions.
+            Strong directional signal — based on 36 simulated buyer reactions.
             Validate with real outbound before committing to this strategy.
           </div>
         </section>
@@ -122,7 +122,7 @@
         <!-- Winning Message -->
         <section class="gr-card gr-winner-card">
           <div class="gr-card-label">
-            <span class="gr-winner-star">★</span>
+            <span class="gr-winner-star">WINNER</span>
             Winning Message — {{ angleLabel(report.winning_message?.angle) }}
             <span class="gr-winner-score">{{ report.winning_message?.average_score }} avg</span>
           </div>
@@ -149,7 +149,7 @@
                 <span class="gr-objection-freq">×{{ obj.frequency }}</span>
               </div>
               <div class="gr-objection-response" v-if="obj.suggested_response">
-                <span class="gr-response-arrow">→</span> {{ obj.suggested_response }}
+                <span class="gr-response-label">Response:</span> {{ obj.suggested_response }}
               </div>
             </div>
           </section>
@@ -226,7 +226,7 @@
 
         <!-- Simulation note -->
         <div class="gr-sim-note">
-          💡 <strong>Simulation note</strong> — All personas, reactions, and scores are AI-generated.
+          <strong>Simulation note</strong> — All personas, reactions, and scores are AI-generated.
           This is directional signal, not real buyer data. Run real outbound to validate.
         </div>
 
@@ -250,7 +250,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { getGTMState, setReport, getReport, resetGTMState } from '../store/gtmSimulation'
+import { getGTMState, setReport, getReport, resetGTMState, getPersonas, getMessageResults } from '../store/gtmSimulation'
 import { getGTMBrief } from '../api/gtm'
 import { generateReport } from '../api/gtm'
 import { downloadGTMReport } from '../utils/downloadMarkdown'
@@ -383,7 +383,16 @@ async function retryLoad() {
 
 function handleDownload() {
   if (!report.value) return
-  downloadGTMReport(report.value, brief.value?.product_name || 'your-product')
+  const { messages, reactionResult } = getMessageResults()
+  downloadGTMReport({
+    report: report.value,
+    brief: brief.value,
+    personas: getPersonas(),
+    messages,
+    reactions: reactionResult?.reactions ?? [],
+    summaries: reactionResult?.summaries ?? [],
+    winner: reactionResult?.winner ?? null,
+  })
 }
 
 function handleStartOver() {

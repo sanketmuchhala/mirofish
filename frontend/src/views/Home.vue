@@ -16,6 +16,8 @@
 
       <!-- ── Hero ──────────────────────────────────────────────── -->
       <section class="hero-section">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
         <div class="hero-eyebrow">
           <span class="hero-badge">AI-Powered GTM Lab</span>
           <span class="hero-version">v0.1 · Open Source</span>
@@ -39,17 +41,17 @@
 
         <div class="hero-stats">
           <div class="hero-stat">
-            <span class="hero-stat-num">12</span>
+            <span class="hero-stat-num">{{ stat1 }}</span>
             <span class="hero-stat-label">Buyer Personas</span>
           </div>
           <div class="hero-stat-sep"></div>
           <div class="hero-stat">
-            <span class="hero-stat-num">3</span>
+            <span class="hero-stat-num">{{ stat2 }}</span>
             <span class="hero-stat-label">Message Angles</span>
           </div>
           <div class="hero-stat-sep"></div>
           <div class="hero-stat">
-            <span class="hero-stat-num">36</span>
+            <span class="hero-stat-num">{{ stat3 }}</span>
             <span class="hero-stat-label">Buyer Reactions</span>
           </div>
           <div class="hero-stat-sep"></div>
@@ -66,7 +68,7 @@
       </section>
 
       <!-- ── Problem ────────────────────────────────────────────── -->
-      <section class="problem-section">
+      <section class="problem-section reveal">
         <div class="problem-inner">
           <div class="problem-label">The problem</div>
           <h2 class="problem-title">Founders test their GTM assumptions on real customers.</h2>
@@ -85,12 +87,11 @@
       </section>
 
       <!-- ── What you get ──────────────────────────────────────── -->
-      <section class="features-section">
+      <section class="features-section reveal">
         <div class="section-eyebrow">What the simulation produces</div>
         <div class="features-grid">
 
           <div class="feature-card">
-            <div class="feature-icon">👥</div>
             <div class="feature-title">12 AI Buyer Personas</div>
             <div class="feature-desc">
               ICP-specific archetypes generated from your brief — each with distinct goals,
@@ -101,7 +102,6 @@
           </div>
 
           <div class="feature-card">
-            <div class="feature-icon">💬</div>
             <div class="feature-title">3 Outreach Angles Tested</div>
             <div class="feature-desc">
               Pain-first, ROI-first, and Curiosity-first message variants — written by the AI
@@ -112,7 +112,6 @@
           </div>
 
           <div class="feature-card">
-            <div class="feature-icon">⚡</div>
             <div class="feature-title">36 Simulated Buyer Reactions</div>
             <div class="feature-desc">
               Every persona × message combination generates an interest score, clarity score,
@@ -123,7 +122,6 @@
           </div>
 
           <div class="feature-card feature-card--accent">
-            <div class="feature-icon">📊</div>
             <div class="feature-title">GTM Report + 7-Day Experiment</div>
             <div class="feature-desc">
               Winning angle with reasoning, top objections with suggested rebuttals, best-fit ICP
@@ -137,7 +135,7 @@
       </section>
 
       <!-- ── How it works ──────────────────────────────────────── -->
-      <section class="hiw-section">
+      <section class="hiw-section reveal">
         <div class="section-eyebrow">How it works</div>
         <h2 class="section-title">Five steps from brief to outbound plan.</h2>
 
@@ -156,13 +154,12 @@
       </section>
 
       <!-- ── Who it's for ──────────────────────────────────────── -->
-      <section class="for-section">
+      <section class="for-section reveal">
         <div class="section-eyebrow">Built for</div>
         <h2 class="section-title">GTM-focused founders and sales teams.</h2>
 
         <div class="for-grid">
           <div class="for-card">
-            <div class="for-icon">🚀</div>
             <div class="for-title">B2B Founders (1–25 employees)</div>
             <div class="for-desc">
               Doing founder-led cold outbound and looking for their first 10 customers.
@@ -177,7 +174,6 @@
           </div>
 
           <div class="for-card">
-            <div class="for-icon">🎯</div>
             <div class="for-title">GTM Teams Entering a New Segment</div>
             <div class="for-desc">
               Launching a new product line or moving upmarket. Use the simulation to
@@ -192,7 +188,6 @@
           </div>
 
           <div class="for-card">
-            <div class="for-icon">📈</div>
             <div class="for-title">Sales Leaders Building a Playbook</div>
             <div class="for-desc">
               Building a repeatable cold outbound process before scaling the team.
@@ -209,7 +204,7 @@
       </section>
 
       <!-- ── Sample output ─────────────────────────────────────── -->
-      <section class="sample-section">
+      <section class="sample-section reveal">
         <div class="section-eyebrow">Sample output</div>
         <h2 class="section-title">Here's what you'll see after a simulation.</h2>
 
@@ -232,7 +227,7 @@
               </div>
               <div class="spc-row">
                 <span class="spc-label">OBJECTION</span>
-                <span class="spc-chip">⚠ What's the actual meeting booking lift vs. our current process?</span>
+                <span class="spc-chip">What's the actual meeting booking lift vs. our current process?</span>
               </div>
               <div class="spc-row">
                 <span class="spc-label">SKEPTICISM</span>
@@ -283,7 +278,7 @@
             <div class="sample-block-label">GTM Report — Winner + Top Objections</div>
             <div class="sample-report-card">
               <div class="srep-winner">
-                <span class="srep-star">★</span>
+                <span class="srep-star">WINNER</span>
                 <div>
                   <div class="srep-winner-label">WINNING ANGLE</div>
                   <div class="srep-winner-angle">ROI-First</div>
@@ -363,7 +358,7 @@
             <div class="form-panel-header">
               <div class="form-panel-title">GTM Brief</div>
               <button class="demo-pill" @click="loadDemoScenario">
-                ⚡ Try example
+                Try example
               </button>
             </div>
 
@@ -376,9 +371,9 @@
               <div v-else-if="homeState === 'submitting'" class="state-loading">
                 <div class="state-spinner"></div>
                 <div class="state-loading-steps">
-                  <div class="sls-step sls-done">✓ Brief validated</div>
-                  <div class="sls-step sls-active">◉ Generating persona preview…</div>
-                  <div class="sls-step sls-pending">○ Preparing simulation</div>
+                  <div class="sls-step sls-done">Brief validated</div>
+                  <div class="sls-step sls-active">Generating persona preview…</div>
+                  <div class="sls-step sls-pending">Preparing simulation</div>
                 </div>
               </div>
 
@@ -422,7 +417,7 @@
               </div>
 
               <div v-else-if="homeState === 'error'" class="state-error">
-                <div class="state-error-icon">⚠</div>
+                <div class="state-error-icon">!</div>
                 <div class="state-error-msg">{{ submitError || 'Submission failed. Check your connection and try again.' }}</div>
                 <button class="btn-ghost" @click="resetForm">← Edit Brief</button>
               </div>
@@ -446,7 +441,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import GTMBriefForm from '../components/GTMBriefForm.vue'
 import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
@@ -463,6 +458,40 @@ const steps = [
   { title: 'Buyer Reactions',  desc: 'Each persona responds with interest scores, objections, and a simulated reply.' },
   { title: 'GTM Report',       desc: 'Best angle, top objections with rebuttals, and a 7-day outbound experiment plan.' },
 ]
+
+// Count-up stats
+const stat1 = ref(0)   // 12
+const stat2 = ref(0)   // 3
+const stat3 = ref(0)   // 36
+
+function countUp(setter, target, duration = 1200) {
+  const start = performance.now()
+  const tick = (now) => {
+    const t = Math.min((now - start) / duration, 1)
+    const ease = 1 - Math.pow(1 - t, 3)
+    setter(Math.round(ease * target))
+    if (t < 1) requestAnimationFrame(tick)
+  }
+  requestAnimationFrame(tick)
+}
+
+let revealObserver = null
+
+onMounted(() => {
+  // Staggered count-up
+  setTimeout(() => countUp(v => { stat1.value = v }, 12), 200)
+  setTimeout(() => countUp(v => { stat2.value = v }, 3, 600), 350)
+  setTimeout(() => countUp(v => { stat3.value = v }, 36), 500)
+
+  // Scroll reveal
+  revealObserver = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed') }),
+    { threshold: 0.12 }
+  )
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el))
+})
+
+onUnmounted(() => { if (revealObserver) revealObserver.disconnect() })
 
 // 'form' | 'submitting' | 'preview' | 'error'
 const homeState = ref('form')
@@ -483,7 +512,7 @@ function scrollToForm() {
 }
 
 function reactionLabel(reaction) {
-  return { interested: '✓ Interested', neutral: '→ Neutral', objection: '⚠ Objection' }[reaction] ?? reaction
+  return { interested: 'Interested', neutral: 'Neutral', objection: 'Objection' }[reaction] ?? reaction
 }
 
 async function handleBriefSubmit(payload) {
@@ -544,16 +573,16 @@ function resetForm() {
 /* ── Shell ───────────────────────────────────────────────────── */
 .home-container {
   min-height: 100vh;
-  background: #fff;
+  background: var(--bg-base);
   font-family: var(--font-sans);
-  color: #111;
+  color: var(--text-primary);
 }
 
 /* ── Navbar ──────────────────────────────────────────────────── */
 .navbar {
   height: 56px;
-  background: #fff;
-  border-bottom: 1px solid #ebebeb;
+  background: var(--bg-base);
+  border-bottom: 1px solid var(--border-subtle);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -568,7 +597,7 @@ function resetForm() {
   font-weight: 800;
   letter-spacing: 0.1em;
   font-size: 13px;
-  color: #111;
+  color: var(--text-primary);
 }
 
 .nav-links {
@@ -578,7 +607,7 @@ function resetForm() {
 }
 
 .github-link {
-  color: #555;
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 13px;
   font-weight: 500;
@@ -588,7 +617,7 @@ function resetForm() {
   transition: color 0.15s;
 }
 
-.github-link:hover { color: #111; }
+.github-link:hover { color: var(--text-primary); }
 .arrow { font-size: 11px; }
 
 /* ── Main content wrapper ────────────────────────────────────── */
@@ -612,8 +641,8 @@ function resetForm() {
 }
 
 .hero-badge {
-  background: #f0f0f8;
-  color: #6366f1;
+  background: var(--accent-dim);
+  color: var(--accent);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -624,7 +653,7 @@ function resetForm() {
 
 .hero-version {
   font-size: 12px;
-  color: #aaa;
+  color: var(--text-tertiary);
   font-family: var(--font-mono);
 }
 
@@ -633,18 +662,18 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.15;
-  color: #111;
+  color: var(--text-primary);
   margin: 0 0 20px;
 }
 
 .hero-title-accent {
-  color: #6366f1;
+  color: var(--accent);
 }
 
 .hero-sub {
   font-size: 1rem;
   line-height: 1.7;
-  color: #555;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 0 0 32px;
 }
@@ -653,7 +682,7 @@ function resetForm() {
   display: flex;
   align-items: center;
   gap: 0;
-  border: 1px solid #ebebeb;
+  border: 1px solid var(--border-subtle);
   border-radius: 10px;
   padding: 0;
   overflow: hidden;
@@ -671,20 +700,20 @@ function resetForm() {
 .hero-stat-sep {
   width: 1px;
   height: 36px;
-  background: #ebebeb;
+  background: var(--border-subtle);
   flex-shrink: 0;
 }
 
 .hero-stat-num {
   font-size: 20px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   letter-spacing: -0.02em;
 }
 
 .hero-stat-label {
   font-size: 11px;
-  color: #aaa;
+  color: var(--text-tertiary);
   white-space: nowrap;
 }
 
@@ -694,7 +723,7 @@ function resetForm() {
   grid-template-columns: 320px 1fr;
   gap: 48px;
   align-items: start;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
   padding-top: 48px;
 }
 
@@ -709,7 +738,7 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--text-tertiary);
   margin-bottom: 24px;
 }
 
@@ -735,14 +764,14 @@ function resetForm() {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #f4f4f8;
-  border: 1px solid #e8e8f0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 11px;
   font-weight: 700;
-  color: #6366f1;
+  color: var(--accent);
   flex-shrink: 0;
 }
 
@@ -750,7 +779,7 @@ function resetForm() {
   width: 1px;
   flex: 1;
   min-height: 20px;
-  background: #ebebeb;
+  background: var(--border-subtle);
   margin: 4px 0;
 }
 
@@ -761,23 +790,23 @@ function resetForm() {
 .hiw-step-title {
   font-size: 14px;
   font-weight: 600;
-  color: #111;
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .hiw-step-desc {
   font-size: 12px;
-  color: #888;
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
 /* ── Right: Form panel ──────────────────────────────────────── */
 .form-panel {
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   overflow: hidden;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  background: var(--bg-card);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.3);
 }
 
 .form-panel-header {
@@ -785,21 +814,21 @@ function resetForm() {
   align-items: center;
   justify-content: space-between;
   padding: 14px 20px;
-  border-bottom: 1px solid #ebebeb;
-  background: #fafafa;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
 }
 
 .form-panel-title {
   font-size: 13px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   letter-spacing: 0.02em;
 }
 
 .demo-pill {
-  background: #f0f0f8;
-  color: #6366f1;
-  border: 1px solid rgba(99,102,241,0.25);
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(99,102,241,0.3);
   border-radius: 20px;
   padding: 5px 12px;
   font-size: 12px;
@@ -809,11 +838,11 @@ function resetForm() {
 }
 
 .demo-pill:hover {
-  background: rgba(99,102,241,0.12);
+  background: rgba(99,102,241,0.2);
 }
 
 .form-panel-body {
-  background: #fff;
+  background: var(--bg-card);
 }
 
 /* ── Submitting state ───────────────────────────────────────── */
@@ -828,8 +857,8 @@ function resetForm() {
 .state-spinner {
   width: 32px;
   height: 32px;
-  border: 2px solid #ebebeb;
-  border-top-color: #6366f1;
+  border: 2px solid var(--border-muted);
+  border-top-color: var(--accent);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
@@ -849,9 +878,9 @@ function resetForm() {
   font-family: var(--font-mono);
 }
 
-.sls-done    { color: #16a34a; }
-.sls-active  { color: #111; animation: pulse 1.2s ease-in-out infinite; }
-.sls-pending { color: #ccc; }
+.sls-done    { color: var(--green); }
+.sls-active  { color: var(--text-primary); animation: pulse 1.2s ease-in-out infinite; }
+.sls-pending { color: var(--text-tertiary); }
 
 /* ── Preview state ──────────────────────────────────────────── */
 .state-preview {
@@ -867,7 +896,7 @@ function resetForm() {
   gap: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #111;
+  color: var(--text-primary);
 }
 
 .state-dot {
@@ -886,7 +915,7 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--text-tertiary);
   margin-bottom: 8px;
 }
 
@@ -897,18 +926,18 @@ function resetForm() {
 }
 
 .preview-persona {
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   padding: 14px;
-  background: #fafafa;
+  background: var(--bg-elevated);
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.preview-persona.interested { border-left: 3px solid #16a34a; }
-.preview-persona.neutral    { border-left: 3px solid #ea580c; }
-.preview-persona.objection  { border-left: 3px solid #dc2626; }
+.preview-persona.interested { border-left: 3px solid var(--green); }
+.preview-persona.neutral    { border-left: 3px solid var(--amber); }
+.preview-persona.objection  { border-left: 3px solid var(--red); }
 
 .pp-header {
   display: flex;
@@ -920,7 +949,7 @@ function resetForm() {
 .pp-name {
   font-size: 13px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
@@ -933,21 +962,21 @@ function resetForm() {
   flex-shrink: 0;
 }
 
-.pp-badge.interested { background: #dcfce7; color: #15803d; }
-.pp-badge.neutral    { background: #ffedd5; color: #c2410c; }
-.pp-badge.objection  { background: #fee2e2; color: #b91c1c; }
+.pp-badge.interested { background: rgba(74,222,128,0.15); color: var(--green); }
+.pp-badge.neutral    { background: rgba(245,158,11,0.15); color: var(--amber); }
+.pp-badge.objection  { background: rgba(248,113,113,0.15); color: var(--red); }
 
 .pp-role {
   font-size: 11px;
-  color: #777;
+  color: var(--text-secondary);
 }
 
 .pp-quote {
   font-size: 11px;
-  color: #666;
+  color: var(--text-secondary);
   font-style: italic;
   line-height: 1.5;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border-subtle);
   padding-top: 6px;
   margin-top: 2px;
 }
@@ -969,12 +998,12 @@ function resetForm() {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
-  color: #6366f1;
+  color: var(--accent);
   min-width: 70px;
 }
 
 .teaser-preview {
-  color: #555;
+  color: var(--text-secondary);
   line-height: 1.4;
 }
 
@@ -999,7 +1028,7 @@ function resetForm() {
 
 .state-error-msg {
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
   max-width: 360px;
   line-height: 1.6;
 }
@@ -1008,7 +1037,7 @@ function resetForm() {
 .btn-primary {
   flex: 1;
   padding: 11px 18px;
-  background: #111;
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 7px;
@@ -1019,13 +1048,13 @@ function resetForm() {
   text-align: center;
 }
 
-.btn-primary:hover { background: #6366f1; }
+.btn-primary:hover { background: #4f46e5; }
 
 .btn-ghost {
   padding: 11px 14px;
   background: transparent;
-  color: #666;
-  border: 1px solid #d5d5d5;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-muted);
   border-radius: 7px;
   font-size: 13px;
   font-weight: 500;
@@ -1034,33 +1063,33 @@ function resetForm() {
   white-space: nowrap;
 }
 
-.btn-ghost:hover { border-color: #999; color: #111; }
+.btn-ghost:hover { border-color: var(--text-secondary); color: var(--text-primary); }
 
 /* ── Footer ─────────────────────────────────────────────────── */
 .home-footer {
   margin-top: 64px;
   padding: 20px 0 32px;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 12px;
-  color: #aaa;
+  color: var(--text-tertiary);
 }
 
-.home-footer-sep { color: #ddd; }
+.home-footer-sep { color: var(--border-muted); }
 
 .home-footer-link {
-  color: #888;
+  color: var(--text-secondary);
   text-decoration: none;
   transition: color 0.15s;
 }
 
-.home-footer-link:hover { color: #111; }
+.home-footer-link:hover { color: var(--text-primary); }
 
 /* ── Navbar CTA ─────────────────────────────────────────────── */
 .nav-cta {
-  background: #111;
+  background: var(--accent);
   color: #fff;
   text-decoration: none;
   font-size: 13px;
@@ -1069,7 +1098,7 @@ function resetForm() {
   border-radius: 7px;
   transition: background 0.15s;
 }
-.nav-cta:hover { background: #6366f1; }
+.nav-cta:hover { background: #4f46e5; }
 
 /* ── Hero actions ───────────────────────────────────────────── */
 .hero-actions {
@@ -1079,7 +1108,7 @@ function resetForm() {
 }
 
 .btn-hero-primary {
-  background: #111;
+  background: var(--accent);
   color: #fff;
   text-decoration: none;
   font-size: 14px;
@@ -1088,20 +1117,20 @@ function resetForm() {
   border-radius: 8px;
   transition: background 0.15s;
 }
-.btn-hero-primary:hover { background: #6366f1; }
+.btn-hero-primary:hover { background: #4f46e5; }
 
 .btn-hero-ghost {
   background: transparent;
-  color: #555;
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
   padding: 12px 20px;
   border-radius: 8px;
-  border: 1px solid #d5d5d5;
+  border: 1px solid var(--border-muted);
   transition: color 0.15s, border-color 0.15s;
 }
-.btn-hero-ghost:hover { color: #111; border-color: #999; }
+.btn-hero-ghost:hover { color: var(--text-primary); border-color: var(--text-secondary); }
 
 /* ── Shared section structure ───────────────────────────────── */
 .section-eyebrow {
@@ -1109,7 +1138,7 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #6366f1;
+  color: var(--accent);
   margin-bottom: 12px;
 }
 
@@ -1117,7 +1146,7 @@ function resetForm() {
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #111;
+  color: var(--text-primary);
   margin: 0 0 40px;
   line-height: 1.2;
 }
@@ -1125,7 +1154,7 @@ function resetForm() {
 /* ── Problem section ────────────────────────────────────────── */
 .problem-section {
   padding: 72px 0;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .problem-inner {
@@ -1137,7 +1166,7 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--text-tertiary);
   margin-bottom: 16px;
 }
 
@@ -1145,7 +1174,7 @@ function resetForm() {
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: #111;
+  color: var(--text-primary);
   margin: 0 0 20px;
   line-height: 1.25;
 }
@@ -1153,14 +1182,14 @@ function resetForm() {
 .problem-body {
   font-size: 1rem;
   line-height: 1.75;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 16px;
 }
 
 /* ── Feature cards ──────────────────────────────────────────── */
 .features-section {
   padding: 72px 0;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .features-grid {
@@ -1170,40 +1199,39 @@ function resetForm() {
 }
 
 .feature-card {
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 24px;
-  background: #fff;
+  background: var(--bg-card);
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .feature-card--accent {
-  background: #f8f8ff;
-  border-color: rgba(99,102,241,0.2);
+  background: var(--bg-elevated);
+  border-color: rgba(99,102,241,0.3);
 }
 
-.feature-icon { font-size: 24px; }
 
 .feature-title {
   font-size: 14px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   line-height: 1.3;
 }
 
 .feature-desc {
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.65;
   flex: 1;
 }
 
 .feature-tag {
   font-size: 11px;
-  color: #888;
-  background: #f4f4f4;
+  color: var(--text-tertiary);
+  background: var(--bg-surface);
   border-radius: 4px;
   padding: 4px 8px;
   line-height: 1.4;
@@ -1212,7 +1240,7 @@ function resetForm() {
 /* ── How it works (full) ────────────────────────────────────── */
 .hiw-section {
   padding: 72px 0;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .hiw-steps-full {
@@ -1230,7 +1258,7 @@ function resetForm() {
   left: 5%;
   right: 5%;
   height: 1px;
-  background: #e0e0e0;
+  background: var(--border-muted);
   z-index: 0;
 }
 
@@ -1248,14 +1276,14 @@ function resetForm() {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #fff;
-  border: 2px solid #e0e0e0;
+  background: var(--bg-card);
+  border: 2px solid var(--border-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
   font-weight: 700;
-  color: #6366f1;
+  color: var(--accent);
   margin-bottom: 14px;
   flex-shrink: 0;
 }
@@ -1263,28 +1291,28 @@ function resetForm() {
 .hiw-sf-title {
   font-size: 13px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
 .hiw-sf-desc {
   font-size: 12px;
-  color: #888;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .hiw-note {
   font-size: 13px;
-  color: #aaa;
+  color: var(--text-tertiary);
   text-align: center;
   padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-subtle);
 }
 
 /* ── Who it's for ───────────────────────────────────────────── */
 .for-section {
   padding: 72px 0;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .for-grid {
@@ -1294,27 +1322,26 @@ function resetForm() {
 }
 
 .for-card {
-  border: 1px solid #e8e8e8;
+  border: 1px solid var(--border-subtle);
   border-radius: 12px;
   padding: 28px;
-  background: #fff;
+  background: var(--bg-card);
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.for-icon { font-size: 24px; }
 
 .for-title {
   font-size: 14px;
   font-weight: 700;
-  color: #111;
+  color: var(--text-primary);
   line-height: 1.3;
 }
 
 .for-desc {
   font-size: 13px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.65;
 }
 
@@ -1322,7 +1349,7 @@ function resetForm() {
   list-style: none;
   padding: 0;
   margin: 0;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-subtle);
   padding-top: 12px;
   display: flex;
   flex-direction: column;
@@ -1331,7 +1358,7 @@ function resetForm() {
 
 .for-list li {
   font-size: 12px;
-  color: #555;
+  color: var(--text-secondary);
   padding-left: 14px;
   position: relative;
   line-height: 1.5;
@@ -1341,14 +1368,14 @@ function resetForm() {
   content: '→';
   position: absolute;
   left: 0;
-  color: #6366f1;
+  color: var(--accent);
   font-size: 11px;
 }
 
 /* ── Sample output ──────────────────────────────────────────── */
 .sample-section {
   padding: 72px 0;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .sample-grid {
@@ -1372,16 +1399,16 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--text-tertiary);
 }
 
 /* Sample persona card */
 .sample-persona-card {
-  border: 1px solid #e8e8e8;
-  border-left: 3px solid #4ade80;
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--green);
   border-radius: 10px;
   padding: 18px;
-  background: #fff;
+  background: var(--bg-card);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -1394,8 +1421,8 @@ function resetForm() {
   gap: 10px;
 }
 
-.spc-name { font-size: 14px; font-weight: 700; color: #111; }
-.spc-title { font-size: 11px; color: #888; margin-top: 2px; }
+.spc-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.spc-title { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 
 .spc-badge {
   font-size: 10px;
@@ -1406,7 +1433,7 @@ function resetForm() {
   flex-shrink: 0;
 }
 
-.spc-badge--interested { background: #dcfce7; color: #15803d; }
+.spc-badge--interested { background: rgba(74,222,128,0.15); color: var(--green); }
 
 .spc-row {
   display: flex;
@@ -1419,19 +1446,19 @@ function resetForm() {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: #aaa;
+  color: var(--text-tertiary);
   text-transform: uppercase;
   min-width: 70px;
   padding-top: 2px;
 }
 
-.spc-val { color: #333; line-height: 1.5; }
+.spc-val { color: var(--text-primary); line-height: 1.5; }
 
 .spc-chip {
   font-size: 11px;
-  color: #b91c1c;
-  background: #fee2e2;
-  border: 1px solid #fecaca;
+  color: var(--red);
+  background: rgba(248,113,113,0.12);
+  border: 1px solid rgba(248,113,113,0.25);
   border-radius: 4px;
   padding: 2px 8px;
   line-height: 1.5;
@@ -1443,20 +1470,20 @@ function resetForm() {
   width: 10px;
   height: 4px;
   border-radius: 2px;
-  background: #e8e8e8;
+  background: var(--border-muted);
 }
 
-.spc-seg--filled { background: #ea580c; }
+.spc-seg--filled { background: var(--amber); }
 
-.spc-skep-label { font-size: 11px; color: #888; margin-left: 6px; }
+.spc-skep-label { font-size: 11px; color: var(--text-secondary); margin-left: 6px; }
 
 /* Sample reaction card */
 .sample-reaction-card {
-  border: 1px solid #e8e8e8;
-  border-left: 3px solid #6366f1;
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent);
   border-radius: 10px;
   padding: 18px;
-  background: #fff;
+  background: var(--bg-card);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -1481,10 +1508,10 @@ function resetForm() {
   line-height: 1;
 }
 
-.src-score-label { font-size: 10px; color: #aaa; }
+.src-score-label { font-size: 10px; color: var(--text-tertiary); }
 
-.src-green  { color: #16a34a; }
-.src-amber  { color: #d97706; }
+.src-green  { color: var(--green); }
+.src-amber  { color: var(--amber); }
 
 .src-verdict {
   margin-left: auto;
@@ -1494,34 +1521,34 @@ function resetForm() {
   border-radius: 4px;
 }
 
-.src-verdict--interested { background: #dcfce7; color: #15803d; }
+.src-verdict--interested { background: rgba(74,222,128,0.15); color: var(--green); }
 
 .src-reply {
   font-size: 13px;
   font-style: italic;
-  color: #444;
+  color: var(--text-secondary);
   line-height: 1.6;
   padding: 10px 14px;
-  background: #f8f8f8;
+  background: var(--bg-elevated);
   border-radius: 6px;
-  border-left: 2px solid #e0e0e0;
+  border-left: 2px solid var(--border-muted);
 }
 
 .src-trigger {
   font-size: 12px;
-  color: #888;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
-.src-trigger-label { font-weight: 700; color: #555; }
+.src-trigger-label { font-weight: 700; color: var(--text-primary); }
 
 /* Sample report card */
 .sample-report-card {
-  border: 1px solid #e8e8e8;
-  border-left: 3px solid #6366f1;
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent);
   border-radius: 10px;
   padding: 20px;
-  background: #fff;
+  background: var(--bg-card);
   display: flex;
   gap: 24px;
 }
@@ -1533,22 +1560,22 @@ function resetForm() {
   flex: 1;
 }
 
-.srep-star { font-size: 20px; color: #d97706; }
+.srep-star { font-size: 9px; font-weight: 800; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-dim); border: 1px solid rgba(59,130,246,0.25); border-radius: 4px; padding: 3px 8px; }
 
 .srep-winner-label {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #6366f1;
+  color: var(--accent);
   text-transform: uppercase;
   margin-bottom: 4px;
 }
 
-.srep-winner-angle { font-size: 16px; font-weight: 700; color: #111; }
+.srep-winner-angle { font-size: 16px; font-weight: 700; color: var(--text-primary); }
 
-.srep-winner-stats { font-size: 12px; color: #888; margin-top: 4px; }
+.srep-winner-stats { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
 
-.srep-divider { width: 1px; background: #ebebeb; flex-shrink: 0; }
+.srep-divider { width: 1px; background: var(--border-subtle); flex-shrink: 0; }
 
 .srep-objections { flex: 1; }
 
@@ -1556,7 +1583,7 @@ function resetForm() {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #aaa;
+  color: var(--text-tertiary);
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -1571,26 +1598,26 @@ function resetForm() {
 .srep-obj-freq {
   font-size: 11px;
   font-weight: 700;
-  color: #d97706;
-  background: #fef3c7;
+  color: var(--amber);
+  background: rgba(245,158,11,0.12);
   padding: 1px 6px;
   border-radius: 3px;
   white-space: nowrap;
 }
 
-.srep-obj-text { font-size: 12px; color: #444; line-height: 1.4; }
+.srep-obj-text { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
 
 /* ── Simulate section ───────────────────────────────────────── */
 .simulate-section {
   padding: 72px 0 80px;
-  border-top: 1px solid #ebebeb;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .simulate-header { margin-bottom: 40px; max-width: 600px; }
 
 .simulate-sub {
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.65;
   margin: -24px 0 0;
 }
@@ -1615,7 +1642,7 @@ function resetForm() {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #aaa;
+  color: var(--text-tertiary);
   margin-bottom: 4px;
 }
 
@@ -1623,12 +1650,12 @@ function resetForm() {
   display: flex;
   gap: 10px;
   font-size: 13px;
-  color: #444;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .scl-check {
-  color: #16a34a;
+  color: var(--green);
   font-weight: 700;
   flex-shrink: 0;
   margin-top: 1px;
@@ -1636,20 +1663,20 @@ function resetForm() {
 
 .scl-divider {
   height: 1px;
-  background: #ebebeb;
+  background: var(--border-subtle);
   margin: 4px 0;
 }
 
 .scl-note {
   font-size: 12px;
-  color: #888;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .scl-demo-link {
   background: none;
   border: none;
-  color: #6366f1;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -1658,7 +1685,152 @@ function resetForm() {
   text-underline-offset: 2px;
 }
 
-.scl-demo-link:hover { color: #4f46e5; }
+.scl-demo-link:hover { color: #818cf8; }
+
+/* ── Hero orbs ──────────────────────────────────────────────── */
+.hero-section {
+  position: relative;
+  overflow: visible;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.hero-orb-1 {
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
+  top: -180px;
+  left: -160px;
+  animation: orb1 12s ease-in-out infinite alternate;
+}
+
+.hero-orb-2 {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%);
+  top: 60px;
+  right: -60px;
+  animation: orb2 16s ease-in-out infinite alternate;
+}
+
+/* All hero content must sit above the orbs */
+.hero-section > *:not(.hero-orb) { position: relative; z-index: 1; }
+
+@keyframes orb1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(60px, 40px) scale(1.08); }
+  100% { transform: translate(20px, 80px) scale(0.94); }
+}
+
+@keyframes orb2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-40px, 60px) scale(1.12); }
+  100% { transform: translate(-70px, 20px) scale(0.9); }
+}
+
+/* ── Navbar glass ────────────────────────────────────────────── */
+.navbar {
+  background: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* ── Scroll reveal ───────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Feature card hover glow ─────────────────────────────────── */
+.feature-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.feature-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.08);
+}
+
+/* ── For-card hover ──────────────────────────────────────────── */
+.for-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.for-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.06);
+}
+
+/* ── How-it-works step number pulse on hover ─────────────────── */
+.hiw-step-full:hover .hiw-sf-num {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* ── Stat number glow ────────────────────────────────────────── */
+.hero-stat-num {
+  transition: color 0.3s;
+}
+.hero-stat:hover .hero-stat-num {
+  color: var(--accent);
+}
+
+/* ── Animated accent underline on hero title ─────────────────── */
+.hero-title-accent {
+  position: relative;
+  display: inline-block;
+}
+.hero-title-accent::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  animation: underlineGrow 1.2s ease-out 0.4s forwards;
+}
+
+@keyframes underlineGrow {
+  to { width: 100%; }
+}
+
+/* ── Hero badge pulse ────────────────────────────────────────── */
+.hero-badge {
+  animation: badgePulse 3s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+  50%       { box-shadow: 0 0 12px 2px rgba(59, 130, 246, 0.2); }
+}
+
+/* ── Simulate section accent border ─────────────────────────── */
+.simulate-section {
+  position: relative;
+}
+.simulate-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent);
+}
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 1100px) {

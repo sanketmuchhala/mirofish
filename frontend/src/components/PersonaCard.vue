@@ -48,7 +48,7 @@
     <!-- Top Objection -->
     <div class="pcf-row" v-if="persona.objections?.length">
       <span class="pcf-row-label">OBJECTION</span>
-      <span class="pcf-objection-chip">⚠ {{ persona.objections[0] }}</span>
+      <span class="pcf-objection-chip">{{ persona.objections[0] }}</span>
     </div>
 
     <!-- Buying Triggers -->
@@ -91,7 +91,7 @@ const props = defineProps({
 })
 
 const reactionLabel = computed(() => {
-  const map = { interested: '✓ Interested', neutral: '→ Neutral', objection: '⚠ Objection' }
+  const map = { interested: 'Interested', neutral: 'Neutral', objection: 'Objection' }
   return map[props.persona.reaction] ?? props.persona.reaction
 })
 

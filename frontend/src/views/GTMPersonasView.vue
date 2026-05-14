@@ -27,7 +27,7 @@
             class="pg-step"
             :class="{ done: i < loadingStep, active: i === loadingStep }"
           >
-            <span class="pg-step-dot">{{ i < loadingStep ? '●' : i === loadingStep ? '◉' : '○' }}</span>
+            <span class="pg-step-dot">{{ i < loadingStep ? '–' : i === loadingStep ? '>' : '·' }}</span>
             <span class="pg-step-label">{{ step }}</span>
           </div>
         </div>
@@ -81,7 +81,7 @@
           </div>
 
           <div class="pg-confidence-note">
-            ⚡ Directional signal — validate your top segments with real outreach before committing.
+            Directional signal — validate your top segments with real outreach before committing.
           </div>
         </div>
 
@@ -186,9 +186,9 @@ const goalLabel = computed(() => {
 // Filters
 const filters = [
   { label: 'All', value: 'all' },
-  { label: '✓ Interested', value: 'interested' },
-  { label: '→ Neutral', value: 'neutral' },
-  { label: '⚠ Objection', value: 'objection' },
+  { label: 'Interested', value: 'interested' },
+  { label: 'Neutral', value: 'neutral' },
+  { label: 'Objection', value: 'objection' },
 ]
 const activeFilter = ref('all')
 

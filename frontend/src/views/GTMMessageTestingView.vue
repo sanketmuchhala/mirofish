@@ -26,7 +26,7 @@
             class="mt-step"
             :class="{ done: i < loadingStep, active: i === loadingStep }"
           >
-            <span class="mt-step-dot">{{ i < loadingStep ? '●' : i === loadingStep ? '◉' : '○' }}</span>
+            <span class="mt-step-dot">{{ i < loadingStep ? '–' : i === loadingStep ? '>' : '·' }}</span>
             <span class="mt-step-label">{{ step }}</span>
           </div>
         </div>
@@ -37,7 +37,7 @@
 
       <!-- Error state -->
       <div v-else-if="viewState === 'error'" class="mt-error">
-        <div class="mt-error-icon">⚠</div>
+        <div class="mt-error-icon">!</div>
         <div class="mt-error-title">Simulation Error</div>
         <div class="mt-error-msg">{{ errorMsg || 'Message simulation failed. Loading example results so you can explore the UI.' }}</div>
         <button class="mt-btn-primary" @click="retryLoad">Retry</button>
@@ -49,7 +49,7 @@
         <!-- Winner banner -->
         <div class="mt-winner-banner" v-if="winner">
           <div class="mt-winner-left">
-            <span class="mt-winner-star">★</span>
+            <span class="mt-winner-star">WINNER</span>
             <div>
               <div class="mt-winner-label">WINNING ANGLE</div>
               <div class="mt-winner-angle">{{ angleLabel(winner.winner_angle) }}</div>
@@ -58,7 +58,7 @@
           <div class="mt-winner-stats" v-if="winnerSummary">
             <span>Avg interest <strong>{{ winnerSummary.average_interest_score }}</strong></span>
             <span class="mt-sep">·</span>
-            <span class="mt-pos">✓ {{ winnerSummary.positive_count }} interested</span>
+            <span class="mt-pos">{{ winnerSummary.positive_count }} interested</span>
             <span class="mt-sep">·</span>
             <span class="mt-neu">→ {{ winnerSummary.neutral_count }} neutral</span>
             <span class="mt-sep">·</span>
@@ -82,7 +82,7 @@
             @click="selectedAngle = msg.angle"
           >
             <div v-if="winner && winner.winner_message_id === msg.id" class="mt-card-winner-strip">
-              ★ WINNER
+              WINNER
             </div>
             <div class="mt-card-header">
               <span class="mt-card-angle">{{ angleLabel(msg.angle) }}</span>
@@ -94,7 +94,7 @@
             <div class="mt-card-body">{{ msg.body }}</div>
             <div class="mt-card-reasoning">{{ msg.target_persona_reasoning }}</div>
             <div class="mt-card-counts" v-if="summaryFor(msg.id)">
-              <span class="mt-pos">✓ {{ summaryFor(msg.id).positive_count }} interested</span>
+              <span class="mt-pos">{{ summaryFor(msg.id).positive_count }} interested</span>
               <span class="mt-neu">→ {{ summaryFor(msg.id).neutral_count }}</span>
               <span class="mt-neg">{{ summaryFor(msg.id).negative_count }} objections</span>
             </div>
@@ -117,7 +117,7 @@
                 @click="selectedAngle = msg.angle"
               >
                 {{ angleLabel(msg.angle) }}
-                <span v-if="winner && winner.winner_message_id === msg.id"> ★</span>
+                <span v-if="winner && winner.winner_message_id === msg.id" class="mt-winner-tag"> WINNER</span>
               </button>
             </div>
           </div>
@@ -162,7 +162,7 @@
                   </td>
                   <td>
                     <span class="mt-verdict" :class="`mt-verdict--${rxn.verdict}`">
-                      {{ rxn.verdict === 'positive' ? '✓ Interested' : rxn.verdict === 'neutral' ? '→ Neutral' : '✗ Objection' }}
+                      {{ rxn.verdict === 'positive' ? 'Interested' : rxn.verdict === 'neutral' ? 'Neutral' : 'Objection' }}
                     </span>
                   </td>
                   <td class="mt-td-reply">{{ rxn.simulated_reply }}</td>

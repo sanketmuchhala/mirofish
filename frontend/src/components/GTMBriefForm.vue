@@ -273,11 +273,11 @@ function handleSubmit() {
   font-family: var(--font-sans);
 }
 
-/* Sections — clean unified container, no stacked borders */
+/* Sections */
 .form-section {
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid var(--border-subtle);
   padding: 18px 20px;
-  background: #fff;
+  background: var(--bg-card);
 }
 
 .form-section:last-of-type {
@@ -285,7 +285,7 @@ function handleSubmit() {
 }
 
 .optional-section {
-  background: #f8f8fb;
+  background: var(--bg-surface);
 }
 
 .section-label {
@@ -293,7 +293,7 @@ function handleSubmit() {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #999;
+  color: var(--text-tertiary);
   margin-bottom: 14px;
   display: flex;
   align-items: center;
@@ -315,37 +315,37 @@ function handleSubmit() {
   display: block;
   font-size: 11px;
   font-weight: 600;
-  color: #222;
+  color: var(--text-primary);
   margin-bottom: 5px;
   letter-spacing: 0.02em;
 }
 
-.field-hint  { font-weight: 400; color: #aaa; margin-left: 4px; }
-.required    { color: #FF5722; }
+.field-hint  { font-weight: 400; color: var(--text-tertiary); margin-left: 4px; }
+.required    { color: var(--red); }
 
 .field-input {
   width: 100%;
   box-sizing: border-box;
-  background: #fff;
-  border: 1px solid #d5d5d5;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-muted);
   border-radius: 5px;
   padding: 9px 11px;
   font-family: var(--font-sans);
   font-size: 13px;
-  color: #111;
+  color: var(--text-primary);
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
   -webkit-appearance: none;
 }
 
 .field-input:focus {
-  border-color: #333;
-  box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.15);
 }
 
-.field-input.error { border-color: #E53935; }
+.field-input.error { border-color: var(--red); }
 
-.field-input::placeholder { color: #bbb; }
+.field-input::placeholder { color: var(--text-tertiary); }
 
 .field-textarea {
   resize: vertical;
@@ -357,16 +357,21 @@ function handleSubmit() {
 
 .field-select {
   cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23666'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238888aa'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 28px;
 }
 
+.field-select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
 .field-error {
   display: block;
   font-size: 11px;
-  color: #E53935;
+  color: var(--red);
   margin-top: 4px;
 }
 
@@ -376,29 +381,29 @@ function handleSubmit() {
   border: none;
   font-size: 10px;
   font-weight: 600;
-  color: #888;
+  color: var(--text-tertiary);
   cursor: pointer;
   padding: 0;
   letter-spacing: 0.05em;
   transition: color 0.15s;
 }
-.toggle-optional:hover { color: #333; }
+.toggle-optional:hover { color: var(--text-primary); }
 
 .optional-fields { margin-top: 6px; }
 
 /* Submit */
-.form-submit { padding: 16px 20px; border-top: 1px solid #e8e8e8; }
+.form-submit { padding: 16px 20px; border-top: 1px solid var(--border-subtle); background: var(--bg-card); }
 
 .global-error {
   font-size: 12px;
-  color: #E53935;
+  color: var(--red);
   margin-bottom: 10px;
 }
 
 .submit-btn {
   width: 100%;
   padding: 12px 20px;
-  background: #111;
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -409,7 +414,7 @@ function handleSubmit() {
   transition: background 0.15s;
 }
 
-.submit-btn:hover:not(:disabled) { background: #FF5722; }
+.submit-btn:hover:not(:disabled) { background: #4f46e5; }
 .submit-btn:active:not(:disabled) { transform: translateY(1px); }
-.submit-btn:disabled { background: #ccc; cursor: not-allowed; }
+.submit-btn:disabled { background: var(--border-muted); cursor: not-allowed; color: var(--text-tertiary); }
 </style>

@@ -27,9 +27,17 @@ class LLMClient:
         if not self.api_key:
             raise ValueError("LLM_API_KEY is not configured")
 
+        extra_headers = {}
+        if self.base_url and "openrouter.ai" in self.base_url:
+            extra_headers = {
+                "HTTP-Referer": "https://github.com/666ghj/MiroFish",
+                "X-Title": "GTM Simulation Lab",
+            }
+
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url=self.base_url
+            base_url=self.base_url,
+            default_headers=extra_headers if extra_headers else None,
         )
 
     def chat(
@@ -84,12 +92,21 @@ class LLMClient:
         Returns:
             Parsed JSON object
         """
-        response = self.chat(
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            response_format={"type": "json_object"}
-        )
+        try:
+            response = self.chat(
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format={"type": "json_object"},
+            )
+        except Exception:
+            # Some models (e.g. non-OpenAI on OpenRouter) don't support json_object mode —
+            # fall back to plain completion and rely on the JSON instruction in the prompt.
+            response = self.chat(
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+            )
         # Strip markdown code block markers
         cleaned_response = response.strip()
         cleaned_response = re.sub(r'^```(?:json)?\s*\n?', '', cleaned_response, flags=re.IGNORECASE)
