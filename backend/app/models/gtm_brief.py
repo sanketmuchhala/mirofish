@@ -45,6 +45,8 @@ class GTMBrief:
     team_size: Optional[str] = None
     existing_problems: Optional[str] = None
     outreach_strategy: Optional[str] = None
+    num_personas: int = 12
+    num_messages: int = 3
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -67,6 +69,8 @@ class GTMBrief:
             team_size=data.get('team_size'),
             existing_problems=data.get('existing_problems'),
             outreach_strategy=data.get('outreach_strategy'),
+            num_personas=int(data.get('num_personas', 12)),
+            num_messages=int(data.get('num_messages', 3)),
         )
 
 
@@ -120,6 +124,8 @@ class GTMBriefManager:
             'team_size': (data.get('team_size') or '').strip() or None,
             'existing_problems': (data.get('existing_problems') or '').strip() or None,
             'outreach_strategy': (data.get('outreach_strategy') or '').strip() or None,
+            'num_personas': max(6, min(500, int(data.get('num_personas') or 12))),
+            'num_messages': max(2, min(5, int(data.get('num_messages') or 3))),
         }
 
     @staticmethod

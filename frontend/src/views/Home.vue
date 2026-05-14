@@ -644,35 +644,33 @@ function resetForm() {
 /* ── Hero ────────────────────────────────────────────────────── */
 .hero-section {
   display: grid;
-  grid-template-columns: 1fr 460px;
-  gap: 40px;
-  align-items: start;
-  margin-bottom: 80px;
+  grid-template-columns: 1fr 480px;
+  gap: 48px;
+  align-items: center;
+  padding-bottom: 80px;
+  border-bottom: 1px solid var(--border-subtle);
   position: relative;
-  overflow: visible;
 }
 
 .hero-left {
-  max-width: 620px;
+  max-width: 580px;
 }
 
 .hero-right {
-  position: sticky;
-  top: 80px;
+  align-self: center;
 }
 
 .hviz-frame {
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  height: 400px;
+  height: 440px;
   position: relative;
-  background: var(--bg-surface);
+  background: transparent;
 }
 
 .hviz-frame-label {
   position: absolute;
-  top: 12px;
+  top: 10px;
   left: 14px;
   font-size: 9px;
   font-weight: 700;
@@ -681,6 +679,7 @@ function resetForm() {
   color: var(--text-tertiary);
   z-index: 10;
   font-family: var(--font-mono);
+  opacity: 0.6;
 }
 
 .hero-eyebrow {
@@ -1204,7 +1203,6 @@ function resetForm() {
 /* ── Problem section ────────────────────────────────────────── */
 .problem-section {
   padding: 72px 0;
-  border-top: 1px solid var(--border-subtle);
 }
 
 .problem-inner {

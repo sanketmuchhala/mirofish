@@ -154,16 +154,17 @@
           v-model.number="form.numPersonas"
           type="range"
           class="field-slider"
-          min="6" max="50" step="1"
+          min="6" max="500" step="1"
         />
         <div class="slider-hints">
-          <span>6 — quick test</span>
-          <span>12 — standard</span>
-          <span>30 — deep</span>
-          <span>50 — exhaustive</span>
+          <span>6</span>
+          <span>50</span>
+          <span>100</span>
+          <span>200</span>
+          <span>500</span>
         </div>
         <div class="param-note">
-          More personas = broader signal + higher LLM cost. ~$0.10 per 6 extra personas.
+          {{ personaCostNote }}
         </div>
       </div>
 
@@ -226,7 +227,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch, watchEffect } from 'vue'
 import { validateGTMBrief, formatGTMBrief } from '../utils/gtmFormatter.js'
 
 const props = defineProps({
@@ -262,6 +263,17 @@ const form = reactive({
   teamSize: '',
   existingProblems: '',
   outreachStrategy: '',
+})
+
+const personaCostNote = computed(() => {
+  const n = form.numPersonas
+  const reactions = n * form.numMessages
+  const cost = (n * 0.008).toFixed(2)
+  if (n <= 12)  return `${n} personas · ${reactions} reactions · fast (~1 min) · ~$${cost}`
+  if (n <= 50)  return `${n} personas · ${reactions} reactions · ~2–3 min · ~$${cost}`
+  if (n <= 100) return `${n} personas · ${reactions} reactions · ~5–8 min · ~$${cost} — deep signal`
+  if (n <= 200) return `${n} personas · ${reactions} reactions · ~10–15 min · ~$${cost} — very deep`
+  return `${n} personas · ${reactions} reactions · ~20–40 min · ~$${cost} — exhaustive simulation`
 })
 
 function applyInitialData(data) {

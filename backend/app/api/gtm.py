@@ -12,14 +12,16 @@ from ..utils.logger import get_logger
 logger = get_logger('mirofish.api.gtm')
 
 
-def _persona_count(brief: dict) -> int:
-    """Persona count from brief, clamped 6–50."""
-    return max(6, min(50, int(brief.get('num_personas', 12))))
+def _persona_count(brief) -> int:
+    """Persona count from brief object or dict, clamped 6–500."""
+    n = brief.get('num_personas', 12) if isinstance(brief, dict) else getattr(brief, 'num_personas', 12)
+    return max(6, min(500, int(n or 12)))
 
 
-def _message_count(brief: dict) -> int:
-    """Message variant count from brief, clamped 2–5."""
-    return max(2, min(5, int(brief.get('num_messages', 3))))
+def _message_count(brief) -> int:
+    """Message variant count from brief object or dict, clamped 2–5."""
+    n = brief.get('num_messages', 3) if isinstance(brief, dict) else getattr(brief, 'num_messages', 3)
+    return max(2, min(5, int(n or 3)))
 
 _MOCK_PREVIEW_PATH = os.path.join(
     os.path.dirname(__file__), '../../../../mock_data/gtm_preview.json'
