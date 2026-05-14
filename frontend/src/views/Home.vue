@@ -123,84 +123,84 @@
           </div>
         </div>
 
-        <!-- Right column: Interactive console -->
+        <!-- Right column: GTM Brief Form or Preview -->
         <div class="right-panel">
           <div class="console-box">
-            <!-- Upload area -->
-            <div class="console-section">
-              <div class="console-header">
-                <span class="console-label">{{ $t('home.realitySeed') }}</span>
-                <span class="console-meta">{{ $t('home.supportedFormats') }}</span>
+
+            <!-- State: form -->
+            <div v-if="homeState === 'form'" class="console-section form-section-wrapper">
+              <GTMBriefForm :loading="loading" @submit="handleBriefSubmit" />
+            </div>
+
+            <!-- State: submitting (transitional) -->
+            <div v-else-if="homeState === 'submitting'" class="console-section preview-section">
+              <div class="preview-header">
+                <span class="preview-status-dot loading"></span>
+                <span class="preview-status-text">Building GTM simulation...</span>
               </div>
-              
-              <div 
-                class="upload-zone"
-                :class="{ 'drag-over': isDragOver, 'has-files': files.length > 0 }"
-                @dragover.prevent="handleDragOver"
-                @dragleave.prevent="handleDragLeave"
-                @drop.prevent="handleDrop"
-                @click="triggerFileInput"
-              >
-                <input
-                  ref="fileInput"
-                  type="file"
-                  multiple
-                  accept=".pdf,.md,.txt"
-                  @change="handleFileSelect"
-                  style="display: none"
-                  :disabled="loading"
-                />
-                
-                <div v-if="files.length === 0" class="upload-placeholder">
-                  <div class="upload-icon">↑</div>
-                  <div class="upload-title">{{ $t('home.dragToUpload') }}</div>
-                  <div class="upload-hint">{{ $t('home.orBrowse') }}</div>
+              <div class="preview-loading-rows">
+                <div class="loading-row" v-for="n in 3" :key="n">
+                  <div class="loading-skeleton"></div>
                 </div>
-                
-                <div v-else class="file-list">
-                  <div v-for="(file, index) in files" :key="index" class="file-item">
-                    <span class="file-icon">📄</span>
-                    <span class="file-name">{{ file.name }}</span>
-                    <button @click.stop="removeFile(index)" class="remove-btn">×</button>
+              </div>
+            </div>
+
+            <!-- State: preview -->
+            <div v-else-if="homeState === 'preview'" class="console-section preview-section">
+              <div class="preview-header">
+                <span class="preview-status-dot ready"></span>
+                <span class="preview-status-text">GTM brief received — simulation ready</span>
+              </div>
+
+              <div class="preview-label">Buyer Persona Preview</div>
+              <div class="persona-grid">
+                <div
+                  v-for="persona in previewPersonas"
+                  :key="persona.id"
+                  class="persona-card"
+                  :class="persona.reaction"
+                >
+                  <div class="persona-name">{{ persona.name }}</div>
+                  <div class="persona-role">{{ persona.role }}</div>
+                  <div class="persona-company">{{ persona.company }}</div>
+                  <div class="persona-reaction-badge" :class="persona.reaction">
+                    {{ reactionLabel(persona.reaction) }}
                   </div>
+                  <div class="persona-quote">"{{ persona.likely_response }}"</div>
                 </div>
               </div>
-            </div>
 
-            <!-- Divider -->
-            <div class="console-divider">
-              <span>{{ $t('home.inputParams') }}</span>
-            </div>
-
-            <!-- Input area -->
-            <div class="console-section">
-              <div class="console-header">
-                <span class="console-label">{{ $t('home.simulationPrompt') }}</span>
+              <div v-if="previewTeasers.length" class="message-teasers">
+                <div class="preview-label">Message Angle Signals</div>
+                <div
+                  v-for="teaser in previewTeasers"
+                  :key="teaser.angle"
+                  class="teaser-row"
+                >
+                  <span class="teaser-label">{{ teaser.label }}</span>
+                  <span class="teaser-text">{{ teaser.preview }}</span>
+                </div>
               </div>
-              <div class="input-wrapper">
-                <textarea
-                  v-model="formData.simulationRequirement"
-                  class="code-input"
-                  :placeholder="$t('home.promptPlaceholder')"
-                  rows="6"
-                  :disabled="loading"
-                ></textarea>
-                <div class="model-badge">{{ $t('home.engineBadge') }}</div>
+
+              <div class="preview-actions">
+                <button class="continue-btn" @click="continueToSimulation">
+                  Continue to Full Simulation →
+                </button>
+                <button class="restart-btn" @click="resetForm">
+                  ← Edit Brief
+                </button>
               </div>
             </div>
 
-            <!-- Start button -->
-            <div class="console-section btn-section">
-              <button 
-                class="start-engine-btn"
-                @click="startSimulation"
-                :disabled="!canSubmit || loading"
-              >
-                <span v-if="!loading">{{ $t('home.startEngine') }}</span>
-                <span v-else>{{ $t('home.initializing') }}</span>
-                <span class="btn-arrow">→</span>
-              </button>
+            <!-- State: error -->
+            <div v-else-if="homeState === 'error'" class="console-section preview-section">
+              <div class="preview-header">
+                <span class="preview-status-dot error"></span>
+                <span class="preview-status-text">{{ submitError || 'Something went wrong.' }}</span>
+              </div>
+              <button class="restart-btn" style="margin-top:16px" @click="resetForm">← Try again</button>
             </div>
+
           </div>
         </div>
       </section>
@@ -216,98 +216,72 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import HistoryDatabase from '../components/HistoryDatabase.vue'
 import LanguageSwitcher from '../components/LanguageSwitcher.vue'
+import GTMBriefForm from '../components/GTMBriefForm.vue'
+import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
+import { setGTMBrief, setSimulationPreview, resetGTMState } from '../store/gtmSimulation.js'
+import { MOCK_GTM_PREVIEW } from '../mock/gtm_preview.js'
 
 const router = useRouter()
 
-// Form data
-const formData = ref({
-  simulationRequirement: ''
-})
-
-// File list
-const files = ref([])
-
-// State
+// 'form' | 'submitting' | 'preview' | 'error'
+const homeState = ref('form')
 const loading = ref(false)
-const error = ref('')
-const isDragOver = ref(false)
+const submitError = ref('')
+const previewPersonas = ref([])
+const previewTeasers = ref([])
 
-// File input ref
-const fileInput = ref(null)
-
-// Computed: whether form can be submitted
-const canSubmit = computed(() => {
-  return formData.value.simulationRequirement.trim() !== '' && files.value.length > 0
-})
-
-// Trigger file selection
-const triggerFileInput = () => {
-  if (!loading.value) {
-    fileInput.value?.click()
-  }
-}
-
-// Handle file selection
-const handleFileSelect = (event) => {
-  const selectedFiles = Array.from(event.target.files)
-  addFiles(selectedFiles)
-}
-
-// Handle drag-and-drop events
-const handleDragOver = (e) => {
-  if (!loading.value) {
-    isDragOver.value = true
-  }
-}
-
-const handleDragLeave = (e) => {
-  isDragOver.value = false
-}
-
-const handleDrop = (e) => {
-  isDragOver.value = false
-  if (loading.value) return
-
-  const droppedFiles = Array.from(e.dataTransfer.files)
-  addFiles(droppedFiles)
-}
-
-// Add files
-const addFiles = (newFiles) => {
-  const validFiles = newFiles.filter(file => {
-    const ext = file.name.split('.').pop().toLowerCase()
-    return ['pdf', 'md', 'txt'].includes(ext)
-  })
-  files.value.push(...validFiles)
-}
-
-// Remove file
-const removeFile = (index) => {
-  files.value.splice(index, 1)
-}
-
-// Scroll to bottom
 const scrollToBottom = () => {
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: 'smooth'
-  })
+  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
 }
 
-// Start simulation - navigate immediately, API call happens in Process page
-const startSimulation = () => {
-  if (!canSubmit.value || loading.value) return
+function reactionLabel(reaction) {
+  return { interested: '✓ Interested', neutral: '→ Neutral', objection: '⚠ Objection' }[reaction] ?? reaction
+}
 
-  // Store pending upload data
-  import('../store/pendingUpload.js').then(({ setPendingUpload }) => {
-    setPendingUpload(files.value, formData.value.simulationRequirement)
+async function handleBriefSubmit(payload) {
+  loading.value = true
+  homeState.value = 'submitting'
+  submitError.value = ''
 
-    // Navigate immediately to Process page (use special marker for new project)
-    router.push({
-      name: 'Process',
-      params: { projectId: 'new' }
-    })
-  })
+  try {
+    setGTMBrief(payload)
+    const res = await submitGTMBrief(payload)
+
+    if (!res.success) {
+      throw new Error(res.error || 'Submission failed')
+    }
+
+    const briefId = res.data.brief_id
+
+    // Fetch preview (fall back to mock if unavailable)
+    let preview = MOCK_GTM_PREVIEW
+    try {
+      const previewRes = await getGTMPreview(briefId)
+      if (previewRes.success && previewRes.data) preview = previewRes.data
+    } catch (_) { /* use mock */ }
+
+    setSimulationPreview(briefId, preview)
+    previewPersonas.value = preview.personas ?? []
+    previewTeasers.value = preview.message_angle_teasers ?? []
+    homeState.value = 'preview'
+  } catch (err) {
+    submitError.value = err.message || 'Something went wrong. Please try again.'
+    homeState.value = 'error'
+  } finally {
+    loading.value = false
+  }
+}
+
+function continueToSimulation() {
+  router.push({ name: 'Process', params: { projectId: 'new' } })
+}
+
+function resetForm() {
+  resetGTMState()
+  previewPersonas.value = []
+  previewTeasers.value = []
+  homeState.value = 'form'
+  submitError.value = ''
 }
 </script>
 
@@ -949,5 +923,208 @@ html[lang="en"] .workflow-list .step-desc {
 
 html[lang="en"] .workflow-list {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* GTM form wrapper inside console-box */
+.form-section-wrapper {
+  padding: 0;
+}
+
+/* Preview state */
+.preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #444;
+}
+
+.preview-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.preview-status-dot.loading { background: #FF9800; animation: pulse 1s infinite; }
+.preview-status-dot.ready   { background: #4CAF50; }
+.preview-status-dot.error   { background: #E53935; }
+
+@keyframes pulse { 50% { opacity: 0.4; } }
+
+.preview-status-text {
+  font-weight: 600;
+}
+
+.preview-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+/* Persona cards */
+.persona-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.persona-card {
+  flex: 1;
+  min-width: 140px;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  padding: 12px;
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.persona-card.interested { border-left: 3px solid #4CAF50; }
+.persona-card.neutral    { border-left: 3px solid #FF9800; }
+.persona-card.objection  { border-left: 3px solid #E53935; }
+
+.persona-name {
+  font-weight: 700;
+  font-size: 13px;
+  color: #111;
+}
+
+.persona-role {
+  font-size: 11px;
+  color: #555;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.persona-company {
+  font-size: 10px;
+  color: #888;
+}
+
+.persona-reaction-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 2px;
+  width: fit-content;
+  margin-top: 4px;
+}
+.persona-reaction-badge.interested { background: #E8F5E9; color: #2E7D32; }
+.persona-reaction-badge.neutral    { background: #FFF3E0; color: #E65100; }
+.persona-reaction-badge.objection  { background: #FFEBEE; color: #C62828; }
+
+.persona-quote {
+  font-size: 11px;
+  color: #555;
+  font-style: italic;
+  margin-top: 6px;
+  line-height: 1.4;
+  border-top: 1px solid #EEE;
+  padding-top: 6px;
+}
+
+/* Message teasers */
+.message-teasers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.teaser-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12px;
+}
+
+.teaser-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 10px;
+  color: #555;
+  white-space: nowrap;
+  padding-top: 1px;
+  min-width: 80px;
+}
+
+.teaser-text {
+  color: #444;
+  line-height: 1.4;
+}
+
+/* Loading skeleton */
+.preview-loading-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.loading-skeleton {
+  height: 60px;
+  background: linear-gradient(90deg, #F0F0F0 25%, #E0E0E0 50%, #F0F0F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 4px;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Preview action buttons */
+.preview-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.continue-btn {
+  flex: 1;
+  padding: 11px 16px;
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 3px;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.continue-btn:hover {
+  background: #FF5722;
+  border-color: #FF5722;
+}
+
+.restart-btn {
+  padding: 11px 14px;
+  background: transparent;
+  color: #666;
+  border: 1px solid #CCC;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.restart-btn:hover {
+  border-color: #999;
+  color: #333;
 }
 </style>
