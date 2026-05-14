@@ -5,7 +5,7 @@
     <nav class="navbar">
       <div class="nav-brand">GTM SIM LAB</div>
       <div class="nav-links">
-        <a href="#simulate" class="nav-cta">Start Simulation</a>
+        <router-link to="/simulate" class="nav-cta">Start Simulation</router-link>
         <a href="https://github.com/sanketmuchhala/GTM-SImulator" target="_blank" class="github-link">
           GitHub <span class="arrow">↗</span>
         </a>
@@ -38,7 +38,7 @@
         </p>
 
         <div class="hero-actions">
-          <a href="#simulate" class="btn-hero-primary">Run a Simulation →</a>
+          <router-link to="/simulate" class="btn-hero-primary">Run a Simulation →</router-link>
           <a href="https://github.com/sanketmuchhala/GTM-SImulator" target="_blank" class="btn-hero-ghost">View on GitHub ↗</a>
         </div>
 
@@ -320,123 +320,114 @@
         </div>
       </section>
 
-      <!-- ── Simulate Now ──────────────────────────────────────── -->
-      <section class="simulate-section" id="simulate">
-        <div class="simulate-header">
-          <div class="section-eyebrow">Run your simulation</div>
-          <h2 class="section-title">Fill in your GTM brief to get started.</h2>
-          <p class="simulate-sub">
-            Takes about 2 minutes. Uses your own LLM API key (OpenAI-compatible).
-            No API key? Load the example simulation to see the full output in mock mode.
-          </p>
+      <!-- ── Demo Showcase ───────────────────────────────────── -->
+      <section class="demo-section reveal" id="demo">
+        <div class="section-eyebrow">Example output</div>
+        <h2 class="section-title">See what a real simulation produces.</h2>
+        <p class="demo-sub">AI-generated output from a real simulation run — Acme AI SDR targeting seed-stage SaaS founders.</p>
+
+        <!-- Tab bar -->
+        <div class="demo-tabs">
+          <button
+            v-for="tab in demoTabs"
+            :key="tab.id"
+            class="demo-tab"
+            :class="{ active: activeDemo === tab.id }"
+            @click="activeDemo = tab.id"
+          >{{ tab.label }}</button>
         </div>
 
-        <div class="simulate-layout">
-
-          <!-- Left: quick checklist -->
-          <div class="simulate-checklist">
-            <div class="scl-header">What you'll need</div>
-            <div class="scl-item">
-              <span class="scl-check">✓</span>
-              <span>Product name + one-paragraph description</span>
-            </div>
-            <div class="scl-item">
-              <span class="scl-check">✓</span>
-              <span>Ideal customer profile (company size, role, stage)</span>
-            </div>
-            <div class="scl-item">
-              <span class="scl-check">✓</span>
-              <span>Pricing model (even approximate)</span>
-            </div>
-            <div class="scl-item">
-              <span class="scl-check">✓</span>
-              <span>Primary pain point you're solving</span>
-            </div>
-            <div class="scl-item">
-              <span class="scl-check">✓</span>
-              <span>GTM goal (e.g. first 10 customers)</span>
-            </div>
-            <div class="scl-divider"></div>
-            <div class="scl-note">
-              Not sure where to start?
-              <button class="scl-demo-link" @click="loadDemoScenario; scrollToForm()">
-                Load the AI SDR example →
-              </button>
+        <!-- Tab: Personas -->
+        <div v-if="activeDemo === 'personas'" class="demo-panel">
+          <div class="demo-personas-grid">
+            <div
+              v-for="p in demoPersonas"
+              :key="p.id"
+              class="demo-persona-card"
+              :class="`demo-persona-card--${p.reaction}`"
+            >
+              <div class="dpc-header">
+                <div>
+                  <div class="dpc-name">{{ p.name }}</div>
+                  <div class="dpc-title">{{ p.title }}</div>
+                </div>
+                <span class="dpc-verdict" :class="`dpc-verdict--${p.reaction}`">{{ reactionLabel(p.reaction) }}</span>
+              </div>
+              <div class="dpc-goal" v-if="p.primary_goal">{{ p.primary_goal }}</div>
+              <div class="dpc-objection" v-if="p.objections?.[0]">{{ p.objections[0] }}</div>
             </div>
           </div>
+          <div class="demo-more">+ {{ demoPersonasTotal - demoPersonas.length }} more personas generated in a full run</div>
+        </div>
 
-          <!-- Right: Form panel -->
-          <div class="form-panel" ref="formPanelRef">
-
-            <div class="form-panel-header">
-              <div class="form-panel-title">GTM Brief</div>
-              <button class="demo-pill" @click="loadDemoScenario">
-                Try example
-              </button>
-            </div>
-
-            <div class="form-panel-body">
-
-              <div v-if="homeState === 'form'">
-                <GTMBriefForm :loading="loading" :initialData="demoData" @submit="handleBriefSubmit" />
+        <!-- Tab: Messages -->
+        <div v-if="activeDemo === 'messages'" class="demo-panel">
+          <div class="demo-messages-grid">
+            <div
+              v-for="msg in demoMessages"
+              :key="msg.id"
+              class="demo-msg-card"
+              :class="{ 'demo-msg-card--winner': msg.angle === demoWinnerAngle }"
+            >
+              <div class="dmc-header">
+                <span class="dmc-angle">{{ angleLabel(msg.angle) }}</span>
+                <span v-if="msg.angle === demoWinnerAngle" class="dmc-winner-badge">WINNER</span>
               </div>
-
-              <div v-else-if="homeState === 'submitting'" class="state-loading">
-                <div class="state-spinner"></div>
-                <div class="state-loading-steps">
-                  <div class="sls-step sls-done">Brief validated</div>
-                  <div class="sls-step sls-active">Generating persona preview…</div>
-                  <div class="sls-step sls-pending">Preparing simulation</div>
-                </div>
+              <div class="dmc-subject">{{ msg.subject_line }}</div>
+              <div class="dmc-body">{{ msg.body }}</div>
+              <div class="dmc-scores" v-if="demoSummaryFor(msg.id)">
+                <span class="dmc-score" :style="{color: scoreColor(demoSummaryFor(msg.id).average_interest_score)}">
+                  {{ demoSummaryFor(msg.id).average_interest_score?.toFixed(1) }} avg interest
+                </span>
+                <span class="dmc-dot">·</span>
+                <span class="dmc-score-green">{{ demoSummaryFor(msg.id).positive_count }} interested</span>
               </div>
-
-              <div v-else-if="homeState === 'preview'" class="state-preview">
-                <div class="state-preview-header">
-                  <span class="state-dot state-dot--ready"></span>
-                  <span class="state-preview-title">Simulation ready — 3 personas generated</span>
-                </div>
-
-                <div class="preview-section-label">Buyer persona preview</div>
-                <div class="preview-personas">
-                  <div
-                    v-for="persona in previewPersonas"
-                    :key="persona.id"
-                    class="preview-persona"
-                    :class="persona.reaction"
-                  >
-                    <div class="pp-header">
-                      <span class="pp-name">{{ persona.name }}</span>
-                      <span class="pp-badge" :class="persona.reaction">{{ reactionLabel(persona.reaction) }}</span>
-                    </div>
-                    <div class="pp-role">{{ persona.role }}</div>
-                    <div class="pp-quote">"{{ persona.likely_response }}"</div>
-                  </div>
-                </div>
-
-                <div v-if="previewTeasers.length" class="preview-teasers">
-                  <div class="preview-section-label">Message angle signals</div>
-                  <div v-for="teaser in previewTeasers" :key="teaser.angle" class="teaser-item">
-                    <span class="teaser-angle">{{ teaser.label }}</span>
-                    <span class="teaser-preview">{{ teaser.preview }}</span>
-                  </div>
-                </div>
-
-                <div class="preview-actions">
-                  <button class="btn-primary" @click="continueToSimulation">
-                    Run Full Simulation →
-                  </button>
-                  <button class="btn-ghost" @click="resetForm">← Edit Brief</button>
-                </div>
-              </div>
-
-              <div v-else-if="homeState === 'error'" class="state-error">
-                <div class="state-error-icon">!</div>
-                <div class="state-error-msg">{{ submitError || 'Submission failed. Check your connection and try again.' }}</div>
-                <button class="btn-ghost" @click="resetForm">← Edit Brief</button>
-              </div>
-
             </div>
           </div>
+        </div>
+
+        <!-- Tab: Report -->
+        <div v-if="activeDemo === 'report'" class="demo-panel">
+          <div class="demo-report-wrap">
+            <!-- Metric strip -->
+            <div class="demo-metrics">
+              <div class="dm-metric">
+                <div class="dm-val">{{ Math.round((demoReport.best_icp?.confidence_score || 0) * 100) }}%</div>
+                <div class="dm-label">ICP Fit</div>
+              </div>
+              <div class="dm-metric">
+                <div class="dm-val">{{ demoReport.buyer_readiness?.score }}/10</div>
+                <div class="dm-label">Buyer Readiness</div>
+              </div>
+              <div class="dm-metric">
+                <div class="dm-val">{{ angleLabel(demoReport.winning_message?.angle) }}</div>
+                <div class="dm-label">Winning Angle</div>
+              </div>
+              <div class="dm-metric">
+                <div class="dm-val">{{ demoReport.seven_day_experiment?.length || 7 }}-Day</div>
+                <div class="dm-label">Experiment Plan</div>
+              </div>
+            </div>
+            <!-- Summary -->
+            <div class="demo-summary">
+              <div class="demo-summary-label">Executive Summary</div>
+              <p class="demo-summary-text">{{ demoReport.executive_summary }}</p>
+            </div>
+            <!-- Top objections -->
+            <div class="demo-objections" v-if="demoReport.top_objections?.length">
+              <div class="demo-summary-label">Top Objections</div>
+              <div v-for="(obj, i) in demoReport.top_objections.slice(0, 3)" :key="i" class="demo-obj-row">
+                <span class="demo-obj-freq">×{{ obj.frequency }}</span>
+                <span class="demo-obj-text">{{ obj.objection }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="demo-cta">
+          <router-link to="/simulate" class="btn-hero-primary">Launch Simulator →</router-link>
+          <span class="demo-cta-note">Takes ~2 min · Uses your LLM API key · No account needed</span>
         </div>
       </section>
 
@@ -455,28 +446,23 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import GTMBriefForm from '../components/GTMBriefForm.vue'
-import { submitGTMBrief, getGTMPreview } from '../api/gtm.js'
-import { setGTMBrief, setSimulationPreview, resetGTMState, getGTMState } from '../store/gtmSimulation.js'
-import { MOCK_GTM_PREVIEW } from '../mock/gtm_preview.js'
-import { DEMO_BRIEF } from '../mock/gtm_demo.js'
 import HeroViz from '../components/HeroViz.vue'
-
-const router = useRouter()
+import { MOCK_PERSONAS_FULL } from '../mock/gtm_preview.js'
+import { MOCK_MESSAGES, MOCK_REACTIONS_RESULT } from '../mock/gtm_messages.js'
+import { MOCK_REPORT } from '../mock/gtm_report.js'
 
 const steps = [
   { title: 'Input Brief',      desc: 'Describe your product, ICP, pricing, and GTM goal.' },
-  { title: 'Buyer Personas',   desc: 'AI generates 12 distinct buyer archetypes from your ICP.' },
-  { title: 'Message Testing',  desc: '3 outreach angles (pain-first, ROI-first, curiosity-first) tested against each persona.' },
+  { title: 'Buyer Personas',   desc: 'AI generates buyer archetypes tailored to your ICP.' },
+  { title: 'Message Testing',  desc: 'Multiple outreach angles tested against every persona.' },
   { title: 'Buyer Reactions',  desc: 'Each persona responds with interest scores, objections, and a simulated reply.' },
   { title: 'GTM Report',       desc: 'Best angle, top objections with rebuttals, and a 7-day outbound experiment plan.' },
 ]
 
 // Count-up stats
-const stat1 = ref(0)   // 12
-const stat2 = ref(0)   // 3
-const stat3 = ref(0)   // 36
+const stat1 = ref(0)
+const stat2 = ref(0)
+const stat3 = ref(0)
 
 function countUp(setter, target, duration = 1200) {
   const start = performance.now()
@@ -492,12 +478,9 @@ function countUp(setter, target, duration = 1200) {
 let revealObserver = null
 
 onMounted(() => {
-  // Staggered count-up
   setTimeout(() => countUp(v => { stat1.value = v }, 12), 200)
   setTimeout(() => countUp(v => { stat2.value = v }, 3, 600), 350)
   setTimeout(() => countUp(v => { stat3.value = v }, 36), 500)
-
-  // Scroll reveal
   revealObserver = new IntersectionObserver(
     (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed') }),
     { threshold: 0.12 }
@@ -507,79 +490,37 @@ onMounted(() => {
 
 onUnmounted(() => { if (revealObserver) revealObserver.disconnect() })
 
-// 'form' | 'submitting' | 'preview' | 'error'
-const homeState = ref('form')
-const loading = ref(false)
-const submitError = ref('')
-const previewPersonas = ref([])
-const previewTeasers = ref([])
-const demoData = ref(null)
-const formPanelRef = ref(null)
-
-function loadDemoScenario() {
-  demoData.value = { ...DEMO_BRIEF }
-}
-
-function scrollToForm() {
-  const el = document.getElementById('simulate')
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
+// Demo showcase data
+const activeDemo = ref('personas')
+const demoTabs = [
+  { id: 'personas', label: 'Buyer Personas' },
+  { id: 'messages', label: 'Message Testing' },
+  { id: 'report',   label: 'GTM Report' },
+]
+const demoPersonas = MOCK_PERSONAS_FULL.slice(0, 3)
+const demoPersonasTotal = MOCK_PERSONAS_FULL.length
+const demoMessages = MOCK_MESSAGES
+const demoWinnerAngle = MOCK_REACTIONS_RESULT?.winner?.winner_angle
+const demoReport = MOCK_REPORT
 
 function reactionLabel(reaction) {
   return { interested: 'Interested', neutral: 'Neutral', objection: 'Objection' }[reaction] ?? reaction
 }
 
-async function handleBriefSubmit(payload) {
-  loading.value = true
-  homeState.value = 'submitting'
-  submitError.value = ''
-
-  try {
-    setGTMBrief(payload)
-    const res = await submitGTMBrief(payload)
-
-    if (!res.success) {
-      throw new Error(res.error || 'Submission failed')
-    }
-
-    const briefId = res.data.brief_id
-
-    // Fetch preview (fall back to mock if unavailable)
-    let preview = MOCK_GTM_PREVIEW
-    try {
-      const previewRes = await getGTMPreview(briefId)
-      if (previewRes.success && previewRes.data) preview = previewRes.data
-    } catch (_) { /* use mock */ }
-
-    setSimulationPreview(briefId, preview)
-    previewPersonas.value = preview.personas ?? []
-    previewTeasers.value = preview.message_angle_teasers ?? []
-    homeState.value = 'preview'
-  } catch (err) {
-    submitError.value = err.message || 'Something went wrong. Please try again.'
-    homeState.value = 'error'
-  } finally {
-    loading.value = false
-  }
+function angleLabel(angle) {
+  return { pain_first: 'Pain-First', roi_first: 'ROI-First', curiosity_first: 'Curiosity-First',
+           feature_first: 'Feature-First', social_proof_first: 'Social Proof' }[angle] ?? (angle || '')
 }
 
-function continueToSimulation() {
-  const { briefId } = getGTMState()
-  if (briefId) {
-    router.push({ name: 'GTMPersonas', params: { briefId } })
-  } else {
-    // Fallback: if briefId was lost somehow, go back to form
-    homeState.value = 'form'
-  }
+function scoreColor(n) {
+  if (!n) return 'var(--text-secondary)'
+  if (n >= 7) return 'var(--green)'
+  if (n >= 5) return 'var(--amber)'
+  return 'var(--red)'
 }
 
-function resetForm() {
-  resetGTMState()
-  previewPersonas.value = []
-  previewTeasers.value = []
-  demoData.value = null
-  homeState.value = 'form'
-  submitError.value = ''
+function demoSummaryFor(msgId) {
+  return (MOCK_REACTIONS_RESULT?.summaries || []).find(s => s.message_id === msgId)
 }
 </script>
 
@@ -849,238 +790,9 @@ function resetForm() {
   line-height: 1.6;
 }
 
-/* ── Right: Form panel ──────────────────────────────────────── */
-.form-panel {
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--bg-card);
-  box-shadow: 0 2px 24px rgba(0,0,0,0.3);
-}
-
-.form-panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border-subtle);
-  background: var(--bg-surface);
-}
-
-.form-panel-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: 0.02em;
-}
-
-.demo-pill {
-  background: var(--accent-dim);
-  color: var(--accent);
-  border: 1px solid rgba(99,102,241,0.3);
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.demo-pill:hover {
-  background: rgba(99,102,241,0.2);
-}
-
-.form-panel-body {
-  background: var(--bg-card);
-}
-
-/* ── Submitting state ───────────────────────────────────────── */
-.state-loading {
-  padding: 40px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-}
-
-.state-spinner {
-  width: 32px;
-  height: 32px;
-  border: 2px solid var(--border-muted);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
+/* ── keyframes (used by demo panel + spinners elsewhere) ──── */
+@keyframes spin  { to { transform: rotate(360deg); } }
 @keyframes pulse { 50% { opacity: 0.4; } }
-
-.state-loading-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.sls-step {
-  font-size: 13px;
-  font-family: var(--font-mono);
-}
-
-.sls-done    { color: var(--green); }
-.sls-active  { color: var(--text-primary); animation: pulse 1.2s ease-in-out infinite; }
-.sls-pending { color: var(--text-tertiary); }
-
-/* ── Preview state ──────────────────────────────────────────── */
-.state-preview {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.state-preview-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.state-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.state-dot--ready { background: #16a34a; }
-
-.state-preview-title { font-size: 13px; font-weight: 600; }
-
-.preview-section-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 8px;
-}
-
-.preview-personas {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.preview-persona {
-  border: 1px solid var(--border-subtle);
-  border-radius: 8px;
-  padding: 14px;
-  background: var(--bg-elevated);
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.preview-persona.interested { border-left: 3px solid var(--green); }
-.preview-persona.neutral    { border-left: 3px solid var(--amber); }
-.preview-persona.objection  { border-left: 3px solid var(--red); }
-
-.pp-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 6px;
-}
-
-.pp-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-primary);
-  line-height: 1.2;
-}
-
-.pp-badge {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 3px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.pp-badge.interested { background: rgba(74,222,128,0.15); color: var(--green); }
-.pp-badge.neutral    { background: rgba(245,158,11,0.15); color: var(--amber); }
-.pp-badge.objection  { background: rgba(248,113,113,0.15); color: var(--red); }
-
-.pp-role {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.pp-quote {
-  font-size: 11px;
-  color: var(--text-secondary);
-  font-style: italic;
-  line-height: 1.5;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 6px;
-  margin-top: 2px;
-}
-
-.preview-teasers {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.teaser-item {
-  display: flex;
-  gap: 10px;
-  font-size: 12px;
-  align-items: baseline;
-}
-
-.teaser-angle {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--accent);
-  min-width: 70px;
-}
-
-.teaser-preview {
-  color: var(--text-secondary);
-  line-height: 1.4;
-}
-
-.preview-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding-top: 4px;
-}
-
-/* ── Error state ────────────────────────────────────────────── */
-.state-error {
-  padding: 32px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  text-align: center;
-}
-
-.state-error-icon { font-size: 28px; }
-
-.state-error-msg {
-  font-size: 13px;
-  color: var(--text-secondary);
-  max-width: 360px;
-  line-height: 1.6;
-}
 
 /* ── Buttons ────────────────────────────────────────────────── */
 .btn-primary {
@@ -1655,85 +1367,203 @@ function resetForm() {
 
 .srep-obj-text { font-size: 12px; color: var(--text-secondary); line-height: 1.4; }
 
-/* ── Simulate section ───────────────────────────────────────── */
-.simulate-section {
+/* ── Demo showcase ───────────────────────────────────────────── */
+.demo-section {
   padding: 72px 0 80px;
   border-top: 1px solid var(--border-subtle);
 }
 
-.simulate-header { margin-bottom: 40px; max-width: 600px; }
-
-.simulate-sub {
+.demo-sub {
   font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.65;
-  margin: -24px 0 0;
+  margin: -28px 0 32px;
+  max-width: 560px;
 }
 
-.simulate-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 40px;
-  align-items: start;
-}
-
-.simulate-checklist {
-  position: sticky;
-  top: 80px;
+.demo-tabs {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0;
 }
 
-.scl-header {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 4px;
-}
-
-.scl-item {
-  display: flex;
-  gap: 10px;
+.demo-tab {
+  padding: 10px 18px;
   font-size: 13px;
+  font-weight: 600;
   color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.scl-check {
-  color: var(--green);
-  font-weight: 700;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.scl-divider {
-  height: 1px;
-  background: var(--border-subtle);
-  margin: 4px 0;
-}
-
-.scl-note {
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-.scl-demo-link {
   background: none;
   border: none;
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 600;
+  border-bottom: 2px solid transparent;
   cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
 }
 
-.scl-demo-link:hover { color: #818cf8; }
+.demo-tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+}
+
+.demo-panel { animation: fadeIn 0.2s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Personas tab */
+.demo-personas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.demo-persona-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 16px;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.demo-persona-card--interested { border-left: 3px solid var(--green); }
+.demo-persona-card--neutral    { border-left: 3px solid var(--amber); }
+.demo-persona-card--objection  { border-left: 3px solid var(--red); }
+
+.dpc-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.dpc-name   { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.dpc-title  { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+.dpc-verdict {
+  font-size: 9px; font-weight: 700; padding: 2px 7px;
+  border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+}
+.dpc-verdict--interested { background: rgba(74,222,128,0.12); color: var(--green); }
+.dpc-verdict--neutral    { background: rgba(245,158,11,0.12); color: var(--amber); }
+.dpc-verdict--objection  { background: rgba(248,113,113,0.12); color: var(--red); }
+
+.dpc-goal { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+.dpc-objection {
+  font-size: 11px; color: var(--red);
+  background: rgba(248,113,113,0.08);
+  border: 1px solid rgba(248,113,113,0.2);
+  border-radius: 4px; padding: 4px 8px; line-height: 1.5;
+}
+
+.demo-more {
+  font-size: 12px; color: var(--text-tertiary);
+  text-align: center; margin-top: 14px;
+}
+
+/* Messages tab */
+.demo-messages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.demo-msg-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+}
+
+.demo-msg-card--winner { border: 2px solid var(--accent); }
+
+.dmc-header {
+  padding: 10px 14px 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dmc-angle {
+  font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent);
+}
+
+.dmc-winner-badge {
+  font-size: 9px; font-weight: 800; background: var(--accent);
+  color: #fff; padding: 2px 7px; border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+.dmc-subject {
+  padding: 0 14px 6px;
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+}
+
+.dmc-body {
+  padding: 0 14px 12px;
+  font-size: 12px; color: var(--text-secondary);
+  line-height: 1.6; flex: 1;
+}
+
+.dmc-scores {
+  padding: 8px 14px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 11px; color: var(--text-tertiary);
+  display: flex; gap: 6px; align-items: center;
+}
+
+.dmc-score-green { color: var(--green); font-weight: 600; }
+.dmc-dot { color: var(--text-tertiary); }
+
+/* Report tab */
+.demo-report-wrap { display: flex; flex-direction: column; gap: 20px; }
+
+.demo-metrics {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--border-subtle); border-radius: 8px; overflow: hidden;
+}
+
+.dm-metric {
+  padding: 14px 18px; border-right: 1px solid var(--border-subtle);
+  display: flex; flex-direction: column; gap: 3px;
+}
+.dm-metric:last-child { border-right: none; }
+.dm-val   { font-size: 20px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; }
+.dm-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.demo-summary {
+  background: var(--bg-card); border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent); border-radius: 8px; padding: 16px 18px;
+}
+
+.demo-summary-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+
+.demo-summary-text { font-size: 13px; color: var(--text-secondary); line-height: 1.75; }
+
+.demo-objections { display: flex; flex-direction: column; gap: 8px; }
+
+.demo-obj-row {
+  display: flex; gap: 10px; align-items: baseline;
+  font-size: 13px; color: var(--text-secondary);
+}
+
+.demo-obj-freq {
+  font-size: 11px; font-weight: 700; color: var(--amber);
+  background: rgba(245,158,11,0.1); padding: 1px 6px;
+  border-radius: 3px; white-space: nowrap;
+}
+
+/* Demo CTA */
+.demo-cta {
+  display: flex; align-items: center; gap: 20px;
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.demo-cta-note { font-size: 12px; color: var(--text-tertiary); }
 
 /* ── Hero orbs ──────────────────────────────────────────────── */
 
@@ -1900,8 +1730,9 @@ function resetForm() {
   .sample-block--wide { grid-column: auto; }
   .sample-report-card { flex-direction: column; }
   .srep-divider { width: 100%; height: 1px; }
-  .simulate-layout { grid-template-columns: 1fr; }
-  .simulate-checklist { position: static; }
+  .demo-personas-grid { grid-template-columns: 1fr; }
+  .demo-messages-grid { grid-template-columns: 1fr; }
+  .demo-metrics { grid-template-columns: repeat(2, 1fr); }
   .hero-actions { flex-direction: column; align-items: flex-start; }
   .section-title { font-size: 1.6rem; }
   .nav-cta { display: none; }

@@ -141,8 +141,8 @@
       </div>
     </div>
 
-    <!-- Section 04: Simulation Parameters -->
-    <div class="form-section params-section">
+    <!-- Section 04: Simulation Parameters (hidden when SimulatePage owns these) -->
+    <div v-if="!hideParams" class="form-section params-section">
       <div class="section-label">04 / Simulation Parameters</div>
 
       <div class="field-group">
@@ -213,14 +213,25 @@
       </div>
     </div>
 
-    <!-- Submit -->
-    <div class="form-submit">
+    <!-- Submit (hidden when parent page owns the button) -->
+    <div v-if="!hideParams" class="form-submit">
       <div v-if="submitAttempted && globalErrors.length" class="global-error">
         {{ globalErrors.length }} field{{ globalErrors.length > 1 ? 's' : '' }} need attention above.
       </div>
       <button class="submit-btn" :disabled="loading" @click="handleSubmit">
         <span v-if="!loading">Run GTM Simulation →</span>
         <span v-else>Building simulation...</span>
+      </button>
+    </div>
+
+    <!-- Inline submit for SimulatePage (triggers same validation + emit) -->
+    <div v-else class="form-submit-inline">
+      <div v-if="submitAttempted && globalErrors.length" class="global-error">
+        {{ globalErrors.length }} field{{ globalErrors.length > 1 ? 's' : '' }} need attention above.
+      </div>
+      <button class="submit-btn" :disabled="loading" @click="handleSubmit">
+        <span v-if="!loading">Run Simulation →</span>
+        <span v-else>Submitting brief...</span>
       </button>
     </div>
   </div>
@@ -238,6 +249,10 @@ const props = defineProps({
   initialData: {
     type: Object,
     default: null,
+  },
+  hideParams: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -534,6 +549,7 @@ function handleSubmit() {
 
 /* Submit */
 .form-submit { padding: 16px 20px; border-top: 1px solid var(--border-subtle); background: var(--bg-card); }
+.form-submit-inline { padding: 20px 0 0; }
 
 .global-error {
   font-size: 12px;

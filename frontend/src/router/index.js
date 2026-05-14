@@ -13,6 +13,11 @@ const routes = [
     component: Home
   },
   {
+    path: '/simulate',
+    name: 'Simulate',
+    component: () => import('../views/SimulatePage.vue'),
+  },
+  {
     path: '/process/:projectId',
     name: 'Process',
     component: Process,

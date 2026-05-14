@@ -1,239 +1,422 @@
 /**
- * Frontend-side mock preview data.
- * Used as a fallback when the backend API is unavailable (MOCK_MODE or network error).
- * Mirrors the structure of backend/mock_data/gtm_preview.json.
+ * Auto-generated demo preview — Acme AI SDR simulation.
  */
 export const MOCK_GTM_PREVIEW = {
-  personas: [
+  "personas": [
     {
-      id: 'skeptical_vp_sales',
-      name: 'Marcus Rivera',
-      role: 'VP of Sales',
-      company: 'Series A SaaS, 80 employees',
-      skepticism_level: 4,
-      reaction: 'objection',
-      likely_response: "We already have a process for this. What makes your ROI different from what we've tried before?",
-      objection_category: 'status_quo_bias',
+      "id": "founder_seller_01",
+      "name": "Jessica Thompson",
+      "role": "Co-founder & CEO",
+      "company": "B2B SaaS",
+      "skepticism_level": 2,
+      "reaction": "interested",
+      "likely_response": "I’m intrigued by how quickly it can save my team time.",
+      "objection_category": null
     },
     {
-      id: 'process_revops',
-      name: 'Sara Kim',
-      role: 'RevOps Manager',
-      company: 'B2B SaaS, 120 employees',
-      skepticism_level: 3,
-      reaction: 'neutral',
-      likely_response: "Interesting — I'd need to see how it integrates with our existing stack before committing to a call.",
-      objection_category: 'integration_concern',
+      "id": "vp_sales_01",
+      "name": "Mike Johnson",
+      "role": "VP of Sales",
+      "company": "B2B SaaS",
+      "skepticism_level": 3,
+      "reaction": "neutral",
+      "likely_response": "I need more information before considering this investment.",
+      "objection_category": "budget_concern"
     },
     {
-      id: 'founder_seller',
-      name: 'David Lee',
-      role: 'Founder / CEO',
-      company: 'Pre-revenue startup, 8 employees',
-      skepticism_level: 2,
-      reaction: 'interested',
-      likely_response: "This is exactly the problem I've been trying to solve. Can we do a quick 20-minute demo?",
-      objection_category: null,
-    },
+      "id": "sdr_manager_01",
+      "name": "Emily Carter",
+      "role": "SDR Manager",
+      "company": "B2B SaaS",
+      "skepticism_level": 1,
+      "reaction": "interested",
+      "likely_response": "If it can save my team time, I’m all in!",
+      "objection_category": null
+    }
   ],
-  message_angle_teasers: [
+  "message_angle_teasers": [
     {
-      angle: 'pain_led',
-      label: 'Pain-Led',
-      preview: 'Strongest early signal — 5 of 12 personas responded with interest or curiosity',
-      top_objection: 'Integration complexity',
+      "angle": "pain_first",
+      "label": "Pain-First",
+      "preview": "Are your SDRs spending 70% of their day on research instead of selling?"
     },
     {
-      angle: 'roi_led',
-      label: 'ROI-Led',
-      preview: 'Best fit for budget-focused buyers — 4 of 12 responded positively',
-      top_objection: 'Proof of ROI claims',
-    },
-  ],
+      "angle": "roi_first",
+      "label": "ROI-First",
+      "preview": "Teams using AI SDR tools book 40% more meetings in the first 30 days."
+    }
+  ]
 }
 
-/**
- * Full 12-persona mock set — used as fallback in GTMPersonasView when backend is unavailable.
- * Mirrors the structure of backend/mock_data/gtm_personas_full.json.
- * @type {Array<object>}
- */
 export const MOCK_PERSONAS_FULL = [
   {
-    id: 'founder_seller_001', name: 'Jordan Kim', title: 'Founder & CEO',
-    company_type: 'B2B SaaS', company_stage: 'Pre-revenue', persona_type: 'founder_seller',
-    primary_goal: 'Close first 10 paying customers without a sales team',
-    pain_points: ['No SDR to do outreach', 'Time split across product and sales'],
-    buying_triggers: ['Peer recommendation', 'Solves a problem in 30 days', 'Trial available'],
-    objections: ['Too early to need this', 'Can do this manually for now'],
-    communication_style: 'Informal, fast-moving, values speed over process',
-    budget_sensitivity: 'high', risk_tolerance: 'high',
-    preferred_channels: ['linkedin', 'cold_call'], likely_message_angle: 'pain_led',
-    summary: 'Will buy if you solve an immediate problem under $200/mo.',
-    reaction: 'interested', skepticism_level: 2,
-    likely_response: 'This could help. Can I try it free for a week?', objection_category: null,
+    "id": "founder_seller_01",
+    "name": "Jessica Thompson",
+    "title": "Co-founder & CEO",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "founder_seller",
+    "primary_goal": "To streamline the sales process and maximize outreach effectiveness.",
+    "pain_points": [
+      "Time-consuming manual lead research",
+      "Difficulty in personalizing outreach",
+      "Need to quickly scale sales efforts."
+    ],
+    "buying_triggers": [
+      "Pressure to achieve sales targets",
+      "Positive reviews from peers",
+      "Ability to free up SDRs for actual selling."
+    ],
+    "objections": [
+      "Not sure if it integrates with our current tools",
+      "Concerned about monthly costs",
+      "Skeptical about the effectiveness of AI."
+    ],
+    "communication_style": "Direct and results-oriented, values data-driven discussions.",
+    "budget_sensitivity": "medium",
+    "risk_tolerance": "medium",
+    "preferred_channels": [
+      "outbound_email",
+      "linkedin"
+    ],
+    "likely_message_angle": "roi_led",
+    "summary": "Demonstrating a clear ROI and showcasing how the tool saves time will win this buyer.",
+    "reaction": "interested",
+    "skepticism_level": 2,
+    "likely_response": "I’m intrigued by how quickly it can save my team time.",
+    "objection_category": null
   },
   {
-    id: 'vp_sales_001', name: 'Marcus Rivera', title: 'VP of Sales',
-    company_type: 'B2B SaaS', company_stage: 'Series A', persona_type: 'vp_sales',
-    primary_goal: 'Hit $2M ARR target without increasing headcount',
-    pain_points: ['Pipeline coverage below 3x', 'Rep ramp time too long'],
-    buying_triggers: ['Peer VP recommendation', 'Proven ROI case study'],
-    objections: ['We already have a process', 'My team won\'t adopt another tool'],
-    communication_style: 'Direct, data-driven, skeptical of vendor claims',
-    budget_sensitivity: 'medium', risk_tolerance: 'low',
-    preferred_channels: ['outbound_email', 'linkedin'], likely_message_angle: 'roi_led',
-    summary: 'Won\'t engage without a peer case study and pipeline proof.',
-    reaction: 'objection', skepticism_level: 4,
-    likely_response: 'What\'s the actual ROI — meetings booked, not emails sent?',
-    objection_category: 'status_quo_bias',
+    "id": "vp_sales_01",
+    "name": "Mike Johnson",
+    "title": "VP of Sales",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "vp_sales",
+    "primary_goal": "To optimize the sales pipeline and increase lead conversion rates.",
+    "pain_points": [
+      "High manual workload for SDRs",
+      "Lack of effective lead segmentation",
+      "Struggle to keep SDRs motivated."
+    ],
+    "buying_triggers": [
+      "Need for immediate improvement in lead generation",
+      "Competitive pressure",
+      "Curiosity about AI capabilities."
+    ],
+    "objections": [
+      "Worried about the learning curve for the team",
+      "Budget constraints due to startup phase",
+      "Need to see case studies."
+    ],
+    "communication_style": "Analytical and data-focused, appreciates insights backed by metrics.",
+    "budget_sensitivity": "high",
+    "risk_tolerance": "medium",
+    "preferred_channels": [
+      "outbound_email",
+      "inbound"
+    ],
+    "likely_message_angle": "pain_led",
+    "summary": "Showcasing clear pain points and how the tool resolves them will resonate with Mike.",
+    "reaction": "neutral",
+    "skepticism_level": 3,
+    "likely_response": "I need more information before considering this investment.",
+    "objection_category": "budget_concern"
   },
   {
-    id: 'revops_lead_001', name: 'Sara Kim', title: 'RevOps Manager',
-    company_type: 'B2B SaaS', company_stage: 'Series B', persona_type: 'revops_lead',
-    primary_goal: 'Reduce revenue leak and improve CRM data quality',
-    pain_points: ['CRM hygiene is broken', 'Sales and marketing data is siloed'],
-    buying_triggers: ['Native CRM integration', 'Visible audit trail'],
-    objections: ['How does this sync with Salesforce?', 'Just went through tool consolidation'],
-    communication_style: 'Process-oriented, asks for documentation and integration specs',
-    budget_sensitivity: 'low', risk_tolerance: 'low',
-    preferred_channels: ['outbound_email'], likely_message_angle: 'roi_led',
-    summary: 'The internal champion who decides if a tool survives.',
-    reaction: 'neutral', skepticism_level: 3,
-    likely_response: 'Can you walk me through the Salesforce integration?',
-    objection_category: 'integration_concern',
+    "id": "sdr_manager_01",
+    "name": "Emily Carter",
+    "title": "SDR Manager",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "sdr_manager",
+    "primary_goal": "To equip my SDRs with effective tools to maximize their outreach efforts.",
+    "pain_points": [
+      "SDRs overwhelmed with data gathering",
+      "Increased burnout leading to turnover",
+      "Need to improve outreach personalization."
+    ],
+    "buying_triggers": [
+      "Feedback from SDRs on current tool inefficiencies",
+      "Desire for higher team morale",
+      "Pressure to hit quarterly targets."
+    ],
+    "objections": [
+      "Uncertain about transition and training",
+      "Potential for tool redundancy",
+      "Trusting AI to generate quality leads."
+    ],
+    "communication_style": "Collaborative and supportive, values team input and feedback.",
+    "budget_sensitivity": "medium",
+    "risk_tolerance": "medium",
+    "preferred_channels": [
+      "outbound_email",
+      "linkedin"
+    ],
+    "likely_message_angle": "social_proof_led",
+    "summary": "Highlighting testimonials and successful case studies will help win Emily over.",
+    "reaction": "interested",
+    "skepticism_level": 1,
+    "likely_response": "If it can save my team time, I’m all in!",
+    "objection_category": null
   },
   {
-    id: 'sdr_manager_001', name: 'Tyler Chen', title: 'SDR Manager',
-    company_type: 'B2B SaaS', company_stage: 'Series A', persona_type: 'sdr_manager',
-    primary_goal: 'Ramp new SDRs faster and hit team quota with fewer reps',
-    pain_points: ['SDR ramp takes 90+ days', 'Manual prospect research kills productivity'],
-    buying_triggers: ['Reduces time-on-task for list building', 'SDRs actually like using it'],
-    objections: ['My team already hates switching tools', 'How long does onboarding take?'],
-    communication_style: 'Practical, cares about adoption, wants to see it work live',
-    budget_sensitivity: 'medium', risk_tolerance: 'medium',
-    preferred_channels: ['linkedin', 'outbound_email'], likely_message_angle: 'pain_led',
-    summary: 'Sold if you can demo time savings live in under 15 minutes.',
-    reaction: 'interested', skepticism_level: 2,
-    likely_response: 'Can we do a 2-week pilot with two reps?', objection_category: null,
+    "id": "revops_lead_01",
+    "name": "Daniel Nguyen",
+    "title": "RevOps Lead",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "revops_lead",
+    "primary_goal": "To ensure all sales processes are efficient and data-driven.",
+    "pain_points": [
+      "Fragmented sales tools leading to inefficiencies",
+      "Difficulty in tracking lead quality",
+      "Need for better data integration."
+    ],
+    "buying_triggers": [
+      "Need for improved sales analytics",
+      "Push for operational efficiency",
+      "Interest in automation tools."
+    ],
+    "objections": [
+      "Concerned about integration with existing systems",
+      "Need to validate the AI's claims",
+      "Potential for increased complexity."
+    ],
+    "communication_style": "Detail-oriented and methodical, prefers thorough analyses before decisions.",
+    "budget_sensitivity": "high",
+    "risk_tolerance": "medium",
+    "preferred_channels": [
+      "outbound_email",
+      "linkedin"
+    ],
+    "likely_message_angle": "roi_led",
+    "summary": "Providing comprehensive data on ROI and integration success stories will be key.",
+    "reaction": "objection",
+    "skepticism_level": 4,
+    "likely_response": "I need to see how this fits into our current stack.",
+    "objection_category": "integration_concern"
   },
   {
-    id: 'marketing_lead_001', name: 'Priya Nair', title: 'Head of Demand Generation',
-    company_type: 'B2B SaaS', company_stage: 'Series A', persona_type: 'marketing_lead',
-    primary_goal: 'Drive more qualified pipeline without increasing paid budget',
-    pain_points: ['MQL-to-SQL conversion below 10%', 'Sales ignores most marketing leads'],
-    buying_triggers: ['Improves sales + marketing alignment', 'Supports ABM strategy'],
-    objections: ['This feels more like a sales tool', 'We already use 6sense'],
-    communication_style: 'Strategic, data-focused, cares about attribution',
-    budget_sensitivity: 'medium', risk_tolerance: 'medium',
-    preferred_channels: ['outbound_email', 'linkedin'], likely_message_angle: 'roi_led',
-    summary: 'Wins if the tool closes the marketing-to-sales attribution gap.',
-    reaction: 'neutral', skepticism_level: 3,
-    likely_response: 'How does this fit with our ABM motion and Salesforce attribution?',
-    objection_category: 'integration_concern',
+    "id": "startup_operator_01",
+    "name": "Sarah Patel",
+    "title": "Operations Manager",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "startup_operator",
+    "primary_goal": "To optimize operational workflows and reduce manual work.",
+    "pain_points": [
+      "Overwhelmed with repetitive tasks",
+      "Struggling to balance multiple roles",
+      "Need efficient processes to support growth."
+    ],
+    "buying_triggers": [
+      "Desperation to streamline operations",
+      "Feedback from the sales team on current bottlenecks",
+      "Interest in innovative tech solutions."
+    ],
+    "objections": [
+      "Uncertain about the tool's learning curve",
+      "Concerned about long-term commitment",
+      "Need proof of effectiveness."
+    ],
+    "communication_style": "Pragmatic and solution-focused, values efficiency and straightforwardness.",
+    "budget_sensitivity": "medium",
+    "risk_tolerance": "high",
+    "preferred_channels": [
+      "outbound_email",
+      "plg"
+    ],
+    "likely_message_angle": "pain_led",
+    "summary": "Emphasizing ease of use and immediate time savings will resonate with Sarah.",
+    "reaction": "interested",
+    "skepticism_level": 2,
+    "likely_response": "If it can save us time, I’m ready to explore it!",
+    "objection_category": null
   },
   {
-    id: 'cfo_001', name: 'David Park', title: 'CFO',
-    company_type: 'B2B SaaS', company_stage: 'Series B', persona_type: 'cfo',
-    primary_goal: 'Reduce CAC while maintaining growth rate heading into next raise',
-    pain_points: ['CAC increasing QoQ', 'Hard to tie software spend to ARR impact'],
-    buying_triggers: ['Payback period under 6 months', 'Reduces SDR headcount need'],
-    objections: ['What\'s the payback period?', 'We\'re in budget freeze'],
-    communication_style: 'Terse, financial, needs a business case not a product demo',
-    budget_sensitivity: 'high', risk_tolerance: 'low',
-    preferred_channels: ['outbound_email'], likely_message_angle: 'roi_led',
-    summary: 'Will only engage with a clear CAC reduction financial model.',
-    reaction: 'objection', skepticism_level: 5,
-    likely_response: 'Send the one-pager with payback period assumptions.',
-    objection_category: 'budget_concern',
+    "id": "agency_owner_01",
+    "name": "Tom Richards",
+    "title": "Owner & Lead Strategist",
+    "company_type": "Agency",
+    "company_stage": "Bootstrapped",
+    "persona_type": "agency_owner",
+    "primary_goal": "To provide my clients with effective lead generation solutions.",
+    "pain_points": [
+      "Difficulty in scaling outreach for multiple clients",
+      "Manual processes leading to inefficiencies",
+      "Need for personalized communication."
+    ],
+    "buying_triggers": [
+      "Client demands for faster results",
+      "Interest in outsourcing lead generation",
+      "Curiosity about AI capabilities."
+    ],
+    "objections": [
+      "Concerned about the cost of integration",
+      "Need proof of value for agencies",
+      "Skeptical about AI delivering quality leads."
+    ],
+    "communication_style": "Creative and flexible, prefers engaging discussions with innovative ideas.",
+    "budget_sensitivity": "medium",
+    "risk_tolerance": "medium",
+    "preferred_channels": [
+      "outbound_email",
+      "linkedin"
+    ],
+    "likely_message_angle": "social_proof_led",
+    "summary": "Showcasing success stories from other agencies will help gain Tom's interest.",
+    "reaction": "neutral",
+    "skepticism_level": 3,
+    "likely_response": "I’m interested, but I want to see how it works for other agencies.",
+    "objection_category": "trust_deficit"
   },
   {
-    id: 'enterprise_buyer_001', name: 'Lisa Wong', title: 'Director of Sales Operations',
-    company_type: 'Enterprise SaaS', company_stage: 'Public', persona_type: 'enterprise_buyer',
-    primary_goal: 'Standardize outbound process across 200+ rep sales org',
-    pain_points: ['100+ reps using inconsistent tools', 'Compliance team requires data governance'],
-    buying_triggers: ['SOC2 compliance', 'Enterprise SLA', 'IT-approved vendor'],
-    objections: ['Legal needs to review the DPA', 'IT security review required'],
-    communication_style: 'Formal, process-heavy, needs executive sponsorship',
-    budget_sensitivity: 'low', risk_tolerance: 'low',
-    preferred_channels: ['outbound_email'], likely_message_angle: 'social_proof_led',
-    summary: 'Long 6-9 month cycle. Needs enterprise contracts and IT security review.',
-    reaction: 'objection', skepticism_level: 5,
-    likely_response: 'This needs to go through our IT security review. Can you provide SOC2 docs?',
-    objection_category: 'process_barrier',
+    "id": "sales_enablement_01",
+    "name": "Laura Simmons",
+    "title": "Sales Enablement Manager",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "sales_enablement",
+    "primary_goal": "To equip the sales team with effective resources and tools.",
+    "pain_points": [
+      "Lack of tools to support outreach",
+      "Difficulty in ensuring sales team is effective",
+      "Need for consistent messaging."
+    ],
+    "buying_triggers": [
+      "Feedback from the sales team on current tools",
+      "Aiming to boost sales performance",
+      "Interest in new technologies."
+    ],
+    "objections": [
+      "Concerned about the time needed for onboarding",
+      "Need to validate if it really saves time",
+      "Budget limitations."
+    ],
+    "communication_style": "Collaborative and supportive, emphasizes team needs and feedback.",
+    "budget_sensitivity": "medium",
+    "risk_tolerance": "medium",
+    "preferred_channels": [
+      "outbound_email",
+      "inbound"
+    ],
+    "likely_message_angle": "roi_led",
+    "summary": "Highlighting team benefits and ease of onboarding will win Laura over.",
+    "reaction": "interested",
+    "skepticism_level": 1,
+    "likely_response": "I’m excited about tools that can help my team!",
+    "objection_category": null
   },
   {
-    id: 'startup_operator_001', name: 'Alex Morgan', title: 'Head of Growth',
-    company_type: 'B2B SaaS', company_stage: 'Seed', persona_type: 'startup_operator',
-    primary_goal: 'Hit 50 new demos booked per month without hiring an SDR',
-    pain_points: ['Founder can\'t keep doing outreach manually', 'No playbook yet'],
-    buying_triggers: ['Works out of the box', 'Results visible in first week'],
-    objections: ['Not ready for a full outbound stack', 'Need to prove this works first'],
-    communication_style: 'Pragmatic, moves fast, hates complexity',
-    budget_sensitivity: 'high', risk_tolerance: 'high',
-    preferred_channels: ['linkedin', 'cold_call'], likely_message_angle: 'pain_led',
-    summary: 'Best early adopter. Will pay if setup is under 30 minutes.',
-    reaction: 'interested', skepticism_level: 2,
-    likely_response: 'This is exactly what I need. How fast can I be up and running?',
-    objection_category: null,
+    "id": "skeptical_buyer_01",
+    "name": "Kevin Brown",
+    "title": "Director of Operations",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "skeptical_buyer",
+    "primary_goal": "To ensure any new tool adds real value and efficiency.",
+    "pain_points": [
+      "Past experiences with ineffective tools",
+      "Skepticism about AI's effectiveness",
+      "Need for proven technology."
+    ],
+    "buying_triggers": [
+      "A strong recommendation from a trusted source",
+      "Witnessing tangible results from peers",
+      "Desire to reduce manual work."
+    ],
+    "objections": [
+      "How do I know this will work for us?",
+      "What if it complicates our current processes?",
+      "I need hard evidence of effectiveness."
+    ],
+    "communication_style": "Cautious and thorough, demands detailed explanations and proof.",
+    "budget_sensitivity": "high",
+    "risk_tolerance": "low",
+    "preferred_channels": [
+      "outbound_email",
+      "cold_call"
+    ],
+    "likely_message_angle": "trust_deficit",
+    "summary": "Providing substantial evidence and testimonials will be critical in winning Kevin over.",
+    "reaction": "objection",
+    "skepticism_level": 5,
+    "likely_response": "I’m not convinced this will work for us without solid proof.",
+    "objection_category": "trust_deficit"
   },
   {
-    id: 'agency_owner_001', name: 'Ben Torres', title: 'Agency Founder',
-    company_type: 'B2B Agency', company_stage: 'Bootstrapped', persona_type: 'agency_owner',
-    primary_goal: 'Scale client outbound delivery without hiring more account managers',
-    pain_points: ['Each client needs a custom workflow', 'Client reporting takes too long'],
-    buying_triggers: ['Multi-client account support', 'White-label reporting', 'API access'],
-    objections: ['Does this support multiple client workspaces?', 'What\'s agency pricing?'],
-    communication_style: 'ROI-focused, asks about agency-specific features',
-    budget_sensitivity: 'medium', risk_tolerance: 'medium',
-    preferred_channels: ['linkedin', 'outbound_email'], likely_message_angle: 'roi_led',
-    summary: 'High LTV if they commit. Needs agency pricing and multi-client workflow.',
-    reaction: 'neutral', skepticism_level: 3,
-    likely_response: 'Do you have agency pricing? Can I manage multiple clients from one login?',
-    objection_category: 'feature_gap',
+    "id": "champion_user_01",
+    "name": "Rachel Green",
+    "title": "Senior SDR",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "champion_user",
+    "primary_goal": "To improve my productivity and effectiveness in lead generation.",
+    "pain_points": [
+      "Spending too much time on research",
+      "Need for more personalized outreach",
+      "Desire to hit quota more consistently."
+    ],
+    "buying_triggers": [
+      "Hearing success stories from peers",
+      "Desire for tools that enhance productivity",
+      "Curiosity about new technology."
+    ],
+    "objections": [
+      "Will it really save me time?",
+      "Is it worth the investment?",
+      "What if it doesn't integrate well?"
+    ],
+    "communication_style": "Enthusiastic and open, eager to explore new solutions that improve work.",
+    "budget_sensitivity": "medium",
+    "risk_tolerance": "high",
+    "preferred_channels": [
+      "outbound_email",
+      "plg"
+    ],
+    "likely_message_angle": "social_proof_led",
+    "summary": "Highlighting peer success and productivity boosts will resonate strongly with Rachel.",
+    "reaction": "interested",
+    "skepticism_level": 2,
+    "likely_response": "If it can help me be more effective, I’m all for it!",
+    "objection_category": null
   },
   {
-    id: 'sales_enablement_001', name: 'Rachel James', title: 'Sales Enablement Lead',
-    company_type: 'B2B SaaS', company_stage: 'Series B', persona_type: 'sales_enablement',
-    primary_goal: 'Reduce rep ramp from 120 to 60 days',
-    pain_points: ['New reps don\'t know what messaging works', 'Training materials go stale fast'],
-    buying_triggers: ['Reduces ramp time with real messaging data', 'Integrates with Gong'],
-    objections: ['We already have Gong', 'Adoption is always the problem'],
-    communication_style: 'Thoughtful, evaluates through adoption and change management lens',
-    budget_sensitivity: 'medium', risk_tolerance: 'medium',
-    preferred_channels: ['outbound_email', 'linkedin'], likely_message_angle: 'pain_led',
-    summary: 'Bought if she\'s championing rep productivity. Blocked if defensive about stack.',
-    reaction: 'neutral', skepticism_level: 3,
-    likely_response: 'The challenge is always adoption. Can you show me the rep-facing UX?',
-    objection_category: 'adoption_risk',
-  },
-  {
-    id: 'skeptical_buyer_001', name: 'Chris Hall', title: 'VP Revenue',
-    company_type: 'B2B SaaS', company_stage: 'Series C', persona_type: 'skeptical_buyer',
-    primary_goal: 'Achieve 40% YoY growth with existing headcount',
-    pain_points: ['Tool sprawl is a real problem', 'Every vendor promises ROI, few deliver'],
-    buying_triggers: ['Pilot shows >15% improvement in meetings booked', 'Executive sponsor at vendor'],
-    objections: ['We\'ve tried similar tools before', 'Show me a reference from our scale'],
-    communication_style: 'Blunt, has been burned before, wants references not demos',
-    budget_sensitivity: 'low', risk_tolerance: 'low',
-    preferred_channels: ['outbound_email'], likely_message_angle: 'social_proof_led',
-    summary: 'Hardest to win but highest value. Only moves after a peer reference call.',
-    reaction: 'objection', skepticism_level: 5,
-    likely_response: 'Give me one customer reference at our scale.',
-    objection_category: 'trust_deficit',
-  },
-  {
-    id: 'champion_user_001', name: 'Maya Patel', title: 'Senior Account Executive',
-    company_type: 'B2B SaaS', company_stage: 'Series A', persona_type: 'champion_user',
-    primary_goal: 'Become a top performer without working more hours',
-    pain_points: ['Spends 2 hours/day on list building and research', 'Inconsistent pipeline'],
-    buying_triggers: ['Saves at least 5 hours/week', 'Easy to learn in under an hour'],
-    objections: ['My manager hasn\'t approved new tools', 'I don\'t have budget authority'],
-    communication_style: 'Enthusiastic early adopter, will champion internally if it works',
-    budget_sensitivity: 'high', risk_tolerance: 'high',
-    preferred_channels: ['linkedin', 'cold_call'], likely_message_angle: 'pain_led',
-    summary: 'Internal champion who drives bottom-up adoption. Give her a trial.',
-    reaction: 'interested', skepticism_level: 1,
-    likely_response: 'Can I get a free trial? I\'ll show my manager the results after week one.',
-    objection_category: null,
-  },
+    "id": "cfo_01",
+    "name": "Mark Wilson",
+    "title": "Chief Financial Officer",
+    "company_type": "B2B SaaS",
+    "company_stage": "Seed",
+    "persona_type": "cfo",
+    "primary_goal": "To ensure financial health while investing in tools that provide value.",
+    "pain_points": [
+      "Concern about overspending on unproven tools",
+      "Need for a clear cost-benefit analysis",
+      "Pressure to keep costs low."
+    ],
+    "buying_triggers": [
+      "Positive feedback from sales leadership",
+      "Evidence of ROI from similar companies",
+      "Need for efficient process tools."
+    ],
+    "objections": [
+      "How do I justify this expense?",
+      "What if it doesn't deliver the promised results?",
+      "Can it integrate with existing financial systems?"
+    ],
+    "communication_style": "Analytical and numbers-driven, prefers detailed financial justifications.",
+    "budget_sensitivity": "high",
+    "risk_tolerance": "low",
+    "preferred_channels": [
+      "outbound_email",
+      "cold_call"
+    ],
+    "likely_message_angle": "roi_led",
+    "summary": "Presenting a detailed cost-benefit analysis will be essential to win Mark’s approval.",
+    "reaction": "objection",
+    "skepticism_level": 4,
+    "likely_response": "I need to see the numbers to justify this investment.",
+    "objection_category": "budget_concern"
+  }
 ]
